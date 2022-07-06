@@ -15,20 +15,20 @@ from rest_framework import viewsets
 # Create your views here.
 
 
-# class ReactView(APIView):
+class ReactView(APIView):
 
-#     serializer_class = ReactSerializer
+    serializer_class = ReactSerializer
 
-#     def get(self, request):
-#         output = [{"employee": output.employee, "department": output.department}
-#                   for output in React.objects.all()]
-#         return Response(output)
+    def get(self, request):
+        output = [{"employee": output.employee, "department": output.department}
+                  for output in React.objects.all()]
+        return Response(output)
 
-#     def post(self, request):
-#         serializer = ReactSerializer(data=request.data)
-#         if serializer.is_valid(raise_exception=True):
-#             serializer.save()
-#             return Response(serializer.data)
+    def post(self, request):
+        serializer = ReactSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
 
 
 

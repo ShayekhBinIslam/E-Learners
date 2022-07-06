@@ -22,7 +22,7 @@ from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('admins/', ReactView.as_view(), name="admins"),
+    path('admins/', ReactView.as_view(), name="admins"),
     path('login/', views.logininfo, name = 'logininfo'),
     path('adminlist/', views.getadminslist, name = 'adminlist')
 
