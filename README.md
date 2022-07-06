@@ -7,6 +7,8 @@
 4. Career Track -> Course List
 
 
-# Total Work
+# TODO
+1. How to show video from video player
+2. 
 
 
