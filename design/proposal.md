@@ -1,0 +1,38 @@
+1. Topic: E-Learning, Coursera type
+2. Name: E-learners
+3. Modules: 
+    - student account
+        - registration
+        - profile: personal info
+        - enrolled courses/progress
+        - accomplishments: certificates, projects
+        - payment: optional
+    - teacher account
+        - regration form
+        - offered courses
+        - course creation
+            - limited features
+    - course
+        - Enrolling View
+            - Timeline
+            - Grades
+                - Assigment: MCQ
+                - Coding: submit only, like moodle
+            - Forum: admin, teacher, enrolled std.
+            - Certificate
+            - Review
+        - Public view
+            - About
+            - Review (read-only)
+            - Instructor
+            - Review
+            - Audit: see video only, no certificate
+            - FAQ
+    - modes: teacher, student, admin
+    - Public Blogs: open-ended, free, (low-priority, talk to sup.)
+    - search: filter: input during 
+            - by university/teacher/professor
+            - by subject/category: subcategory
+            - by level: beginner, inter, expert
+            - by duration: day/month/year
+            - by paid/free
