@@ -1,0 +1,104 @@
+.topbar{
+    width: 100%;
+    height: 50px;
+    /* background-color: white; */
+    position: sticky;
+    top: 0;
+    z-index: 999;
+
+  
+    background: #5E5DF0;
+    /* border-radius: 999px; */
+    box-shadow: #5E5DF0 0 10px 20px -10px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    /* cursor: pointer; */
+    font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    opacity: 1;
+    outline: 0 solid transparent;
+    /* padding: 8px 18px; */
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    /* width: fit-content; */
+    word-break: break-word;
+    border: 0;
+    
+}
+
+.topbarWrapper{
+    height: 100%;
+    padding: 0px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo{
+    font-weight: bold;
+    font-size: 30px;
+    color: darkblue;
+    cursor: pointer;
+}
+
+.topRight{
+    display: flex;
+    align-items: center;
+}
+
+.topbaricnos{
+    position: relative;
+    cursor: pointer;
+    margin-right: 10px;
+    color: #555;
+}
+
+.topAvatar{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.button-30 {
+
+    
+    width: 98%;
+    height: 50px;
+    /* background-color: white; */
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    margin-top: 15px;
+
+  
+  background-color: #FCFCFD;
+
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.3) 0 2px 4px,rgba(45, 35, 66, 0.2) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #36395A;
+  cursor: pointer;
+  /* display: inline-flex; */
+  font-family: "JetBrains Mono",monospace;
+  /* height: 48px; */
+  /* justify-content: center; */
+  line-height: 1;
+  list-style: none; 
+  overflow: hidden;
+  /* padding-left: 16px; */
+  /* padding-right: 16px; */
+  /* position: relative; */
+  /* text-align: left; */
+  /* text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform; */
+  /* font-size: 18px; */
+}
