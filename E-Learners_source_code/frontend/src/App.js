@@ -8,6 +8,7 @@ import Topbar from "./components/topbar";
 import Login from "./pages/login";
 import Admins from "./pages/admins";
 import Home from "./pages/Home";
+import CareerTracks from "./pages/CareerTracks";
 
 
 import {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/admins" element={<Admins/>}/>
+          <Route path="/CareerTracks/:trackid" element={<CareerTracks/>}/>
         </Routes>
       </div>
       
