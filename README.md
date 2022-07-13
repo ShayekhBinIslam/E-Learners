@@ -36,6 +36,10 @@ Module | Assigned
    - Show advanced courses
    - Show 
 
+# Guides
+
+1. [Django models](https://docs.djangoproject.com/en/4.0/topics/db/models/)
+
 # Learning Resources
 
 1. [Good Django: Python Django + PostgreSQL | REST API Tutorial](https://www.youtube.com/watch?v=Pwwz4_AvHDU&ab_channel=ArtofEngineer)
