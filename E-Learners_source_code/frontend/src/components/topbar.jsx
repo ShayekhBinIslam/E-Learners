@@ -14,6 +14,14 @@ import { ReactComponent as CogIcon } from "../icons/cog.svg";
 import { ReactComponent as ChevronIcon } from "../icons/chevron.svg";
 import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
 import { ReactComponent as BoltIcon } from "../icons/bolt.svg";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  TextField
+} from '@material-ui/core';
 
 const tracks = [
   {
@@ -36,6 +44,22 @@ const firstTrack = "Web Development";
 const fistDes = "This is Web Development Career Track";
 
 export default function Topbar() {
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    password: ''
+  });
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const onSubmit = (e) => {
+      e.preventDefault();
+      console.log(formValues);
+  };
+  const handleInputChange = (e) => {
+      const name = e.target.name;
+      setFormValues({ ...formValues, [name]: e.target.value });
+  };
+  
   return (
     <div className="topbar-container">
       <div className="topbarWrapper">
@@ -55,7 +79,78 @@ export default function Topbar() {
         </div>
 
         <div className="topRight">
-          <div className="topbaricnos">login</div>
+          <div  className="topbaricnos" onClick={() => setShowRegisterForm(!showRegisterForm)}>login</div>
+          <Dialog
+                open={showRegisterForm}
+                fullWidth
+                onClose={() => setShowRegisterForm(false)}
+          >
+              <DialogTitle>Login</DialogTitle>
+              <DialogContent>
+                  <form onSubmit={onSubmit}>
+                      <Grid container spacing={4}>
+                          <Grid item xs={12}>
+                              <TextField
+                                  label="Name"
+                                  type="text"
+                                  required
+                                  fullWidth
+                                  name="name"
+                                  value={formValues.name}
+                                  onChange={handleInputChange}
+                              />
+                          </Grid>
+                          <Grid item xs={12}>
+                              <TextField
+                                  label="Email"
+                                  type="email"
+                                  name="email"
+                                  required
+                                  fullWidth
+                                  value={formValues.email}
+                                  onChange={handleInputChange}
+                              />
+                          </Grid>
+                          <Grid item xs={12}>
+                              <TextField
+                                  label="Phone"
+                                  type="tel"
+                                  name="phone"
+                                  required
+                                  fullWidth
+                                  value={formValues.phone}
+                                  onChange={handleInputChange}
+                              />
+                          </Grid>
+                          <Grid item xs={12}>
+                              <TextField
+                                  label="Password"
+                                  type="password"
+                                  required
+                                  name="password"
+                                  fullWidth
+                                  value={formValues.password}
+                                  onChange={handleInputChange}
+                              />
+                          </Grid>
+                          <Grid item xs={12}>
+                              <Button variant="contained" onClick={() => setShowRegisterForm(false)} disableElevation>
+                                  Close
+                              </Button>
+                              <Button
+                                  style={{ marginLeft: '15px' }}
+                                  variant="contained"
+                                  color="primary"
+                                  type='submit'
+                                  disableElevation
+                              >
+                                  Login
+                              </Button>
+                          </Grid>
+                      </Grid>
+                  </form>
+              </DialogContent>
+          </Dialog>
           <img
             src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
             alt=""
