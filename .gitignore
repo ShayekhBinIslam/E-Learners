@@ -1,5 +1,8 @@
+<<<<<<< HEAD
+=======
+# React #
 
-
+>>>>>>> 5e97a16e3d6d170ad00f9915ff1e7f8569e9154c
 .DS_STORE
 node_modules
 scripts/flow/*/.flowconfig
@@ -177,3 +180,6 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+
+

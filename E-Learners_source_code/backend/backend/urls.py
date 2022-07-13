@@ -15,20 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-#from django.conf.urls import url
+
+# from django.conf.urls import url
 from app.views import *
 
-from app import views 
+from app import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('admins/', ReactView.as_view(), name="admins"),
-    path('login/', views.logininfo, name = 'logininfo'),
-    path('adminlist/', views.getadminslist, name = 'adminlist')
-
-#     path('showAllStudents', views.showAllStudents, name='show-all'),
-#     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
-#     path('addStudent', views.addStudent, name='add-student'),
-#     path('updateStudent/<int:pk>/', views.updateStudent, name='update-student'),
-#     path('deleteStudent/<int:pk>/', views.deleteProduct, name='delete-student'),
+    path("admin/", admin.site.urls),
+    path("admins/", ReactView.as_view(), name="admins"),
+    path("login/", views.logininfo, name="logininfo"),
+    path("adminlist/", views.getadminslist, name="adminlist")
+    #     path('showAllStudents', views.showAllStudents, name='show-all'),
+    #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
+    #     path('addStudent', views.addStudent, name='add-student'),
+    #     path('updateStudent/<int:pk>/', views.updateStudent, name='update-student'),
+    #     path('deleteStudent/<int:pk>/', views.deleteProduct, name='delete-student'),
 ]
