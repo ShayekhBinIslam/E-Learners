@@ -1,0 +1,20 @@
+.home-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    
+    min-height: 560px;
+    background-image: linear-gradient(to right, #9600FF, #AEBAF8);
+}
+
+@media screen and (max-width: 1110px) {
+    .home-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        
+        min-height: 420px;
+        background-image: linear-gradient(to right, #9600FF, #AEBAF8);
+
+    }
+}

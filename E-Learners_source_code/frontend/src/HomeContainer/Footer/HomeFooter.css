@@ -1,0 +1,10 @@
+.homefooter-container{
+    background-color: rgba(9, 1, 53, 0.644);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    color: white;
+    padding: 30px 60px 30px 60px;
+    height: 300px;
+}

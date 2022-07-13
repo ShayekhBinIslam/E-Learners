@@ -6,6 +6,7 @@ import Topbar from "./components/topbar";
 
 import Login from "./pages/login";
 import Admins from "./pages/admins";
+import Home from "./pages/Home";
 
 
 import {
@@ -22,7 +23,8 @@ function App() {
       <Topbar/>
       <div className="appcontainer">
         <Routes>
-          <Route path="/" element={<Login/>}/>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/login" element={<Login/>}/>
           <Route path="/admins" element={<Admins/>}/>
         </Routes>
        
