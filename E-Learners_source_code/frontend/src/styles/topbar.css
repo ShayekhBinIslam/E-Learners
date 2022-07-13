@@ -1,37 +1,13 @@
 .topbar{
     width: 100%;
     height: 50px;
-    /* background-color: white; */
     position: sticky;
     top: 0;
-    z-index: 999;
-
-  
-    background: #5E5DF0;
-    /* border-radius: 999px; */
-    box-shadow: #5E5DF0 0 10px 20px -10px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    /* cursor: pointer; */
-    font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 24px;
-    opacity: 1;
-    outline: 0 solid transparent;
-    /* padding: 8px 18px; */
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    /* width: fit-content; */
-    word-break: break-word;
-    border: 0;
-    
+    z-index: 999; 
 }
 
 .topbarWrapper{
-    height: 100%;
-    padding: 0px 20px;
+    margin-left: 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,21 +15,21 @@
 
 .logo{
     font-weight: bold;
-    font-size: 30px;
-    color: darkblue;
-    cursor: pointer;
+    font-size: 28px;
+    color: white;
 }
 
 .topRight{
     display: flex;
     align-items: center;
+    margin-right: 40px;
 }
 
 .topbaricnos{
     position: relative;
     cursor: pointer;
-    margin-right: 10px;
-    color: #555;
+    margin-right: 15px;
+    color: #FFF;
 }
 
 .topAvatar{
@@ -63,42 +39,30 @@
     cursor: pointer;
 }
 
-.button-30 {
+.topbar-container{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-image: linear-gradient(to right, #9600FF, #AEBAF8);
+}
 
-    
-    width: 98%;
-    height: 50px;
-    /* background-color: white; */
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    margin-top: 15px;
+.tracksDropdown-container{
+    display: flex;
+    color: #FFF;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 40px;
+    padding-left: 20px;
+}
 
-  
-  background-color: #FCFCFD;
+.tracksDropdown-container:hover{
 
-  border-width: 0;
-  box-shadow: rgba(45, 35, 66, 0.3) 0 2px 4px,rgba(45, 35, 66, 0.2) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #36395A;
-  cursor: pointer;
-  /* display: inline-flex; */
-  font-family: "JetBrains Mono",monospace;
-  /* height: 48px; */
-  /* justify-content: center; */
-  line-height: 1;
-  list-style: none; 
-  overflow: hidden;
-  /* padding-left: 16px; */
-  /* padding-right: 16px; */
-  /* position: relative; */
-  /* text-align: left; */
-  /* text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow,transform; */
-  /* font-size: 18px; */
+    background-color: #570394;
+    border-radius: 5%;
+}
+
+.topbarLeft-container{
+    display: flex;
+    align-items: center;
+
 }
