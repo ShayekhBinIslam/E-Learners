@@ -6,9 +6,6 @@ export default function Card() {
     <div className="card-container">
       <div className="cards-list">
         <div className="card 1">
-          {/* <div class="card_image">
-            <img src="https://media.giphy.com/media/10SvWCbt1ytWCc/giphy.gif" />
-          </div> */}
 
           <div className="imgg">
             <img
@@ -23,9 +20,6 @@ export default function Card() {
         </div>
 
         <div className="card 2">
-          {/* <div class="card_image">
-            <img src="https://media.giphy.com/media/10SvWCbt1ytWCc/giphy.gif" />
-          </div> */}
           <div className="imgg">
             <img
               src={require("../assets/card/math.png")}
@@ -38,9 +32,7 @@ export default function Card() {
         </div>
 
         <div className="card 3">
-          {/* <div class="card_image">
-            <img src="https://media.giphy.com/media/10SvWCbt1ytWCc/giphy.gif" />
-          </div> */}
+
           <div className="imgg">
             <img
               src={require("../assets/card/design.png")}
@@ -53,9 +45,7 @@ export default function Card() {
         </div>
 
         <div className="card 4">
-          {/* <div class="card_image">
-            <img src="https://media.giphy.com/media/10SvWCbt1ytWCc/giphy.gif" />
-          </div> */}
+
           <div className="imgg">
             <img
               src={require("../assets/card/algo.png")}

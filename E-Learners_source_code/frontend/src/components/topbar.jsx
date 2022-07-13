@@ -4,8 +4,10 @@ import axios from "axios";
 
 import { useState, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
+import { useNavigate } from "react-router-dom";
 
 import "../styles/dropdown.css";
+
 import { ReactComponent as BellIcon } from "../icons/bell.svg";
 import { ReactComponent as MessengerIcon } from "../icons/messenger.svg";
 import { ReactComponent as CaretIcon } from "../icons/caret.svg";
@@ -17,25 +19,28 @@ import { ReactComponent as BoltIcon } from "../icons/bolt.svg";
 
 const tracks = [
   {
-    id: 1,
+    id: 0,
     name: "Web Development",
     des: "This is Web Development Career Track",
-  },
+  }
   ,
   {
-    id: 2,
+    id: 1,
     name: "Competetive Programming",
     des: "This is Competetive Programming Career Track",
-  },
+  }
   ,
-  { id: 3, name: "Math", des: "This is Math Career Track" },
-  { id: 4, name: "Design", des: "This is Desing Career Track" }
+  { id: 2, name: "Math", des: "This is Math Career Track" },
+  { id: 3, name: "Design", des: "This is Desing Career Track" }
 ];
 
 const firstTrack = "Web Development";
 const fistDes = "This is Web Development Career Track";
 
 export default function Topbar() {
+
+  
+
   return (
     <div className="topbar-container">
       <div className="topbarWrapper">
@@ -67,6 +72,7 @@ export default function Topbar() {
   );
 }
 
+
 function Navbar(props) {
   return (
     <nav className="navbar">
@@ -91,12 +97,22 @@ function NavItem(props) {
 function DropdownMenu() {
   const [activeMenu, setActiveMenu] = useState("main");
   const [activeTrack, setActiveTrack] = useState(firstTrack);
+  const [activeId, setActiveId] = useState(firstTrack);
   const [activeDes, setActiveDes] = useState(fistDes);
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
 
+  // const navigate = useNavigate();
+
+  // const goCTpage = (e) => {
+  //   let patht = "./CareerTrack/";
+  //   patht.concat(activeId);
+  //   navigate(patht);
+  // };
+  
+
   useEffect(() => {
-    setMenuHeight(tracks.length*43);
+    setMenuHeight(tracks.length*50+50);
   }, []);
 
   function calcHeight(el) {
@@ -104,7 +120,8 @@ function DropdownMenu() {
     setMenuHeight(height);
   }
 
-  function setActiveDesName(des1, name1) {
+  function setActiveDesName(id1, des1, name1) {
+    setActiveId(id1);
     setActiveDes(des1);
     setActiveTrack(name1);
   }
@@ -114,15 +131,11 @@ function DropdownMenu() {
       <a
         href="#"
         className="menu-item"
-        onMouseEnter={() => setActiveDesName(props.des, props.name)}
+        onMouseEnter={() => setActiveDesName(props.goToMenu, props.des, props.name)}
       >
         {props.children}
       </a>
     );
-  }
-
-  function DropdownItemRight(props) {
-    return <div className="menu-item-right">{props.children}</div>;
   }
 
   return (
@@ -149,7 +162,9 @@ function DropdownMenu() {
         <h4>{activeTrack}</h4>
         <br></br>
         {activeDes}
-        <button>Explore</button>
+        <a 
+        className="btn-right-mi"
+        href={"/CareerTracks/".concat(activeId.toString())}>Explore</a>
       </div>
     </div>
   );
