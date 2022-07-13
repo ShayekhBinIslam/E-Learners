@@ -29,6 +29,7 @@ const tracks = [
   },
   ,
   { id: 3, name: "Math", des: "This is Math Career Track" },
+  { id: 4, name: "Design", des: "This is Desing Career Track" }
 ];
 
 const firstTrack = "Web Development";
