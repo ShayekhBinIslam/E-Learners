@@ -1,15 +1,13 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from rest_framework.views import APIView
-from . models import *
 from rest_framework.response import Response
-from . serializer import *
 
-
-from rest_framework.response import Response
+# from rest_framework.response import Response
 from rest_framework.decorators import api_view
+# from rest_framework import viewsets
 
-
-from rest_framework import viewsets
+from .models import *
+from .serializer import *
 
 
 # Create your views here.
@@ -17,34 +15,33 @@ from rest_framework import viewsets
 
 class ReactView(APIView):
 
-    serializer_class = ReactSerializer
+  serializer_class = ReactSerializer
 
-    def get(self, request):
-        output = [{"employee": output.employee, "department": output.department}
-                  for output in React.objects.all()]
-        return Response(output)
+  def get(self, request):
+    output = [
+        {"employee": output.employee, "department": output.department}
+        for output in React.objects.all()
+    ]
+    return Response(output)
 
-    def post(self, request):
-        serializer = ReactSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-
-
-
-
+  def post(self, request):
+    serializer = ReactSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+      serializer.save()
+      return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def getadminslist(request):
 
-    serializer_class = ReactSerializer
+  serializer_class = ReactSerializer
 
-    output = [{"employee": output.employee, "department": output.department}
-                  for output in React.objects.all()]
-    print(output)
-    return Response(output)
-    
+  output = [
+      {"employee": output.employee, "department": output.department}
+      for output in React.objects.all()
+  ]
+  print(output)
+  return Response(output)
 
 
 # @api_view(['GET'])
@@ -55,16 +52,16 @@ def getadminslist(request):
 #     return Response(serilizer.data)
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def logininfo(request):
-    serilizer = ReactSerializer(data=request.data)
+  serilizer = ReactSerializer(data=request.data)
 
-    if serilizer.is_valid():
-        serilizer.save()
+  if serilizer.is_valid():
+    serilizer.save()
 
-    print(serilizer.data)
-    print(request.data)
-    return Response(serilizer.data)
+  print(serilizer.data)
+  print(request.data)
+  return Response(serilizer.data)
 
 
 # @api_view(['PUT'])
@@ -84,4 +81,3 @@ def logininfo(request):
 #     product.delete()
 
 #     return Response('Items delete successfully!')
-
