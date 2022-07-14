@@ -46,7 +46,6 @@ const firstTrack = "Web Development";
 const fistDes = "This is Web Development Career Track";
 
 export default function Topbar() {
-<<<<<<< HEAD
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
@@ -63,11 +62,9 @@ export default function Topbar() {
       setFormValues({ ...formValues, [name]: e.target.value });
   };
   
-=======
 
   
 
->>>>>>> a2484f4f1cd2f9a2600e81356cd46100a38d2b3c
   return (
     <div className="topbar-container">
       <div className="topbarWrapper">
