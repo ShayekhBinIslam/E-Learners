@@ -114,6 +114,11 @@
 
 }
 
+.courseRecomCard:hover{
+    transition: all 250ms;
+    transform: scale(1.02);
+}
+
 .CourseRecom-topText{
     padding-left: 20px;
     padding-top: 20px;

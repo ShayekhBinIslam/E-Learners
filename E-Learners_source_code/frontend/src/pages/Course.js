@@ -145,13 +145,6 @@ function DropdownMenu() {
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
 
-  // const navigate = useNavigate();
-
-  // const goCTpage = (e) => {
-  //   let patht = "./CareerTrack/";
-  //   patht.concat(activeId);
-  //   navigate(patht);
-  // };
 
   useEffect(() => {
     setMenuHeight(courses.length * 50 + 50);
@@ -241,7 +234,7 @@ function CourseContent() {
         <div className="courseRecom-card-container">
           {recomList.map((out) => (
             <div className="courseRecomCard">
-              <div className="CourseRecom-topText">{out.title}</div>
+              <div className="CourseRecom-topText">{out.header}</div>
               <div className="CourseRecom-title">{out.title}</div>
               <div className="CourseRecom-bottomText">{out.type}</div>
               <div className="courseRecom-btn">
@@ -261,6 +254,7 @@ function CourseContent() {
 
   const Progress = ({ done }) => {
     const [style, setStyle] = React.useState({});
+    const [backStyle, setBackStyle] = React.useState({});
 
     setTimeout(() => {
       const newStyle = {
@@ -268,11 +262,27 @@ function CourseContent() {
         width: `${done}%`,
       };
 
+      const bnewStyle = {
+        opacity: 0,
+        
+      };
+
+      const nbewStyle2 = {
+        opacity: 1,
+      };
+
       setStyle(newStyle);
+
+      if(done<=1){
+        setBackStyle(bnewStyle);
+      }
+      else{
+        setBackStyle(nbewStyle2);
+      }
     }, 200);
 
     return (
-      <div className="progress-back-course">
+      <div className="progress-back-course" style={backStyle}>
         <div className="progress-done-course" style={style}></div>
       </div>
     );

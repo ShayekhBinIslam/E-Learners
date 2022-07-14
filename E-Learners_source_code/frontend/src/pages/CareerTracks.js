@@ -112,6 +112,8 @@ export default function CareerTracks() {
 
   const Progress = ({ done }) => {
     const [style, setStyle] = React.useState({});
+    const [backStyle, setBackStyle] = React.useState({});
+
 
     setTimeout(() => {
       const newStyle = {
@@ -120,10 +122,27 @@ export default function CareerTracks() {
       };
 
       setStyle(newStyle);
+      const bnewStyle = {
+        opacity: 0,
+        
+      };
+
+      const nbewStyle2 = {
+        opacity: 1,
+      };
+
+      setStyle(newStyle);
+
+      if(done<=1){
+        setBackStyle(bnewStyle);
+      }
+      else{
+        setBackStyle(nbewStyle2);
+      }
     }, 200);
 
     return (
-      <div className="progress-back">
+      <div className="progress-back" style={backStyle}>
         <div className="progress-done" style={style}>
           {done}%
         </div>
@@ -143,9 +162,9 @@ export default function CareerTracks() {
               <div>
                 <div>
                   <div className="table-row">
-                    <div className="table-col">
+                    {/* <div className="table-col">
                       <div className="id">{out.id+1}</div>
-                    </div>
+                    </div> */}
                     <div className="table-col">
                       <div className="name">{out.name}</div>
                       <div className="des">{out.des}</div>
