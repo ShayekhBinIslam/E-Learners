@@ -198,21 +198,31 @@ margin-top: 50px;
 
 .course-table{
     width: 80%;
-    background-color: white;
+    /* background-color: white; */
     border-radius: 1%;
     margin-left: 10%;
-    
+   
+}
+
+.course-table-course{
+    width: 80%;
+    background-color: white;
+    border-radius: 1%;
+    margin-left: 40px;
+   
 }
 
 .table-row{
     margin-bottom: 10px;
     margin-top: 10px;
-    /* background-image: linear-gradient(to left, #9500ff1c, #AEBAF8); */
-    border-radius: 1%;
+    /* background-image: linear-gradient(to left, #a62ffc09, #AEBAF8); */
+    border-radius: 20px;
     padding-left: 5%;
     padding-right: 5%;
 
-    box-shadow: 2px 5px 1px 1px rgba(17, 17, 17, 0.144);
+    background-color: rgba(255, 255, 255, 0.452);
+
+    box-shadow: 2px 2px 1px 1px rgba(17, 17, 17, 0.144);
 
     display: flex;
     align-items: center;
@@ -222,18 +232,75 @@ margin-top: 50px;
 
 }
 
-.table-col{
+.table-row:hover{
+    transition: all 250ms;
 
+    transform: scale(1.01);
+}
+
+.table-row-course{
+    /* margin-bottom: 10px;
+    margin-top: 10px; */
+    /* background-image: linear-gradient(to left, #9500ff1c, #AEBAF8); */
+    border-radius: 1%;
+    /* padding-left: 5%;
+    padding-right: 5%; */
+
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 100px;
+
+}
+
+.table-row-course:hover{
+    transition: all 250ms;
+
+    transform: scale(1.01);
+}
+
+.progressRow{
+    margin-bottom: 15px;
+    margin-top: 15px;
+    /* background-image: linear-gradient(to left, #9500ff1c, #AEBAF8); */
+    border-radius: 1%;
+    /* padding-left: 5%;
+    padding-right: 5%; */
+
+    box-shadow: 0px 2px 5px 2px rgba(17, 17, 17, 0.144);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 20px;
+
+    width: 100%;
+    flex-direction: column;
+
+}
+
+.progressRow-row{
+    width: 100%;
+}
+
+.table-col{
 }
 
 .id{
     font-size: 18px;
-    font-family: "Poppins Regular";
+    font-family: "Poppins SemiBold";
+    padding-left: 10px;
 }
 
 .name{
     font-size: 24px;
     font-family: "Poppins Bold";
+    width: 350px;
 }
 
 .des{
@@ -272,7 +339,30 @@ margin-top: 50px;
 	align-items: center;
 	justify-content: center;
 	height: 30px;
+
+    font-size: 12px;
 	
+	opacity: 0;
+	transition: 1s ease 0.3s;
+}
+
+.progress-back-course {
+	background-color: #d8d8d881;
+	border-radius: 20px;
+	position: relative;
+	height: 10px;
+	width: 100%;
+}
+
+.progress-done-course {
+	background: linear-gradient(to left, #F2709C, #FF9472);
+	box-shadow: 0 3px 3px -5px #F2709C, 0 2px 5px #F2709C;
+	border-radius: 20px;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 10px;
 	opacity: 0;
 	transition: 1s ease 0.3s;
 }
@@ -312,6 +402,13 @@ margin-top: 50px;
     font-size: 24px;
     color: white;
     margin-left: 10%;
+}
+
+.courseList-header-course{
+    font-family: "Poppins SemiBold";
+    font-size: 24px;
+    color: rgb(0, 0, 0);
+    margin-left: 40px;
 }
 
 .recom-header{

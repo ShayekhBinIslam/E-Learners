@@ -61,7 +61,6 @@
 }
 
 .tracksDropdown-container:hover{
-
     background-color: #570394;
     border-radius: 5%;
 }
@@ -69,5 +68,4 @@
 .topbarLeft-container{
     display: flex;
     align-items: center;
-
 }

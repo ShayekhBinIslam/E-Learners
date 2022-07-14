@@ -1,10 +1,54 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import Typical from "react-typical";
 import "../index.css";
 import "../styles/CareerTracks.css";
 
 export default function CareerTracks() {
+  const course = [
+    {
+      id: 0,
+      name: "FrontEnd Basics",
+      des: "This is Web FrontEnd Basics Course",
+      progress: "25",
+    },
+    {
+      id: 1,
+      name: "Frontend Advance",
+      des: "This is Frontend Advance Course",
+      progress: "75",
+    },
+    { id: 2, name: "React", des: "This is React Course",progress: "35", },
+    { id: 3, name: "Angular", des: "This is Angular Course",progress: "0", },
+  ];
+
+  const tracks = [
+    {
+      id: 1,
+      name: "Web Development",
+      des: "This is Web Development Career Track",
+    },
+    {
+      id: 2,
+      name: "Competetive Programming",
+      des: "This is Competetive Programming Career Track",
+    },
+    { id: 3, name: "Math", des: "This is Math Career Track" },
+    { id: 4, name: "Design", des: "This is Desing Career Track" },
+  ];
+
+  let isEnrolled = true;
+
+  const { trackid } = useParams();
+
+  let TrackName = tracks[trackid].name;
+  let TrackDes = tracks[trackid].des;
+
+  let buttonName = "Start";
+  if (isEnrolled) {
+    buttonName = "Continue";
+  }
+
+
   function RecommendationCard() {
       return (
         <div className="card-container">
@@ -66,25 +110,10 @@ export default function CareerTracks() {
     
   }
 
-  const course = [
-    {
-      id: 1,
-      name: "HTML",
-      des: "This is HTML Course",
-      progress: "70",
-    },
-    {
-      id: 2,
-      name: "HTML",
-      des: "This is HTML Course",
-      progress: "30",
-    },
-    { id: 3, name: "HTML", des: "This is HTML Course", progress: "20" },
-    { id: 4, name: "HTML", des: "This is HTML Course", progress: "0" },
-  ];
-
   const Progress = ({ done }) => {
     const [style, setStyle] = React.useState({});
+    const [backStyle, setBackStyle] = React.useState({});
+
 
     setTimeout(() => {
       const newStyle = {
@@ -93,10 +122,27 @@ export default function CareerTracks() {
       };
 
       setStyle(newStyle);
+      const bnewStyle = {
+        opacity: 0,
+        
+      };
+
+      const nbewStyle2 = {
+        opacity: 1,
+      };
+
+      setStyle(newStyle);
+
+      if(done<=1){
+        setBackStyle(bnewStyle);
+      }
+      else{
+        setBackStyle(nbewStyle2);
+      }
     }, 200);
 
     return (
-      <div className="progress-back">
+      <div className="progress-back" style={backStyle}>
         <div className="progress-done" style={style}>
           {done}%
         </div>
@@ -116,9 +162,9 @@ export default function CareerTracks() {
               <div>
                 <div>
                   <div className="table-row">
-                    <div className="table-col">
-                      <div className="id">{out.id}</div>
-                    </div>
+                    {/* <div className="table-col">
+                      <div className="id">{out.id+1}</div>
+                    </div> */}
                     <div className="table-col">
                       <div className="name">{out.name}</div>
                       <div className="des">{out.des}</div>
@@ -141,9 +187,9 @@ export default function CareerTracks() {
                         </div>
                     </div>
                     <div className="table-col">
-                      <button className="btn-table">
+                      <a href={"/CareerTracks/".concat(trackid.toString()).concat("/Course/").concat(out.id)} className="btn-table">
                         Enter
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -200,33 +246,6 @@ export default function CareerTracks() {
         </div>
       );
     }
-  }
-
-  const tracks = [
-    {
-      id: 1,
-      name: "Web Development",
-      des: "This is Web Development Career Track",
-    },
-    {
-      id: 2,
-      name: "Competetive Programming",
-      des: "This is Competetive Programming Career Track",
-    },
-    { id: 3, name: "Math", des: "This is Math Career Track" },
-    { id: 4, name: "Design", des: "This is Desing Career Track" },
-  ];
-
-  let isEnrolled = true;
-
-  const { trackid } = useParams();
-
-  let TrackName = tracks[trackid].name;
-  let TrackDes = tracks[trackid].des;
-
-  let buttonName = "Start";
-  if (isEnrolled) {
-    buttonName = "Continue";
   }
 
   return (

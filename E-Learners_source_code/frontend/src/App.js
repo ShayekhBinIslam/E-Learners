@@ -9,6 +9,7 @@ import Login from "./pages/login";
 import Admins from "./pages/admins";
 import Home from "./pages/Home";
 import CareerTracks from "./pages/CareerTracks";
+import Course from "./pages/Course";
 
 
 import {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/admins" element={<Admins/>}/>
           <Route path="/CareerTracks/:trackid" element={<CareerTracks/>}/>
+          <Route path="/CareerTracks/:trackid/Course/:courseid" element={<Course/>}/>
         </Routes>
       </div>
       
