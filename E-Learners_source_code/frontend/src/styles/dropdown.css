@@ -11,7 +11,7 @@
       monospace;
   } */
   
-  ul {
+  /* ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -20,7 +20,7 @@
   a {
     color: var(--text-color);
     text-decoration: none;;
-  }
+  } */
   
   /* Top Navigation Bar */
   
@@ -94,11 +94,55 @@
     overflow: hidden;
     /*transform: translateX(-45%);*/  
     transition: height var(--speed) ease;
+  }
+
+  .dropdown-course {
+    position: absolute;
+    top: 60px;
+    width: 750px;
+    left: 300px;
+
+    font-family: "Poppins Regular";
+
+    box-shadow: 5px 5px 3px 2px #1111111f;
+    
+    /* background-color: #fff; */
+    background-image: linear-gradient(to left, #9500ffef, #AEBAF8);
+
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    overflow: hidden;
+    /*transform: translateX(-45%);*/  
+    transition: height var(--speed) ease;
 
   }
 
-  .dropDown-container{
+  .menu-course {
+    width: 265px;
+    padding-left: 20px;
+    padding-top: 5px;
+    background-color: #e3cdf359;
+    /* background-image: linear-gradient(to right, #9500ffef, #AEBAF8); */
 
+    font-size: 14px !important;
+    font-family: "Poppins SemiBold";
+  }
+
+  .menu-item-right-course{
+    position: absolute;
+    top: 100px;
+    width: 450px;
+    left: 600px;
+    color: #ffffff;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    font-family: "Poppins SemiBold";
+  }
+
+  .dropDown-container{
     display: flex;
     flex-direction: column;
   }
@@ -135,6 +179,9 @@
     
     transition: background var(--speed);
     padding: 0.5rem;
+    color: rgb(0, 0, 0);
+    font-family: "Poppins Bold";
+    text-decoration: none;
   }
   
   .menu-item .icon-button {
@@ -179,5 +226,5 @@
 
 .btn-right-mi:hover {
   box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
-  transform: scale(1.05) rotate(-1deg);
+  transform: scale(1.07);
 }
