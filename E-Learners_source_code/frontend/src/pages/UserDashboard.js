@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import "../index.css";
 import "../styles/CareerTracks.css";
 import { TRACKS } from "../shared/tracks";
+import "../styles/Course.css";
+import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
+import { useState, useEffect, useRef } from "react";
 function RenderCompletedItem ({course}) {
     console.log(course.image);
     return (
@@ -27,54 +30,9 @@ export default function UserDashboard(props) {
     let TrackDes = TRACKS[trackid].des;
     let img = TRACKS[trackid].image;
     console.log({img});
-    
-    function RunningCard(){
-        const running_course = props.running.map((course) => {
-            return (
-                <div key={ course.id } className="cards-list">    
-                    <RenderCompletedItem course={course} />         
-                </div>
-            );
-        });
-        return (
-            <div className="card-container">
-              <div className="recom-header">
-                  Running Course
-              </div>
-              <div className="row">
-                  {running_course}
-              </div>
-               
-            </div>
-          );
-
-    }
-      function CompletedCard() {
-        const completed_course = props.completed.map((course) => {
-            return (
-                <div key={ course.id } className="cards-list">    
-                    <RenderCompletedItem course={course} />         
-                </div>
-            );
-        });
-        
-        return (
-          <div className="card-container">
-            <div className="recom-header">
-                Completed Course
-            </div>
-            <div className="row">
-                {completed_course}
-            </div>
-     
-          </div>
-        );
-      
-    }
     const Progress = ({ done }) => {
         const [style, setStyle] = React.useState({});
         const [backStyle, setBackStyle] = React.useState({});
-    
     
         setTimeout(() => {
           const newStyle = {
@@ -82,7 +40,6 @@ export default function UserDashboard(props) {
             width: `${done}%`,
           };
     
-          setStyle(newStyle);
           const bnewStyle = {
             opacity: 0,
             
@@ -103,12 +60,73 @@ export default function UserDashboard(props) {
         }, 200);
     
         return (
-          <div className="progress-back" style={backStyle}>
-            <div className="progress-done" style={style}>
-              {done}%
-            </div>
+          <div className="progress-back-course" style={backStyle}>
+            <div className="progress-done-course" style={style}></div>
           </div>
         );
+      };
+    
+    function RunningCard(){
+        
+        return (
+            <div className="courseRecom-container">
+                <div className="courseRecom-header">Running Tracks</div>
+
+                <div className="courseRecom-card-container">
+                {props.running.map((out) => (
+                    <div className="courseRecomCard">
+                    <div className="CourseRecom-topText">{out.header}</div>
+                    <div className="CourseRecom-title">{out.title}</div>
+                    <div className="CourseRecom-bottomText">{out.type}</div>
+                    <div className="courseRecom-btn">
+                    <a href="#" className="btn-right-mi">
+                        Visit Track
+                    </a>
+                    </div>
+                    <div className="progressRow-row">
+                        <Progress done={100} />
+                    </div>
+                    </div>
+                ))}
+                </div>
+            </div>
+          );
+
+    }
+      function CompletedCard() { 
+        return (
+            <div className="courseRecom-container">
+                <div className="courseRecom-header">Completed Tracks</div>
+
+                <div className="courseRecom-card-container">
+                {props.completed.map((out) => (
+                    <div className="courseRecomCard">
+                    <div className="CourseRecom-topText">{out.header}</div>
+                    <div className="CourseRecom-title">{out.title}</div>
+                    <div className="CourseRecom-bottomText">{out.type}</div>
+                    <div className="courseRecom-btn">
+                    <a href="#" className="btn-right-mi">
+                        Visit Track
+                    </a>
+                    </div>
+                    <div className="progressRow-row">
+                        <Progress done={100} />
+                    </div>
+                    </div>
+                ))}
+                </div>
+            </div>
+        //   <div className="card-container">
+        //     <div className="recom-header">
+        //         Completed Course
+        //     </div>
+        //     <div className="row">
+        //         {completed_course}
+        //     </div>
+     
+        //   </div>
+        );
+      
     }
     return (
         <div className="CT-container">
@@ -118,13 +136,13 @@ export default function UserDashboard(props) {
                 <div className="tracksProfile-details-name">
                   <span className="primary-text">
                     {" "}
-                    <span className="highlighted-text">{TrackName}</span>
+                    <span className="highlighted-text">Running Track</span>
                   </span>
                 </div>
                 <div className="tracksProfile-details-role">
                   <span className="primary-text">
                     {" "}
-                    <span className="tracksProfile-role-tagline">{TrackDes}</span>
+                    <span className="tracksProfile-role-tagline">{TrackName}</span>
                   </span>
                 </div>
                 <div className="tracksProfile-options">
@@ -143,10 +161,10 @@ export default function UserDashboard(props) {
             </div>
           </div>
           
-          <div>
+          <div className="courseContent">
             <CompletedCard />
           </div>
-          <div>
+          <div className="courseContent">
             <RunningCard />
           </div>
           {/* <div>
