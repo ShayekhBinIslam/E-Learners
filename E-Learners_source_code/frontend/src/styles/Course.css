@@ -125,18 +125,22 @@
     color: rgba(255, 255, 255, 0.692);
     font-size: 14px;
     margin-bottom: 15px;
+    z-index: 1;
 }
 
 .CourseRecom-title{
     padding-left: 20px;
     color: rgb(255, 255, 255);
     font-size: 24px;
+    z-index: 1;
 }
 
 .CourseRecom-bottomText{
     padding-left: 20px;
     color: rgba(255, 255, 255, 0.986);
     font-size: 15px;
+    z-index: 1;
+
     
 }
 
@@ -150,6 +154,8 @@
     font-size: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+    z-index: 1;
+
 }
 
 .courseRecom-card-container{
@@ -159,4 +165,96 @@
 .courseRecom-btn{
     padding-left: 20px;
     padding-bottom: 20px;
+    z-index: 1;
+
 }
+
+
+.btn-right-mi-chapter {
+    width: fit-content;
+    margin-right: 10px;
+    
+    background-color: #c2fbd7;
+    border-radius: 100px;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+    color: green;
+    cursor: pointer;
+    display: inline-block;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    padding: 7px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 250ms;
+    border: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    font-family: "Poppins Bold";
+    font-size: 20px;
+  }
+  
+  .btn-right-mi-chapter:hover {
+    box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+    transform: scale(1.07);
+  }
+
+  .tutorials-container{
+    margin-left: 40px;
+    margin-top: 60px;
+  }
+
+
+  .tutorialsCard{
+    font-family: "Poppins SemiBold";
+
+    background-color: #522ED2;
+    
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 2px rgba(17, 17, 17, 0.158);
+    margin-right: 20px;
+
+}
+
+.tutorialsCard:hover{
+    transition: all 250ms;
+    transform: scale(1.02);
+}
+
+
+  .courseRecomCard .card_image {
+    width: inherit;
+    height: inherit;
+    opacity: .7;
+    position: absolute;
+    margin-top: -0px;
+    z-index: -0;
+    border-radius: 10px;
+  }
+
+  .tutorials-grid{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .playbtn{
+    z-index: 5;
+  }
+
+  .playbtn img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    opacity: .8;
+    margin-bottom: 35px;
+    margin-left: 90px;
+  }
+
+  .tutorialsName{
+    font-size: 18px;
+    font-family: "Poppins SemiBold";
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
