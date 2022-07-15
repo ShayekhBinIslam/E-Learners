@@ -4,8 +4,7 @@ import "../index.css";
 import "../styles/CareerTracks.css";
 import { TRACKS } from "../shared/tracks";
 import "../styles/Course.css";
-import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
-import { useState, useEffect, useRef } from "react";
+
 function RenderCompletedItem ({course}) {
     console.log(course.image);
     return (
@@ -160,11 +159,10 @@ export default function UserDashboard(props) {
               </div>
             </div>
           </div>
-          
-          <div className="courseContent">
+          <div >
             <CompletedCard />
           </div>
-          <div className="courseContent">
+          <div>
             <RunningCard />
           </div>
           {/* <div>

@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import Typical from 'react-typical'
 import "../../../index.css"
 import "./Profile.css"
+import { TRACKS } from '../../../shared/tracks'
 import {
     Button,
     Dialog,
@@ -21,6 +22,8 @@ export default function () {
       });
       const [showRegisterForm, setShowRegisterForm] = useState(false);
       const [showLoginForm, setShowLoginForm] = useState(false);
+      const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
+      const runningID = runningTrack.id;
       const onSubmit = (e) => {
           e.preventDefault();
           console.log(formValues);
@@ -128,15 +131,9 @@ export default function () {
                                         <Button variant="contained" onClick={() => setShowLoginForm(false)} disableElevation>
                                             Close
                                         </Button>
-                                        <Button
-                                            style={{ marginLeft: '15px' }}
-                                            variant="contained"
-                                            color="primary"
-                                            type='submit'
-                                            disableElevation
-                                        >
-                                            Login
-                                        </Button>
+                                        <a 
+                                            className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
+                                            href={"/UserDashboard/".concat(runningID.toString())}>Log in</a>
                                     </Grid>
                                 </Grid>
                             </form>
