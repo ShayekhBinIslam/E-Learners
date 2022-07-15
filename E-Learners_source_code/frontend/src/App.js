@@ -10,6 +10,8 @@ import Admins from "./pages/admins";
 import Home from "./pages/Home";
 import CareerTracks from "./pages/CareerTracks";
 import Course from "./pages/Course";
+import UserDashboard from "./pages/UserDashboard";
+import { TRACKS } from "./shared/tracks";
 
 
 import {
@@ -21,6 +23,7 @@ import {
 
 function App() {
   
+  
 
   return (
     <div className="fintech">
@@ -31,6 +34,8 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/admins" element={<Admins/>}/>
+          <Route path="/UserDashboard/:trackid" element={<UserDashboard completed = {TRACKS.filter((track) => track.isCompleted)} running = {TRACKS.filter((track) => track.isRunning)}/>}/>
+          
           <Route path="/CareerTracks/:trackid" element={<CareerTracks/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid" element={<Course/>}/>
         </Routes>

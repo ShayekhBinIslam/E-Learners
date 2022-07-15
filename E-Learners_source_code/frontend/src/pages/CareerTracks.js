@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import "../index.css";
 import "../styles/CareerTracks.css";
+import { TRACKS } from "../shared/tracks";
 
 export default function CareerTracks() {
   const course = [
@@ -10,15 +11,17 @@ export default function CareerTracks() {
       name: "FrontEnd Basics",
       des: "This is Web FrontEnd Basics Course",
       progress: "25",
+      isRunning : true
     },
     {
       id: 1,
       name: "Frontend Advance",
       des: "This is Frontend Advance Course",
       progress: "75",
+      isRunning : false
     },
-    { id: 2, name: "React", des: "This is React Course",progress: "35", },
-    { id: 3, name: "Angular", des: "This is Angular Course",progress: "0", },
+    { id: 2, name: "React", des: "This is React Course",progress: "35",isRunning : false },
+    { id: 3, name: "Angular", des: "This is Angular Course",progress: "0",isRunning : false },
   ];
 
   const tracks = [
@@ -26,14 +29,16 @@ export default function CareerTracks() {
       id: 1,
       name: "Web Development",
       des: "This is Web Development Career Track",
+      isRunning : true
     },
     {
       id: 2,
       name: "Competetive Programming",
       des: "This is Competetive Programming Career Track",
+      isRunning : false
     },
-    { id: 3, name: "Math", des: "This is Math Career Track" },
-    { id: 4, name: "Design", des: "This is Desing Career Track" },
+    { id: 3, name: "Math", des: "This is Math Career Track",isRunning : false },
+    { id: 4, name: "Design", des: "This is Desing Career Track" , isRunning : false},
   ];
 
   let isEnrolled = true;
@@ -275,7 +280,11 @@ export default function CareerTracks() {
           </div>
 
           <div className="tracksProfile-picture">
-            <div className="tracksProfile-picture-background"></div>
+            <div className="tracksProfile-picture-background" style={{ 
+              backgroundImage: `url(../assets/card/${TRACKS[trackid].image})` 
+            }}>
+
+            </div>
           </div>
         </div>
       </div>

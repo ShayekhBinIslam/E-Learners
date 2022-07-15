@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useNavigate } from "react-router-dom";
+import { TRACKS } from "../shared/tracks";
 
 import "../styles/dropdown.css";
 
@@ -44,6 +45,8 @@ const tracks = [
 
 const firstTrack = "Web Development";
 const fistDes = "This is Web Development Career Track";
+const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
+const runningID = runningTrack.id;
 
 export default function Topbar() {
   const [formValues, setFormValues] = useState({
@@ -90,7 +93,7 @@ export default function Topbar() {
                 fullWidth
                 onClose={() => setShowRegisterForm(false)}
           >
-              <DialogTitle>Login</DialogTitle>
+              <DialogTitle>Log in</DialogTitle>
               <DialogContent>
                   <form onSubmit={onSubmit}>
                       <Grid container spacing={4}>
@@ -142,7 +145,7 @@ export default function Topbar() {
                               <Button variant="contained" onClick={() => setShowRegisterForm(false)} disableElevation>
                                   Close
                               </Button>
-                              <Button
+                              {/* <Button
                                   style={{ marginLeft: '15px' }}
                                   variant="contained"
                                   color="primary"
@@ -150,7 +153,10 @@ export default function Topbar() {
                                   disableElevation
                               >
                                   Login
-                              </Button>
+                              </Button> */}
+                              <a 
+                                className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
+                                href={"/UserDashboard/".concat(runningID.toString())}>Log in</a>
                           </Grid>
                       </Grid>
                   </form>
