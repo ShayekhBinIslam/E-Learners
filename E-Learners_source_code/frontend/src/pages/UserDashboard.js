@@ -5,13 +5,12 @@ import "../styles/CareerTracks.css";
 import { TRACKS } from "../shared/tracks";
 function RenderCompletedItem ({course}) {
     console.log(course.image);
+    let srcc = "../assets/card/design.png";
     return (
         <div className="card 1">
             <div className="imgg">
-                <img
-                src={''+course.image}
-                alt="no internet connection"
-                />
+            <img src={srcc}></img>
+          
             </div>
 
             <div className="card_title title-black">
