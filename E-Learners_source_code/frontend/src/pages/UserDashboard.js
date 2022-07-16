@@ -8,12 +8,17 @@ import "../styles/UserDashboard.css"
 
 function RenderCompletedItem({ course }) {
   //console.log(course.image);
-  let srcc = require("../assets/card/design.png");
+
+  // first fetch img from backend
+  // save it in here :"../assets/card/"
+  // image variable only have image name 
+
+  let imagee = "design.png";
 
   return (
     <div className="card 1">
       <div className="imgg">
-        <img src={srcc}></img>
+        <img src={require(`../assets/card/${imagee}`)}></img>
       </div>
 
       <div className="card_title title-black">
