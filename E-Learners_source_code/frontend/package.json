@@ -19,6 +19,7 @@
     "font-awesome": "^4.7.0",
     "react-animated-modal": "^1.1.1",
     "react-bootstrap": "^2.4.0",
+    "react-player": "^2.10.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-slick": "^0.29.0",
