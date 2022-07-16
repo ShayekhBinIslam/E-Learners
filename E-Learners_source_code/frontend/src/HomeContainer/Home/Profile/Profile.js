@@ -12,6 +12,7 @@ import {
     Grid,
     TextField
   } from '@material-ui/core';
+import { Navigate } from 'react-router-dom';
   
 
 export default function () {
@@ -47,12 +48,13 @@ export default function () {
             .then(function (response) {
               //handle success
               console.log(response);
+              Navigate('/UserDashboard');
+
             })
             .catch(function (response) {
               //handle error
               console.log(response);
             });
-        window.location.href('http://google.com');
 
       };
       const onSubmit2 = (e) => {
