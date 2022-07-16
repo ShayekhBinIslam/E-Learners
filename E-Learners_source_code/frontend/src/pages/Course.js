@@ -12,7 +12,7 @@ import "../styles/CareerTracks.css";
 //mode = 1 for CourseContent
 //mode = 2 for ChapterContent
 //mode = 3 for tutorialsContent
-let activeMode = 2;
+let globalactiveMode = 1;
 
 let activeChapterid = 1;
 
@@ -155,6 +155,8 @@ const recomChapterList = [
 ];
 
 export default function Course() {
+  const [activeMode, setActiveMode] = useState(globalactiveMode);
+
   return (
     <div className="courseContainer">
       <div className="courseSidebar">
@@ -198,7 +200,7 @@ export default function Course() {
       </div>
     </div>
   );
-}
+
 
 function Navbar(props) {
   return (
@@ -370,6 +372,11 @@ function CourseContent() {
   };
 
   function ChapterListEnrolled() {
+
+    function gotoChapter(){
+      setActiveMode(2);
+    }
+
     if (isEnrolled) {
       return (
         <div className="courselist-container">
@@ -393,7 +400,7 @@ function CourseContent() {
                       <div className="table-col"></div>
 
                       <div className="table-col">
-                        <button className="btn-table">Enter</button>
+                        <button className="btn-table" onClick={gotoChapter}>Enter</button>
                       </div>
                     </div>
                     <div className="progressRow-row">
@@ -424,6 +431,7 @@ function CourseContent() {
 }
 
 function ChapterContent() {
+
   let isEnrolled = true;
 
   let ChpaterName = chapterList[activeChapterid].name;
@@ -435,15 +443,14 @@ function ChapterContent() {
   }
 
   function goBackToCourseContent(){
-    activeMode=2;
-    // this.forceUpdate();
+    setActiveMode(1);
   }
 
   function RecommendationCard() {
     return (
       <div className="courseRecom-container">
         <div className="courseRecom-header">
-          <button className="btn-right-mi-chapter" onClick={goBackToCourseContent()}>{"<-"}</button>
+          <button className="btn-right-mi-chapter" onClick={goBackToCourseContent}>{"<-"}</button>
           {ChpaterName}
         </div>
 
@@ -552,4 +559,6 @@ function ChapterContent() {
       </div>
     );
   }
+}
+
 }

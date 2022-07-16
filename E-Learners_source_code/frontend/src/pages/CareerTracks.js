@@ -53,66 +53,91 @@ export default function CareerTracks() {
     buttonName = "Continue";
   }
 
+  const recomList = [
+    {
+      id: 1,
+      header: "Active Learning",
+      title: "Card with HTML5",
+      type: "Power Play",
+      progress: "70",
+      button: "continue",
+    },
+    {
+      id: 2,
+      header: "Recommendation",
+      title: "Form with HTML5",
+      type: "Power Play",
+      progress: "0",
+      button: "start",
+    },
+  ];
+
 
   function RecommendationCard() {
+
+    const ProgressR = ({ done }) => {
+      const [style, setStyle] = React.useState({});
+      const [backStyle, setBackStyle] = React.useState({});
+  
+  
+      setTimeout(() => {
+        const newStyle = {
+          opacity: 1,
+          width: `${done}%`,
+        };
+  
+        setStyle(newStyle);
+        const bnewStyle = {
+          opacity: 0,
+          
+        };
+  
+        const nbewStyle2 = {
+          opacity: 1,
+        };
+  
+        setStyle(newStyle);
+  
+        if(done<=1){
+          setBackStyle(bnewStyle);
+        }
+        else{
+          setBackStyle(nbewStyle2);
+        }
+      }, 200);
+  
       return (
-        <div className="card-container">
-            <div className="recom-header">
-                Recommnedation
-            </div>
-          <div className="cards-list">
-            <div className="card 1">
-              <div className="imgg">
-                <img
-                  src={require("../assets/card/web.png")}
-                  alt="no internet connection"
-                />
-              </div>
-
-              <div className="card_title title-black">
-                <p>Web Dev</p>
-              </div>
-            </div>
-
-            <div className="card 2">
-              <div className="imgg">
-                <img
-                  src={require("../assets/card/math.png")}
-                  alt="no internet connection"
-                />
-              </div>
-              <div className="card_title title-black">
-                <p>Programming</p>
-              </div>
-            </div>
-
-            <div className="card 3">
-              <div className="imgg">
-                <img
-                  src={require("../assets/card/design.png")}
-                  alt="no internet connection"
-                />
-              </div>
-              <div className="card_title title-black">
-                <p>Design</p>
-              </div>
-            </div>
-
-            <div className="card 4">
-              <div className="imgg">
-                <img
-                  src={require("../assets/card/algo.png")}
-                  alt="no internet connection"
-                />
-              </div>
-              <div className="card_title title-black">
-                <p>Algorithm</p>
-              </div>
-            </div>
+        <div className="progress-back-course" style={backStyle}>
+          <div className="progress-done-course" style={style}>
+            
           </div>
         </div>
       );
-    
+    };
+
+    return (
+      <div className="trackRecom-container">
+        <div className="courseRecom-header">Recommneded for you</div>
+
+        <div className="courseRecom-card-container">
+          {recomList.map((out) => (
+            <div className="courseRecomCard">
+              <div className="CourseRecom-topText">{out.header}</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.type}</div>
+              <div className="courseRecom-btn">
+                <a href="#" className="btn-right-mi">
+                  {out.button}
+                </a>
+              </div>
+              <div className="progressRow-row">
+                <ProgressR done={out.progress} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   const Progress = ({ done }) => {
@@ -280,21 +305,37 @@ export default function CareerTracks() {
           </div>
 
           <div className="tracksProfile-picture">
-            <div className="tracksProfile-picture-background" style={{ 
+            {/* <div className="tracksProfile-picture-background" style={{ 
               backgroundImage: `url(../assets/card/${TRACKS[trackid].image})` 
             }}>
 
+            </div> */}
+            <div className="tutorrialsCard">
+            <div className="courseRecomCard">
+              <img
+                className="card_image"
+                src={require("../assets/Home/profilephoto.jpg")}
+              ></img>
+              <div className="CourseRecom-topText"></div>
+              <div className="courseRecom-btn">
+                <a href="#" className="playbtn">
+                  <img src={require("../assets/card/playbtn.jpg")}></img>
+                </a>
+              </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
+
       <div>
         <RecommendationCard />
       </div>
-      <div>
+      
+      <div className="track-course-list">
         <CourseListEnrolled />
       </div>
-      <div>
+      <div className="track-course-list">
         <CourseListNotEnrolled/>
       </div>
     </div>
