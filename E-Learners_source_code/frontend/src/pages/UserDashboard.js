@@ -7,8 +7,9 @@ import "../styles/Course.css";
 import "../styles/UserDashboard.css"
 
 function RenderCompletedItem({ course }) {
-  console.log(course.image);
-  let srcc = "../assets/card/design.png";
+  //console.log(course.image);
+  let srcc = require("../assets/card/design.png");
+
   return (
     <div className="card 1">
       <div className="imgg">
@@ -16,11 +17,13 @@ function RenderCompletedItem({ course }) {
       </div>
 
       <div className="card_title title-black">
-        <p>{course.name}</p>
+        <p>{"name"}</p>
       </div>
     </div>
   );
 }
+
+
 export default function UserDashboard(props) {
   const { trackid } = useParams();
 
@@ -215,6 +218,9 @@ export default function UserDashboard(props) {
             <CourseListNotEnrolled/>
           </div> */}
       </div>
+      {/* <div> 
+        <RenderCompletedItem/>
+      </div> */}
     </div>
   );
 }
