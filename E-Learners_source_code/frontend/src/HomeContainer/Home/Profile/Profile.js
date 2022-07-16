@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import Typical from 'react-typical'
 import "../../../index.css"
 import "./Profile.css"
+import axios from 'axios';
 import { TRACKS } from '../../../shared/tracks'
 import {
     Button,
@@ -18,21 +19,62 @@ export default function () {
         name: '',
         email: '',
         phone: '',
-        password: ''
+        password: '',
+        confirmpassword: '',
       });
       const [showRegisterForm, setShowRegisterForm] = useState(false);
       const [showLoginForm, setShowLoginForm] = useState(false);
       const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
       const runningID = runningTrack.id;
+      
       const onSubmit = (e) => {
-          e.preventDefault();
-          console.log(formValues);
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        const actualData = {
+            name: data.get('name'),
+            email: data.get('email'),
+            password: data.get('password'),
+            password2: data.get('confirm password'),
+            // tc: data.get('tc'),
+        }
+        console.log(formValues);
+        axios({
+            method: "post",
+            url: "http://localhost:8000/register/",
+            data: actualData,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+            .then(function (response) {
+              //handle success
+              console.log(response);
+            })
+            .catch(function (response) {
+              //handle error
+              console.log(response);
+            });
+        window.location.href('http://google.com');
+
+      };
+      const onSubmit2 = (e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        const actualData = {
+            email: data.get('email'),
+            password: data.get('password'),
+        } 
+        console.log(formValues);
       };
       const handleInputChange = (e) => {
           const name = e.target.name;
           setFormValues({ ...formValues, [name]: e.target.value });
     };
+    function submitForm() {
+        let form = document.getElementById("form__submit");
+        form.submit();
+      }
+    
   return (
+    
     <div className='profile-container'>
         <div className='profile-parent'>
             <div className='profile-details'>
@@ -80,7 +122,7 @@ export default function () {
                     >
                         <DialogTitle>Login</DialogTitle>
                         <DialogContent>
-                            <form onSubmit={onSubmit}>
+                            <form onSubmit={onSubmit2}>
                                 <Grid container spacing={4}>
                                     {/* <Grid item xs={12}>
                                         <TextField
@@ -150,7 +192,7 @@ export default function () {
                     >
                         <DialogTitle>Login</DialogTitle>
                         <DialogContent>
-                            <form onSubmit={onSubmit}>
+                            <form onSubmit={onSubmit} id="form__submit">
                                 <Grid container spacing={4}>
                                     <Grid item xs={12}>
                                         <TextField
@@ -174,17 +216,7 @@ export default function () {
                                             onChange={handleInputChange}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            label="Phone"
-                                            type="tel"
-                                            name="phone"
-                                            required
-                                            fullWidth
-                                            value={formValues.phone}
-                                            onChange={handleInputChange}
-                                        />
-                                    </Grid>
+                                    
                                     <Grid item xs={12}>
                                         <TextField
                                             label="Password"
@@ -196,11 +228,26 @@ export default function () {
                                             onChange={handleInputChange}
                                         />
                                     </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Confirm Password"
+                                            type="password"
+                                            required
+                                            name="confirm password"
+                                            fullWidth
+                                            value={formValues.password}
+                                            onChange={handleInputChange}
+                                        />
+                                    </Grid>
                                     
                                     <Grid item xs={12}>
                                         <Button variant="contained" onClick={() => setShowRegisterForm(false)} disableElevation>
                                             Close
                                         </Button>
+                                        {/* <a 
+                                            className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
+                                            href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
+                                        
                                         <Button
                                             style={{ marginLeft: '15px' }}
                                             variant="contained"
@@ -208,7 +255,10 @@ export default function () {
                                             type='submit'
                                             disableElevation
                                         >
-                                            Login
+                                            {/* <a 
+                                            className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
+                                            href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
+                                            Sign up
                                         </Button>
                                     </Grid>
                                 </Grid>
