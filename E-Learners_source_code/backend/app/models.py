@@ -34,6 +34,7 @@ class EleanerUser(models.Model):
 
 class Video(models.Model):
   link = models.CharField(max_length=200)
+  # more metadata such as duration
 
 
 class FreeSlot(models.Model):
@@ -88,16 +89,28 @@ class Tutorial(models.Model):
   order = models.IntegerField(default=0)
 
 
+# class Quiz(models.Model):
+  # class Meta:
+    # abstract = True
+
+
+
+# class Practice(SimpleQuiz):
 class Practice(models.Model):
+  # quiz = models.OneToOneField(SimpleQuiz, on_delete=models.CASCADE)
+  # quiz = models.ForeignKey(SimpleQuiz, on_delete=models.CASCADE)
+  # quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
   chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-  title = models.CharField(max_length=200)
-  description = models.CharField(max_length=5000)
+  title = models.CharField(max_length=200, default='default')
+  description = models.CharField(max_length=5000, default="default")
   duration = models.IntegerField(default=0) # duration in seconds
   level = models.CharField(max_length=2,
                            choices=[(tag, tag.value) for tag in Levels], blank=True)
 
 
 class Question(models.Model):
+  # practice = models.ForeignKey(SimpleQuiz, on_delete=models.CASCADE)
+  # practice = models.ForeignKey(Quiz, on_delete=models.CASCADE)
   practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
   picture = models.CharField(max_length=500, default="")
@@ -139,4 +152,41 @@ class UserCareerTrack(models.Model):
   user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
   track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE)
   join_date = models.DateTimeField(default=datetime.datetime.now())
+
+
+class Attribute(models.Model):
+  name = models.CharField(max_length=200)
+
+class UserAttribute(models.Model):
+  user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
+  attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+  value = models.IntegerField(default=0)
+
+class ChapterAttribute(models.Model):
+  chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+  attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+  value = models.IntegerField(default=0)
+
+class SimpleQuiz(models.Model):
+  # Recommendation Quiz
+  title = models.CharField(max_length=200, default="default")
+  description = models.CharField(max_length=5000, default="default")
+
+class QuizQuestion(models.Model):
+  # practice = models.ForeignKey(SimpleQuiz, on_delete=models.CASCADE)
+  # practice = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+  reco_quiz = models.ForeignKey(SimpleQuiz, on_delete=models.CASCADE)
+  title = models.CharField(max_length=200)
+  # picture = models.CharField(max_length=500, default="")
+  picture = models.ImageField()
+
+
+class QuizOption(models.Model):
+  question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
+  title = models.CharField(max_length=200)
+  picture = models.CharField(max_length=500, default="")
+
+class QuizAnswer(models.Model):
+  question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
+  correct_option = models.ForeignKey(QuizOption, on_delete=models.CASCADE)
 

@@ -44,6 +44,20 @@ def getadminslist(request):
   return Response(output)
 
 
+@api_view(["GET"])
+def get_tracks_list(request):
+  serializer_class = CareerTrackSerializer
+  output = [
+      # {"employee": output.employee, "department": output.department}
+      output
+      for output in React.objects.all()
+  ]
+
+  print(output)
+  return Response(output)
+
+  
+
 # @api_view(['GET'])
 # def showSingleStudent(request, pk):
 
