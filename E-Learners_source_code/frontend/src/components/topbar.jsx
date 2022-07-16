@@ -99,17 +99,6 @@ export default function Topbar() {
                       <Grid container spacing={4}>
                           <Grid item xs={12}>
                               <TextField
-                                  label="Name"
-                                  type="text"
-                                  required
-                                  fullWidth
-                                  name="name"
-                                  value={formValues.name}
-                                  onChange={handleInputChange}
-                              />
-                          </Grid>
-                          <Grid item xs={12}>
-                              <TextField
                                   label="Email"
                                   type="email"
                                   name="email"
@@ -119,17 +108,7 @@ export default function Topbar() {
                                   onChange={handleInputChange}
                               />
                           </Grid>
-                          <Grid item xs={12}>
-                              <TextField
-                                  label="Phone"
-                                  type="tel"
-                                  name="phone"
-                                  required
-                                  fullWidth
-                                  value={formValues.phone}
-                                  onChange={handleInputChange}
-                              />
-                          </Grid>
+                          
                           <Grid item xs={12}>
                               <TextField
                                   label="Password"

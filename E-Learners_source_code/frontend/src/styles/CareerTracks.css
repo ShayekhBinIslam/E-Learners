@@ -29,6 +29,7 @@
     height: 10%;
     min-height: fit-content;
     margin-top: 50px;
+    margin-bottom: 40px;
 }
 
 .tracksProfile-parent{
@@ -286,6 +287,7 @@ margin-top: 50px;
 
 .progressRow-row{
     width: 100%;
+    z-index: 1;
 }
 
 .table-col{
@@ -418,4 +420,12 @@ margin-top: 50px;
     margin-left: 5%;
     margin-top: 30px;
     padding-top: 30px;
+}
+
+
+.trackRecom-container{
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 80px;
+    padding-left: 10%;
 }

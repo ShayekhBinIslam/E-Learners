@@ -9,6 +9,13 @@ import { useParams } from "react-router-dom";
 import "../index.css";
 import "../styles/CareerTracks.css";
 
+//mode = 1 for CourseContent
+//mode = 2 for ChapterContent
+//mode = 3 for tutorialsContent
+let globalactiveMode = 1;
+
+let activeChapterid = 1;
+
 const courses = [
   {
     id: 0,
@@ -52,6 +59,63 @@ const chapterList = [
   },
 ];
 
+const tutorialsList = [
+  {
+    id: 1,
+    title: "Card with HTML5",
+    progress: "70",
+    length: "9 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+];
+
 const recomList = [
   {
     id: 1,
@@ -71,7 +135,28 @@ const recomList = [
   },
 ];
 
+const recomChapterList = [
+  {
+    id: 1,
+    header: "Active Learning",
+    title: "Card with HTML5",
+    type: "Power Play",
+    progress: "70",
+    button: "continue",
+  },
+  {
+    id: 2,
+    header: "FrontEnd Basics",
+    title: "Practice",
+    type: "Test what you have learnt",
+    progress: "0",
+    button: "Practice Now",
+  },
+];
+
 export default function Course() {
+  const [activeMode, setActiveMode] = useState(globalactiveMode);
+
   return (
     <div className="courseContainer">
       <div className="courseSidebar">
@@ -111,10 +196,11 @@ export default function Course() {
       {/* bodyContent */}
       <div className="courseContent">
         <CourseContent />
+        <ChapterContent />
       </div>
     </div>
   );
-}
+
 
 function Navbar(props) {
   return (
@@ -144,7 +230,6 @@ function DropdownMenu() {
   const [activeDes, setActiveDes] = useState(fistDes);
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
-
 
   useEffect(() => {
     setMenuHeight(courses.length * 50 + 50);
@@ -238,9 +323,9 @@ function CourseContent() {
               <div className="CourseRecom-title">{out.title}</div>
               <div className="CourseRecom-bottomText">{out.type}</div>
               <div className="courseRecom-btn">
-              <a href="#" className="btn-right-mi">
-                {out.button}
-              </a>
+                <a href="#" className="btn-right-mi">
+                  {out.button}
+                </a>
               </div>
               <div className="progressRow-row">
                 <Progress done={out.progress} />
@@ -264,7 +349,6 @@ function CourseContent() {
 
       const bnewStyle = {
         opacity: 0,
-        
       };
 
       const nbewStyle2 = {
@@ -273,10 +357,9 @@ function CourseContent() {
 
       setStyle(newStyle);
 
-      if(done<=1){
+      if (done <= 1) {
         setBackStyle(bnewStyle);
-      }
-      else{
+      } else {
         setBackStyle(nbewStyle2);
       }
     }, 200);
@@ -289,6 +372,11 @@ function CourseContent() {
   };
 
   function ChapterListEnrolled() {
+
+    function gotoChapter(){
+      setActiveMode(2);
+    }
+
     if (isEnrolled) {
       return (
         <div className="courselist-container">
@@ -312,7 +400,7 @@ function CourseContent() {
                       <div className="table-col"></div>
 
                       <div className="table-col">
-                        <button className="btn-table">Enter</button>
+                        <button className="btn-table" onClick={gotoChapter}>Enter</button>
                       </div>
                     </div>
                     <div className="progressRow-row">
@@ -328,14 +416,149 @@ function CourseContent() {
     }
   }
 
-  return (
-    <div className="">
-      <div>
-        <RecommendationCard />
+  if (activeMode == 1) {
+    return (
+      <div className="">
+        <div>
+          <RecommendationCard />
+        </div>
+        <div>
+          <ChapterListEnrolled />
+        </div>
       </div>
-      <div>
-        <ChapterListEnrolled />
+    );
+  }
+}
+
+function ChapterContent() {
+
+  let isEnrolled = true;
+
+  let ChpaterName = chapterList[activeChapterid].name;
+  let ChapterDes = courses[activeChapterid].des;
+
+  let buttonName = "Start";
+  if (isEnrolled) {
+    buttonName = "Continue";
+  }
+
+  function goBackToCourseContent(){
+    setActiveMode(1);
+  }
+
+  function RecommendationCard() {
+    return (
+      <div className="courseRecom-container">
+        <div className="courseRecom-header">
+          <button className="btn-right-mi-chapter" onClick={goBackToCourseContent}>{"<-"}</button>
+          {ChpaterName}
+        </div>
+
+        <div className="courseRecom-card-container">
+          {recomChapterList.map((out) => (
+            <div className="courseRecomCard">
+              <div className="CourseRecom-topText">{out.header}</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.type}</div>
+              <div className="courseRecom-btn">
+                <a href="#" className="btn-right-mi">
+                  {out.button}
+                </a>
+              </div>
+              <div className="progressRow-row">
+                <Progress done={out.progress} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  const Progress = ({ done }) => {
+    const [style, setStyle] = React.useState({});
+    const [backStyle, setBackStyle] = React.useState({});
+
+    setTimeout(() => {
+      const newStyle = {
+        opacity: 1,
+        width: `${done}%`,
+      };
+
+      const bnewStyle = {
+        opacity: 0,
+      };
+
+      const nbewStyle2 = {
+        opacity: 1,
+      };
+
+      setStyle(newStyle);
+
+      if (done <= 1) {
+        setBackStyle(bnewStyle);
+      } else {
+        setBackStyle(nbewStyle2);
+      }
+    }, 200);
+
+    return (
+      <div className="progress-back-course" style={backStyle}>
+        <div className="progress-done-course" style={style}></div>
+      </div>
+    );
+  };
+
+  function TutorialsListEnrolled() {
+    if (isEnrolled) {
+      return (
+        <div className="tutorials-container">
+          <div className="courseRecom-header">
+            Tutorials ({tutorialsList.length})
+          </div>
+          <div className="tutorials-grid">
+            {tutorialsList.map((out) => (
+              <div className="tutorrialsCard">
+                
+                <div className="courseRecomCard">
+                  <img
+                    className="card_image"
+                    src={require("../assets/Home/profilephoto.jpg")}
+                  ></img>
+                  <div className="CourseRecom-topText">{out.length}</div>
+                  <div className="courseRecom-btn">
+                    <a href="#" className="playbtn">
+                      <img src={require("../assets/card/playbtn.jpg")}></img>
+                    </a>
+                  </div>
+                  <div className="progressRow-row">
+                    <Progress done={out.progress} />
+                  </div>
+                  
+                </div>
+                <div className="tutorialsName">{out.title}</div>
+              
+                
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+  }
+
+  if (activeMode == 2) {
+    return (
+      <div className="">
+        <div>
+          <RecommendationCard />
+        </div>
+        <div>
+          <TutorialsListEnrolled />
+        </div>
+      </div>
+    );
+  }
+}
+
 }
