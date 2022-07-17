@@ -6,6 +6,9 @@ import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
 import { useState, useEffect, useRef } from "react";
 
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 import "../index.css";
 import "../styles/CareerTracks.css";
 
@@ -157,6 +160,13 @@ const recomChapterList = [
 export default function Course() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
 
+
+  const navigate = useNavigate();
+
+  function gotoPractice(){
+    navigate("./practice");
+  }
+
   return (
     <div className="courseContainer">
       <div className="courseSidebar">
@@ -179,11 +189,11 @@ export default function Course() {
         </div>
         <div className="courseSidebarSplit"></div>
         <div className="courseSidebarMenu">
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem-selected" >
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Learn
           </div>
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={gotoPractice}>
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Practice
           </div>
