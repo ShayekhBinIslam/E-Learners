@@ -1,0 +1,5 @@
+Django-React:::MVT
+
+Model: interface of data. :::represented by a db:PostgreSQL
+Views: Django views roughly correspond to controllers in MVC::::response HTML content(GET, POST etc)
+Template: Corresonds to view in MVC (HTML, CSS):::Frontend Framework:Reat
