@@ -391,6 +391,7 @@ margin-top: 50px;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    font-family: "Poppins SemiBold";
   }
   
   .btn-table:hover {

@@ -190,15 +190,15 @@ export default function Practice() {
         <div className="courseSidebarSplit"></div>
         <div className="courseSidebarMenu">
           <div className="cousreSidebarMenuItem">
-            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            <img src={require("../assets/icons/learn.webp")}></img>
             Learn
           </div>
           <div className="cousreSidebarMenuItem-selected">
-            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            <img src={require("../assets/icons/practice.webp")}></img>
             Practice
           </div>
           <div className="cousreSidebarMenuItem">
-            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            <img src={require("../assets/icons/challenge.png")}></img>
             Daily Challenge
           </div>
         </div>

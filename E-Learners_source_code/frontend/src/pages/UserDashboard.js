@@ -186,7 +186,7 @@ export default function UserDashboard(props) {
 
         <div className="courseSidebarSplit"></div>
         <div className="courseSidebarMenu">
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem-selected">
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Progress
           </div>

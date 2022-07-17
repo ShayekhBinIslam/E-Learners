@@ -243,25 +243,27 @@ export default function () {
                                     </Grid>
                                     
                                     <Grid item xs={12}>
-                                        <Button variant="contained" onClick={() => setShowRegisterForm(false)} disableElevation>
+                                        <Button variant="contained" className='btn-table' onClick={() => setShowRegisterForm(false)} disableElevation>
                                             Close
                                         </Button>
                                         {/* <a 
                                             className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                         
-                                        <Button
+                                        <a
+                                            href={"/UserDashboard/".concat(runningID.toString())}
                                             style={{ marginLeft: '15px' }}
                                             variant="contained"
                                             color="primary"
                                             type='submit'
                                             disableElevation
+                                            className='btn-table'
                                         >
                                             {/* <a 
                                             className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                             Sign up
-                                        </Button>
+                                        </a>
                                     </Grid>
                                 </Grid>
                             </form>

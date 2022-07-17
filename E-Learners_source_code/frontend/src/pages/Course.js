@@ -2,7 +2,7 @@ import React from "react";
 
 import "../styles/Course.css";
 
-import { ReactComponent as ArrowIcon } from "../icons/arrow.svg";
+import { ReactComponent as ArrowIcon } from "../icons/caret.svg";
 import { useState, useEffect, useRef } from "react";
 
 import { useParams } from "react-router-dom";
@@ -190,15 +190,15 @@ export default function Course() {
         <div className="courseSidebarSplit"></div>
         <div className="courseSidebarMenu">
           <div className="cousreSidebarMenuItem-selected" >
-            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            <img src={require("../assets/icons/learn.webp")}></img>
             Learn
           </div>
           <div className="cousreSidebarMenuItem" onClick={gotoPractice}>
-            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            <img src={require("../assets/icons/practice.webp")}></img>
             Practice
           </div>
           <div className="cousreSidebarMenuItem">
-            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            <img src={require("../assets/icons/challenge.png")}></img>
             Daily Challenge
           </div>
         </div>
