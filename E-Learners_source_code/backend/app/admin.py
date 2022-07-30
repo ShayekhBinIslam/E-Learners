@@ -3,10 +3,21 @@ from django.contrib import admin
 # Register your models here.
 
 from .models import (
+  Answer,
+  CareerTrack,
+  Chapter,
+  Option,
+  Practice,
+  Question,
   React,
   EleanerUser,
   Course, 
-  SimpleQuiz, QuizQuestion
+  SimpleQuiz, QuizQuestion,
+  TrackCourse,
+  Tutorial,
+  UserCareerTrack,
+  UserPractice,
+  UserQuestions
 )
 from app.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -42,3 +53,20 @@ admin.site.register(React)
 admin.site.register(Course)
 admin.site.register(SimpleQuiz)
 admin.site.register(QuizQuestion)
+admin.site.register(CareerTrack)
+admin.site.register(Tutorial)
+admin.site.register(Practice)
+admin.site.register(TrackCourse)
+admin.site.register(Chapter)
+admin.site.register(Question)
+admin.site.register(Option)
+admin.site.register(Answer)
+admin.site.register(UserCareerTrack)
+admin.site.register(UserPractice)
+admin.site.register(UserQuestions)
+
+
+
+
+
+
