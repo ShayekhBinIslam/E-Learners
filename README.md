@@ -2,6 +2,19 @@
 
 # Plan for full project (30%)
 
+[Feedback video](https://youtu.be/X-9f1WVWU8o)
+
+Feedback
+   - UI was good
+   - Backend seemed less, have to cover next
+   - Degign 
+      - Set difficulty level of exercise
+      - compulsory/optional modules
+      - make student understand the motivation
+
+Next day
+   - Nearly complete
+   - Verify from Supervisor
 
 Module | Assigned
 --- | ---
