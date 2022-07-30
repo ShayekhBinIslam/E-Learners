@@ -6,7 +6,8 @@ from .models import (
   React,
   EleanerUser,
   Course, 
-  SimpleQuiz, QuizQuestion
+  SimpleQuiz, QuizQuestion,
+  Video
 )
 from app.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -42,3 +43,4 @@ admin.site.register(React)
 admin.site.register(Course)
 admin.site.register(SimpleQuiz)
 admin.site.register(QuizQuestion)
+admin.site.register(Video)
