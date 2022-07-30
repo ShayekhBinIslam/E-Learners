@@ -192,7 +192,7 @@ export default function () {
                         fullWidth
                         onClose={() => setShowRegisterForm(false)}
                     >
-                        <DialogTitle>Login</DialogTitle>
+                        <DialogTitle>Register</DialogTitle>
                         <DialogContent>
                             <form onSubmit={onSubmit} id="form__submit">
                                 <Grid container spacing={4}>
@@ -250,8 +250,8 @@ export default function () {
                                             className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                         
-                                        <a
-                                            href={"/UserDashboard/".concat(runningID.toString())}
+                                        <button
+                                            
                                             style={{ marginLeft: '15px' }}
                                             variant="contained"
                                             color="primary"
@@ -263,7 +263,7 @@ export default function () {
                                             className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                             Sign up
-                                        </a>
+                                        </button>
                                     </Grid>
                                 </Grid>
                             </form>

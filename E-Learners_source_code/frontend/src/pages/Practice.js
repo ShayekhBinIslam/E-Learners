@@ -476,7 +476,7 @@ export default function Practice() {
           <div className="topbarWrapper">
             <div className="topbarLeft-container">
               <div className="topLeft">
-                <span className="logo">Easy Practices</span>
+                <span className="logo">Hard Practices</span>
               </div>
 
               <div className="tracksDropdown-container">

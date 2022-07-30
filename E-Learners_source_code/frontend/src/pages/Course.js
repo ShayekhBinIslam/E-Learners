@@ -149,7 +149,7 @@ const recomChapterList = [
   },
   {
     id: 2,
-    header: "FrontEnd Basics",
+    header: "HTML",
     title: "Practice",
     type: "Test what you have learnt",
     progress: "0",
