@@ -58,6 +58,11 @@ export default function Topbar() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const onSubmit = (e) => {
       e.preventDefault();
+      const data = new FormData(e.currentTarget);
+      const actualData = {
+        email: data.get('email'),
+        password: data.get('password'),
+      } 
       console.log(formValues);
   };
   const handleInputChange = (e) => {

@@ -72,6 +72,21 @@
     cursor: pointer;
 }
 
+.cousreSidebarMenuItem-selected{
+    margin-bottom: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.322);
+    border-radius: 50px;
+}
+
+.cousreSidebarMenuItem-selected img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
 .cousreSidebarMenuItem img{
     height: 50px;
     width: 50px;
@@ -152,7 +167,7 @@
 .courseRecom-header{
     font-family: "Poppins SemiBold";
     font-size: 20px;
-    margin-top: 20px;
+    padding-top: 20px;
     margin-bottom: 20px;
     z-index: 1;
 
@@ -191,6 +206,8 @@
     touch-action: manipulation;
     font-family: "Poppins Bold";
     font-size: 20px;
+    font-family: "Poppins SemiBold";
+
   }
   
   .btn-right-mi-chapter:hover {

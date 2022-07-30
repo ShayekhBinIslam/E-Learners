@@ -20,12 +20,26 @@ from django.urls import path, include
 from app.views import *
 
 from app import views
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from rest_framework_simplejwt.views import TokenVerifyView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("admins/", ReactView.as_view(), name="admins"),
-    path("login/", views.logininfo, name="logininfo"),
+    path("login/", views.UserLoginView.as_view(), name="login"),
+    path("profile/", views.UserProfileView.as_view(), name="profile"),
+    path("changepassword/", views.UserChangePasswordView.as_view(), name="changepassword"),
+    path("reset-password/<uid>/<token>", views.UserPasswordResetView.as_view(), name="reset-password"),
+    path("send-reset-password-email/", views.SendPasswordResetEmailView.as_view(), name="send-reset-password-email"),
     path("adminlist/", views.getadminslist, name="adminlist"),
+    path("userlist/",views.StudentList.as_view()),
+    path("register/",views.UserRegistrationView.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
     #     path('addStudent', views.addStudent, name='add-student'),
