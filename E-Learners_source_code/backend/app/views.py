@@ -1,4 +1,5 @@
 # from django.shortcuts import render
+from urllib import response
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -113,6 +114,19 @@ def getadminslist(request):
       for output in React.objects.all()
   ]
   print(output)
+  return Response(output)
+
+@api_view(["GET"])
+def get_videos(request):
+  serializer_class = VideoSerializer
+
+  output = [
+    {"link": str(output.link) }
+    for output in Video.objects.all()
+  ]
+
+  print(output)
+
   return Response(output)
 
 

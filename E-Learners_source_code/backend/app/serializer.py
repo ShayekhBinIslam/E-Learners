@@ -126,3 +126,8 @@ class CourseSerializer(serializers.ModelSerializer):
   class Meta:
     model = Course
     fields = ["id", "name", "des"]
+
+class VideoSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Video
+    fields = ["link"]
