@@ -142,11 +142,12 @@ class Course(models.Model):
   poster = models.CharField(max_length=500, default="")
   subject = models.CharField(max_length=100, default="subject")
   level = models.CharField(max_length=2,
-                           choices=[(tag, tag.value) for tag in Levels], blank=True)
+                          #  choices=[(tag, tag.value) for tag in Levels], 
+                           blank=True)
 
 class TrackCourse(models.Model):
-  career_track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE)
-  course = models.ForeignKey(Course, on_delete=models.CASCADE)
+  career_track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE,related_name="track")
+  course = models.ForeignKey(Course,related_name="course", on_delete=models.CASCADE)
   order = models.IntegerField()
 
 

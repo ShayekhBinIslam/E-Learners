@@ -15,25 +15,37 @@ export default function CareerTracks() {
 
 
   const [tracks, setTracks] = useState([]);
+  const [course, setCourse] = useState([]);
+  const [trackscontent, setTrackContent] = useState({
+    "name": "name",
+    "des": "des",
+    "courses": []
+  });
 
   function fechTracks(){
     let data;
-    axios.get('http://localhost:8000/getTrackList/')
+    axios.get('http://localhost:8000/getCourseList/?trackid=1')
       .then(res=>{
         data = res.data;
-        setTracks(
+        setTrackContent(
           data
         );
       })
       .catch(err=>{})
 
-      console.log(tracks);
 
-      tracks.forEach((out, i) => {
-         if(out.id==trackid){
-          setTrackName(out.name);
-         }
-        });
+      setCourse(trackscontent.courses)
+
+      setTrackName(trackscontent.name)
+      setTrackDes(trackscontent.des)
+
+      // course.forEach((out, i) => {
+      //    if(out.id==trackid){
+      //     setTrackName(out.name);
+      //    }
+      //   });
+
+
       
   }
 
@@ -42,26 +54,26 @@ export default function CareerTracks() {
 
     fechTracks();
 
-  },[]);
+  });
 
-  const course = [
-    {
-      id: 0,
-      name: "FrontEnd Basics",
-      des: "This is Web FrontEnd Basics Course",
-      progress: "25",
-      isRunning : true
-    },
-    {
-      id: 1,
-      name: "Frontend Advance",
-      des: "This is Frontend Advance Course",
-      progress: "75",
-      isRunning : false
-    },
-    { id: 2, name: "React", des: "This is React Course",progress: "35",isRunning : false },
-    { id: 3, name: "Angular", des: "This is Angular Course",progress: "0",isRunning : false },
-  ];
+  // const course = [
+  //   {
+  //     id: 0,
+  //     name: "FrontEnd Basics",
+  //     des: "This is Web FrontEnd Basics Course",
+  //     progress: "25",
+  //     isRunning : true
+  //   },
+  //   {
+  //     id: 1,
+  //     name: "Frontend Advance",
+  //     des: "This is Frontend Advance Course",
+  //     progress: "75",
+  //     isRunning : false
+  //   },
+  //   { id: 2, name: "React", des: "This is React Course",progress: "35",isRunning : false },
+  //   { id: 3, name: "Angular", des: "This is Angular Course",progress: "0",isRunning : false },
+  // ];
 
   // const tracks = [
   //   {

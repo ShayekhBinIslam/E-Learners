@@ -29,6 +29,7 @@ export default function () {
       const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
       const [loginAuth,setloginAuth] = useState(true);
       const [loginSuccess,setloginSuccess] = useState(false);
+      const [regSuccess,setRegSuccess] = useState(false);
       const [userID,setUserID] = useState('');
       const [userData, setUserData] = useState({});
       const runningID = runningTrack.id;
@@ -52,13 +53,17 @@ export default function () {
           })
             .then(function (response) {
               //handle success
-              console.log(response);
-              Navigate('/UserDashboard');
-
+            //   console.log(response);
+            //   Navigate('/UserDashboard');
+                
+                setRegSuccess(true);
+                setUserData(response.data); //setting user data
+                setUserID(response.data.id);
             })
             .catch(function (response) {
               //handle error
               console.log(response);
+              setRegSuccess(false);
             });
 
       };
@@ -316,6 +321,9 @@ export default function () {
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                             Sign up
                                         </button>
+
+                                        {regSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
+                                        {regSuccess ? localStorage.setItem('user_id',userID) : '' }
                                     </Grid>
                                 </Grid>
                             </form>

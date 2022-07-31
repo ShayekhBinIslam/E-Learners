@@ -37,7 +37,7 @@ class UserRegistrationView(APIView):
     serializer.is_valid(raise_exception=True)
     user = serializer.save()
     token = get_tokens_for_user(user)
-    return Response({'token':token, 'msg':'Registration Successful'}, status=status.HTTP_201_CREATED)
+    return Response({'token':token, 'msg':'Registration Successful', 'id': user.pk}, status=status.HTTP_201_CREATED)
 
 class UserLoginView(APIView):
   renderer_classes = [UserRenderer]
@@ -142,7 +142,47 @@ def get_tracks_list(request):
 
   return Response(output)
 
+@api_view(["GET"])
+def get_course_list(request):
+  serializer_class1 = CourseSerializer
 
+  idd = request.GET.get('trackid', '')
+
+  # name, des = CareerTrack.objects.filter(id = idd).values('title', 'description')
+  
+  res = CareerTrack.objects.filter(id = idd).values('title', 'description')
+
+  # print(name, des)
+  #print(type(res), res[0])
+
+  output = [
+      {"id": output.course_id}
+      for output in TrackCourse.objects.filter(career_track__id = idd)
+  ]
+
+  output2 = []
+  
+  for i in output:
+    output2.extend(
+        list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+        for output3 in Course.objects.filter(id = i["id"]))
+    )
+
+
+ # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
+
+  print(output2)
+
+  dictO = {
+    "name": res[0]["title"],
+    "des": res[0]["description"],
+    "courses": output2
+  }
+
+  print(dictO)
+ 
+
+  return Response(dictO)
 
   
 

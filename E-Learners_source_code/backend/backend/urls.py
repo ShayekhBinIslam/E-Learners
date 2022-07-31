@@ -44,6 +44,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('getTrackList/', views.get_tracks_list, name="TrackList"),
+    path('getCourseList/', views.get_course_list, name="CourseList"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
     path("get_video/", views.get_videos, name="get_video")
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
