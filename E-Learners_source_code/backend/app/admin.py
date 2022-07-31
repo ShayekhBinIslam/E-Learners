@@ -98,4 +98,3 @@ admin.site.register(Answer)
 
 
 
-admin.site.register(Video)

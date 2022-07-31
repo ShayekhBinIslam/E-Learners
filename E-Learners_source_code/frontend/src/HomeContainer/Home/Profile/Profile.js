@@ -29,6 +29,8 @@ export default function () {
       const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
       const [loginAuth,setloginAuth] = useState(true);
       const [loginSuccess,setloginSuccess] = useState(false);
+      const [regSuccess,setregSuccess] = useState(false);
+
       const [userID,setUserID] = useState('');
       const [userData, setUserData] = useState({});
       const runningID = runningTrack.id;
@@ -51,6 +53,9 @@ export default function () {
             headers: { "Content-Type": "multipart/form-data" },
           })
             .then(function (response) {
+              setregSuccess(true);
+              setUserID(response.data.id);
+              
               //handle success
               console.log(response);
               Navigate('/UserDashboard');
@@ -316,6 +321,7 @@ export default function () {
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                             Sign up
                                         </button>
+                                        {regSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
                                     </Grid>
                                 </Grid>
                             </form>

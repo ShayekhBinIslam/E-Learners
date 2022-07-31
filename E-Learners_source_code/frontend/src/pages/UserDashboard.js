@@ -35,7 +35,7 @@ export default function UserDashboard(props) {
 
   // let TrackName = TRACKS[trackid].name;
   // let TrackDes = TRACKS[trackid].des;
-  let img = TRACKS[trackid].image;
+  // let img = TRACKS[trackid].image;
   // console.log({ img });
   const Progress = ({ done }) => {
     const [style, setStyle] = React.useState({});

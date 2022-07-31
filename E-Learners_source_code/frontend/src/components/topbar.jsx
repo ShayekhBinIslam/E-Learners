@@ -225,7 +225,7 @@ function DropdownMenu() {
 
   useEffect(() => {
     setMenuHeight(tracks.length*50+50);
-  }, []);
+  });
 
   function calcHeight(el) {
     const height = el.offsetHeight;
