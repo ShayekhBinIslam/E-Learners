@@ -82,16 +82,6 @@ export default function CareerTracks() {
 
   let isEnrolled = true;
 
-<<<<<<< HEAD
-  const { trackid } = useParams();
-  // console.log(userid);
-  console.log(trackid);
-
-  let TrackName = tracks[trackid].name;
-  let TrackDes = tracks[trackid].des;
-
-=======
->>>>>>> f21f4d1d0d2a6f1fa2d31b1d4701f54557cc8d28
   let buttonName = "Start";
   if (isEnrolled) {
     buttonName = "Continue";
