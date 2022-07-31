@@ -205,7 +205,7 @@ function DropdownMenu() {
 
     fechTracks();
 
-  },[]);
+  });
 
   const [activeMenu, setActiveMenu] = useState("main");
   const [activeTrack, setActiveTrack] = useState(firstTrack);
