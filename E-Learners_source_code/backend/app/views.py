@@ -120,13 +120,15 @@ def getadminslist(request):
 def get_tracks_list(request):
   serializer_class = CareerTrackSerializer
   output = [
-      # {"employee": output.employee, "department": output.department}
-      output
-      for output in React.objects.all()
+      {"id": output.id, "name": output.title, "des": output.description, "isRunning": "true"}
+      for output in CareerTrack.objects.all()
   ]
 
-  print(output)
+  print(request.GET.get('track', ''))
+
   return Response(output)
+
+
 
   
 

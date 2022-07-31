@@ -17,7 +17,8 @@ from .models import (
   Tutorial,
   UserCareerTrack,
   UserPractice,
-  UserQuestions
+  UserQuestions,
+  Video
 )
 from app.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -64,6 +65,8 @@ admin.site.register(Answer)
 admin.site.register(UserCareerTrack)
 admin.site.register(UserPractice)
 admin.site.register(UserQuestions)
+admin.site.register(Video)
+
 
 
 
