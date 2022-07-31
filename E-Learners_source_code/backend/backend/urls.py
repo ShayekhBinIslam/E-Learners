@@ -13,8 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from tomlkit import document
+from . import settings
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 
 # from django.conf.urls import url
 from app.views import *
@@ -40,7 +43,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('getTrackList/', views.get_tracks_list, name="TrackList"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
+    path("get_video/", views.get_videos, name="get_video")
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
     #     path('addStudent', views.addStudent, name='add-student'),
     #     path('updateStudent/<int:pk>/', views.updateStudent, name='update-student'),
@@ -49,4 +54,7 @@ urlpatterns = [
     # path("get_video/", views.get_video, name="getvideo"),
     # url(r'^api/tutorials/(?P<pk>[0-9]+)$', views.tutorial_detail),
     # url(r'^api/tutorials/published$', views.tutorial_list_published)
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+

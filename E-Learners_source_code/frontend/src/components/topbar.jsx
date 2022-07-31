@@ -26,22 +26,22 @@ import {
   TextField
 } from '@material-ui/core';
 
-const tracks = [
-  {
-    id: 0,
-    name: "Web Development",
-    des: "This is Web Development Career Track",
-  }
-  ,
-  {
-    id: 1,
-    name: "Competetive Programming",
-    des: "This is Competetive Programming Career Track",
-  }
-  ,
-  { id: 2, name: "Math", des: "This is Math Career Track" },
-  { id: 3, name: "Design", des: "This is Desing Career Track" }
-];
+// const tracks = [
+//   {
+//     id: 0,
+//     name: "Web Development",
+//     des: "This is Web Development Career Track",
+//   }
+//   ,
+//   {
+//     id: 1,
+//     name: "Competetive Programming",
+//     des: "This is Competetive Programming Career Track",
+//   }
+//   ,
+//   { id: 2, name: "Math", des: "This is Math Career Track" },
+//   { id: 3, name: "Design", des: "This is Desing Career Track" }
+// ];
 
 const firstTrack = "Web Development";
 const fistDes = "This is Web Development Career Track";
@@ -49,6 +49,8 @@ const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
 const runningID = runningTrack.id;
 
 export default function Topbar() {
+
+
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
@@ -180,6 +182,31 @@ function NavItem(props) {
 }
 
 function DropdownMenu() {
+
+  const [tracks, setTracks] = useState([]);
+
+  function fechTracks(){
+    let data;
+    let trackid=1;
+    axios.get('http://localhost:8000/getTrackList/?track=2')
+      .then(res=>{
+        data = res.data;
+        setTracks(
+          data
+        );
+      })
+      .catch(err=>{})
+      console.log(tracks);
+      setMenuHeight(tracks.length*50+50);
+  }
+
+
+  useEffect(() => {
+
+    fechTracks();
+
+  },[]);
+
   const [activeMenu, setActiveMenu] = useState("main");
   const [activeTrack, setActiveTrack] = useState(firstTrack);
   const [activeId, setActiveId] = useState(firstTrack);

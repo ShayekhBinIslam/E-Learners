@@ -3,6 +3,12 @@ from django.contrib import admin
 # Register your models here.
 
 from .models import (
+  Answer,
+  CareerTrack,
+  Chapter,
+  Option,
+  Practice,
+  Question,
   React,
   CareerTrack,
   Course,
@@ -21,6 +27,12 @@ from .models import (
   Video,
   FreeSlot,
   UserTutorials,
+  TrackCourse,
+  Tutorial,
+  UserCareerTrack,
+  UserPractice,
+  UserQuestions,
+  Video
 )
 from app.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -68,3 +80,22 @@ admin.site.register(UserCareerTrack)
 admin.site.register(Video)
 admin.site.register(UserTutorials)
 admin.site.register(FreeSlot)
+admin.site.register(QuizQuestion)
+
+
+
+
+
+
+
+admin.site.register(Answer)
+
+
+
+
+
+
+
+
+
+admin.site.register(Video)

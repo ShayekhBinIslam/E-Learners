@@ -103,15 +103,16 @@ class EleanerUser(models.Model):
   # User: username, fname, lname, email, pass, is_admin, lastlogin, date_joined
   user = models.OneToOneField(User, on_delete=models.CASCADE)
   phone_no = models.CharField(max_length=200, default=0)
-  email = models.EmailField(max_length=255, unique=True)
-  name = models.CharField(max_length=255)
-  password = models.CharField(max_length=32)
+  email = models.EmailField(max_length=255, unique=True, null=True)
+  name = models.CharField(max_length=255, null=True)
+  password = models.CharField(max_length=32, null=True)
   # TODO: current_track = models.ForeignKey(Track)
   # TODO: current_course = models.ForeignKey(Course)
 
 
 class Video(models.Model):
-  link = models.CharField(max_length=200)
+  # link = models.CharField(max_length=200)
+  link = models.FileField(upload_to="video/%y")
   # more metadata such as duration
 
 

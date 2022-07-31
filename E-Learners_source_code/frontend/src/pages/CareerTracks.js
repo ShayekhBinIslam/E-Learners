@@ -1,10 +1,49 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from 'axios'
+
 import "../index.css";
 import "../styles/CareerTracks.css";
 import { TRACKS } from "../shared/tracks";
 
 export default function CareerTracks() {
+
+  const { trackid } = useParams();
+
+  const [TrackName, setTrackName] = useState();
+  const [TrackDes, setTrackDes] = useState();
+
+
+  const [tracks, setTracks] = useState([]);
+
+  function fechTracks(){
+    let data;
+    axios.get('http://localhost:8000/getTrackList/')
+      .then(res=>{
+        data = res.data;
+        setTracks(
+          data
+        );
+      })
+      .catch(err=>{})
+
+      console.log(tracks);
+
+      tracks.forEach((out, i) => {
+         if(out.id==trackid){
+          setTrackName(out.name);
+         }
+        });
+      
+  }
+
+
+  useEffect(() => {
+
+    fechTracks();
+
+  },[]);
+
   const course = [
     {
       id: 0,
@@ -24,25 +63,26 @@ export default function CareerTracks() {
     { id: 3, name: "Angular", des: "This is Angular Course",progress: "0",isRunning : false },
   ];
 
-  const tracks = [
-    {
-      id: 1,
-      name: "Web Development",
-      des: "This is Web Development Career Track",
-      isRunning : true
-    },
-    {
-      id: 2,
-      name: "Competetive Programming",
-      des: "This is Competetive Programming Career Track",
-      isRunning : false
-    },
-    { id: 3, name: "Math", des: "This is Math Career Track",isRunning : false },
-    { id: 4, name: "Design", des: "This is Desing Career Track" , isRunning : false},
-  ];
+  // const tracks = [
+  //   {
+  //     id: 1,
+  //     name: "Web Development",
+  //     des: "This is Web Development Career Track",
+  //     isRunning : true
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Competetive Programming",
+  //     des: "This is Competetive Programming Career Track",
+  //     isRunning : false
+  //   },
+  //   { id: 3, name: "Math", des: "This is Math Career Track",isRunning : false },
+  //   { id: 4, name: "Design", des: "This is Desing Career Track" , isRunning : false},
+  // ];
 
   let isEnrolled = true;
 
+<<<<<<< HEAD
   const { trackid } = useParams();
   // console.log(userid);
   console.log(trackid);
@@ -50,6 +90,8 @@ export default function CareerTracks() {
   let TrackName = tracks[trackid].name;
   let TrackDes = tracks[trackid].des;
 
+=======
+>>>>>>> f21f4d1d0d2a6f1fa2d31b1d4701f54557cc8d28
   let buttonName = "Start";
   if (isEnrolled) {
     buttonName = "Continue";
@@ -78,8 +120,8 @@ export default function CareerTracks() {
   function RecommendationCard() {
 
     const ProgressR = ({ done }) => {
-      const [style, setStyle] = React.useState({});
-      const [backStyle, setBackStyle] = React.useState({});
+      const [style, setStyle] = useState({});
+      const [backStyle, setBackStyle] = useState({});
   
   
       setTimeout(() => {
@@ -143,8 +185,8 @@ export default function CareerTracks() {
   }
 
   const Progress = ({ done }) => {
-    const [style, setStyle] = React.useState({});
-    const [backStyle, setBackStyle] = React.useState({});
+    const [style, setStyle] = useState({});
+    const [backStyle, setBackStyle] = useState({});
 
 
     setTimeout(() => {

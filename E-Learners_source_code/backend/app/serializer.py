@@ -115,7 +115,19 @@ class ReactSerializer(serializers.ModelSerializer):
 class CareerTrackSerializer(serializers.ModelSerializer):
   class Meta:
     model = CareerTrack
+    fields = ["id", "name", "des"]
+
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = EleanerUser
     fields = ["id", "name","email","password"]
+
+class CourseSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Course
+    fields = ["id", "name", "des"]
+
+class VideoSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Video
+    fields = ["link"]
