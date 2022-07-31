@@ -39,7 +39,7 @@ function App() {
           <Route path="/admins" element={<Admins/>}/>
           <Route path="/UserDashboard/:trackid" element={<UserDashboard completed = {TRACKS.filter((track) => track.isCompleted)} running = {TRACKS.filter((track) => track.isRunning)}/>}/>
           
-          <Route path="/CareerTracks/:trackid" element={<CareerTracks/>}/>
+          <Route path="/CareerTracks/:trackid/User/:userid" element={<CareerTracks/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid" element={<Course/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid/practice" element={<Practice/>}/>
           <Route path="/videos" element={<Video/>}/>

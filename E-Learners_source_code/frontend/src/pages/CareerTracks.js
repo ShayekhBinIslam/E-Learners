@@ -44,6 +44,8 @@ export default function CareerTracks() {
   let isEnrolled = true;
 
   const { trackid } = useParams();
+  // console.log(userid);
+  console.log(trackid);
 
   let TrackName = tracks[trackid].name;
   let TrackDes = tracks[trackid].des;
@@ -230,6 +232,9 @@ export default function CareerTracks() {
       );
     }
   }
+  const enroll = () => {
+
+  }
 
 
   function CourseListNotEnrolled() {
@@ -296,7 +301,8 @@ export default function CareerTracks() {
               </span>
             </div>
             <div className="tracksProfile-options">
-              <button className="btn highlighted-btn">
+              {/* enroll in a track */}
+              <button className="btn highlighted-btn" onClick={enroll}>
                 {""}
                 {buttonName}
                 {""}

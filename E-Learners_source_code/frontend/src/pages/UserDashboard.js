@@ -6,36 +6,37 @@ import { TRACKS } from "../shared/tracks";
 import "../styles/Course.css";
 import "../styles/UserDashboard.css"
 
-function RenderCompletedItem({ course }) {
-  //console.log(course.image);
+// function RenderCompletedItem({ course }) {
+//   //console.log(course.image);
 
-  // first fetch img from backend
-  // save it in here :"../assets/card/"
-  // image variable only have image name 
+//   // first fetch img from backend
+//   // save it in here :"../assets/card/"
+//   // image variable only have image name 
 
-  let imagee = "design.png";
+//   let imagee = "design.png";
 
-  return (
-    <div className="card 1">
-      <div className="imgg">
-        <img src={require(`../assets/card/${imagee}`)}></img>
-      </div>
+//   return (
+//     <div className="card 1">
+//       <div className="imgg">
+//         <img src={require(`../assets/card/${imagee}`)}></img>
+//       </div>
 
-      <div className="card_title title-black">
-        <p>{"name"}</p>
-      </div>
-    </div>
-  );
-}
+//       <div className="card_title title-black">
+//         <p>{"name"}</p>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 export default function UserDashboard(props) {
   const { trackid } = useParams();
+  console.log(localStorage.getItem('user_id'));
 
-  let TrackName = TRACKS[trackid].name;
-  let TrackDes = TRACKS[trackid].des;
+  // let TrackName = TRACKS[trackid].name;
+  // let TrackDes = TRACKS[trackid].des;
   let img = TRACKS[trackid].image;
-  console.log({ img });
+  // console.log({ img });
   const Progress = ({ done }) => {
     const [style, setStyle] = React.useState({});
     const [backStyle, setBackStyle] = React.useState({});

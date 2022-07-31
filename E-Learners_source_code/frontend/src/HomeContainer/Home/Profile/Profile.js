@@ -13,6 +13,7 @@ import {
     TextField
   } from '@material-ui/core';
 import { Navigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
   
 
 export default function () {
@@ -26,6 +27,10 @@ export default function () {
       const [showRegisterForm, setShowRegisterForm] = useState(false);
       const [showLoginForm, setShowLoginForm] = useState(false);
       const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
+      const [loginAuth,setloginAuth] = useState(true);
+      const [loginSuccess,setloginSuccess] = useState(false);
+      const [userID,setUserID] = useState('');
+      const [userData, setUserData] = useState({});
       const runningID = runningTrack.id;
       
       const onSubmit = (e) => {
@@ -61,10 +66,42 @@ export default function () {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
         const actualData = {
+            
             email: data.get('email'),
             password: data.get('password'),
-        } 
-        console.log(formValues);
+            
+        }
+        // console.log(formValues);
+        axios({
+            method: "post",
+            url: "http://localhost:8000/login/",
+            data: actualData,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+            .then(response => {
+            
+                
+              //handle success
+              setloginAuth(true);
+              setloginSuccess(true);
+              console.log(loginAuth);
+              console.log(response.status);
+              setUserData(response.data); //setting user data
+              setUserID(response.data.id);
+            //   localStorage.setItem('user_id',userID.toString());
+              console.log(userID);
+              <Navigate to={"/UserDashboard/".concat(userID.toString())} replace={true} />
+              
+            })
+            .catch((error) => {
+              //handle error
+              console.log("is it printing something");
+              setloginAuth(false);
+            //   setloginSuccess(false);
+              console.log(error);
+            //   localStorage.setItem('user_id',userID.toString());
+            });
+        
       };
       const handleInputChange = (e) => {
           const name = e.target.name;
@@ -175,13 +212,28 @@ export default function () {
                                         <Button variant="contained" onClick={() => setShowLoginForm(false)} disableElevation>
                                             Close
                                         </Button>
-                                        <a 
-                                            className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
-                                            href={"/UserDashboard/".concat(runningID.toString())}>Log in</a>
+                                        
+                                        {loginAuth ? '' : <span style={{ fontSize: 12, color: 'red', paddingLeft: 10 }}>Incorrect Password or Email</span> }    
+                                        
+                                        <button
+                                            
+                                            style={{ marginLeft: '15px' }}
+                                            variant="contained"
+                                            color="primary"
+                                            type='submit'
+                                            disableElevation
+                                            className='btn-table'
+                                        >Login
+                                        
+                                        {/* <a disableElevation href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
+                                        </button>
+                                        {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
+                                        {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
+
                                     </Grid>
                                 </Grid>
                             </form>
-                        </DialogContent>
+                        </DialogContent>l
                     </Dialog>
                     <button className='btn primary-btn'onClick={() => setShowRegisterForm(!showRegisterForm)}>
                         {""}
