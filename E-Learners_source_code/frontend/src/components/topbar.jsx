@@ -276,7 +276,7 @@ function DropdownMenu() {
         {activeDes}
         <a 
         className="btn-right-mi"
-        href={"/CareerTracks/".concat(activeId.toString())}>Explore</a>
+        href={"/CareerTracks/".concat(activeId.toString()).concat("/User/").concat(localStorage.getItem('user_id').toString())}>Explore</a>
       </div>
     </div>
   );

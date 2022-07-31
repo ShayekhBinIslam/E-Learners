@@ -10,9 +10,23 @@ from .models import (
   Practice,
   Question,
   React,
+  CareerTrack,
+  Course,
+  TrackCourse,
+  Chapter,
+  Tutorial,
+  Practice,
+  Question,
+  Option,
+  UserPractice,
+  UserQuestions,
+  UserCareerTrack,
   EleanerUser,
   Course, 
   SimpleQuiz, QuizQuestion,
+  Video,
+  FreeSlot,
+  UserTutorials,
   TrackCourse,
   Tutorial,
   UserCareerTrack,
@@ -53,18 +67,29 @@ admin.site.register(EleanerUser)
 admin.site.register(React)
 admin.site.register(Course)
 admin.site.register(SimpleQuiz)
-admin.site.register(QuizQuestion)
 admin.site.register(CareerTrack)
-admin.site.register(Tutorial)
-admin.site.register(Practice)
 admin.site.register(TrackCourse)
 admin.site.register(Chapter)
+admin.site.register(Tutorial)
+admin.site.register(Practice)
 admin.site.register(Question)
 admin.site.register(Option)
-admin.site.register(Answer)
-admin.site.register(UserCareerTrack)
 admin.site.register(UserPractice)
 admin.site.register(UserQuestions)
+admin.site.register(UserCareerTrack)
+admin.site.register(Video)
+admin.site.register(UserTutorials)
+admin.site.register(FreeSlot)
+admin.site.register(QuizQuestion)
+
+
+
+
+
+
+
+admin.site.register(Answer)
+
 
 
 

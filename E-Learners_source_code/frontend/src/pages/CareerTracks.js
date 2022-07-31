@@ -264,6 +264,9 @@ export default function CareerTracks() {
       );
     }
   }
+  const enroll = () => {
+
+  }
 
 
   function CourseListNotEnrolled() {
@@ -330,7 +333,8 @@ export default function CareerTracks() {
               </span>
             </div>
             <div className="tracksProfile-options">
-              <button className="btn highlighted-btn">
+              {/* enroll in a track */}
+              <button className="btn highlighted-btn" onClick={enroll}>
                 {""}
                 {buttonName}
                 {""}

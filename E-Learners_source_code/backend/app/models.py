@@ -121,7 +121,7 @@ class FreeSlot(models.Model):
   Rationale: if a learner is suddenly free today in the middle,
     we can assgin some tasks. Date will not allow time in the middle.
   '''
-  user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   start_date = models.DateTimeField()
   end_date = models.DateTimeField()
 
@@ -131,7 +131,7 @@ class CareerTrack(models.Model):
   '''
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
-  intro_video = models.ForeignKey(Video, on_delete=models.SET_NULL, null=True)
+  intro_video = models.ForeignKey(Video, on_delete=models.SET_NULL, null=True,default="")
 
 
 class Course(models.Model):
@@ -206,7 +206,7 @@ class Answer(models.Model):
 
 
 class UserPractice(models.Model):
-  user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
   # progress = # derive from questions  
 
@@ -215,20 +215,20 @@ class QuestionStatus(Enum):
   WG = "wrong"
 
 class UserQuestions(models.Model):
-  user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
   status = models.CharField(max_length=2,
                            choices=[(tag, tag.value) for tag in QuestionStatus], blank=True)
 
 
 class UserTutorials(models.Model):
-  user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
   progress = models.CharField(max_length=200)
 
 
 class UserCareerTrack(models.Model):
-  user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE)
   join_date = models.DateTimeField(default=datetime.datetime.now())
 
@@ -237,7 +237,7 @@ class Attribute(models.Model):
   name = models.CharField(max_length=200)
 
 class UserAttribute(models.Model):
-  user = models.ForeignKey(EleanerUser, on_delete=models.CASCADE)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
   attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
   value = models.IntegerField(default=0)
 
