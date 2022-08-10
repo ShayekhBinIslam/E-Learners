@@ -384,9 +384,35 @@ function CourseContent() {
   };
 
   function ChapterListEnrolled() {
+    var userCourse = {
+      "user": 1,
+      "course": 1,
+      "active_tutorial": 2,
+      "active_practice": 1,
+    }
 
     function gotoChapter(){
       setActiveMode(2);
+      axios({
+        method: "post",
+        url: "http://localhost:8000/saveUserCourse/",
+        data: userCourse,
+      })
+        .then(function (response) {
+          //handle success
+        //   console.log(response);
+        //   Navigate('/UserDashboard');
+            
+            // setRegSuccess(true);
+            // setUserData(response.data); //setting user data
+            // setUserID(response.data.id);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+          // setRegSuccess(false);
+        });
+
     }
 
     const [chapters, setChapters] = useState([]);

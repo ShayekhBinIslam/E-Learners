@@ -206,6 +206,8 @@ def get_chapter_list(request):
   logger.info(output)
   
   return Response(output)
+
+
   
 
 # @api_view(['GET'])
@@ -245,3 +247,10 @@ def logininfo(request):
 #     product.delete()
 
 #     return Response('Items delete successfully!')
+
+
+@api_view(['POST'])
+def save_user_course(request):
+  serializer = UserCourseSerializer(data=request.data)
+  serializer.is_valid(raise_exception=True)
+  serializer.save()
