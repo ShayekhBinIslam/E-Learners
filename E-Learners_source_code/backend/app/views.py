@@ -254,3 +254,17 @@ def save_user_course(request):
   serializer = UserCourseSerializer(data=request.data)
   serializer.is_valid(raise_exception=True)
   serializer.save()
+
+  return Response('Item save successfully!')
+
+
+
+  # class UserRegistrationView(APIView):
+  # renderer_classes = [UserRenderer]
+  # def post(self, request, format=None):
+    
+  #   serializer = UserRegistrationSerializer(data=request.data)
+  #   serializer.is_valid(raise_exception=True)
+  #   user = serializer.save()
+  #   token = get_tokens_for_user(user)
+  #   return Response({'token':token, 'msg':'Registration Successful', 'id': user.pk}, status=status.HTTP_201_CREATED)

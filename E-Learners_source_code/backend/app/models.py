@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 from django.utils.translation import gettext_lazy
 
 # from django.contrib.auth.models import User
-from enum import Enum
+from enum import Enum, unique
 
 #  Custom User Manager
 class UserManager(BaseUserManager):
@@ -272,6 +272,9 @@ class UserCourse(models.Model):
   course = models.ForeignKey(Course, on_delete=models.CASCADE)
   active_tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, null=True)
   active_practice = models.ForeignKey(Practice, on_delete=models.CASCADE, null=True)
+
+  class Meta:
+    unique_together = ('user', 'course')
   
 
 class UserCareerTrack(models.Model):
