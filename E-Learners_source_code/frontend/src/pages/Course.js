@@ -385,8 +385,10 @@ function CourseContent() {
 
   function ChapterListEnrolled() {
 
-    function gotoChapter(){
+    function gotoChapter(chapter_id){
       setActiveMode(2);
+      localStorage.setItem("chapter_id", chapter_id);
+      console.log("Chapter id: " + chapter_id);
     }
 
     const [chapters, setChapters] = useState([]);
@@ -439,7 +441,7 @@ function CourseContent() {
                       <div className="table-col"></div>
 
                       <div className="table-col">
-                        <button className="btn-table" onClick={gotoChapter}>Enter</button>
+                        <button className="btn-table" onClick={() => gotoChapter(out.id)}>Enter</button>
                       </div>
                     </div>
                     <div className="progressRow-row">
@@ -549,14 +551,41 @@ function ChapterContent() {
   };
 
   function TutorialsListEnrolled() {
+    const [tutorials, setTutorials] = useState([]);
+    // console.log(localStorage.getItem('user_id'))
+    // const { courseid } = useParams();
+    const chapter_id = localStorage.getItem('chapter_id');
+
+
+    useEffect(() => {
+
+      // fechTracks();
+      let data;
+      // localStorage.setItem('trackid', '1')
+      // let trackid = localStorage.getItem('trackid')
+      // console.log("course id", localStorage.getItem('courseid'))
+
+      // let courseid = "1"
+      
+      console.log("chapter_id", chapter_id)
+      axios.get(`http://localhost:8000/getTutorialList/?chapterid=${chapter_id}`)
+        .then(res=>{
+          data = res.data;
+          setTutorials(data)
+          console.log(data)
+        })
+        .catch(err=>{})
+      
+  
+    }, []);
     if (isEnrolled) {
       return (
         <div className="tutorials-container">
           <div className="courseRecom-header">
-            Tutorials ({tutorialsList.length})
+            Tutorials ({tutorials.length})
           </div>
           <div className="tutorials-grid">
-            {tutorialsList.map((out) => (
+            {tutorials.map((out) => (
               <div className="tutorrialsCard">
                 
                 <div className="courseRecomCard">

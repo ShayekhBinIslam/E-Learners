@@ -46,6 +46,7 @@ urlpatterns = [
     path('getTrackList/', views.get_tracks_list, name="TrackList"),
     path('getCourseList/', views.get_course_list, name="CourseList"),
     path('getChapterList/', views.get_chapter_list, name="getChapterList"),
+    path('getTutorialList/', views.get_tutorial_list, name="getTutorialList"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
     path("get_video/", views.get_videos, name="get_video"),
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
