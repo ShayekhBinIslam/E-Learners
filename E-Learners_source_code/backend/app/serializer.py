@@ -125,7 +125,15 @@ class UserSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
   class Meta:
     model = Course
-    fields = ["id", "name", "des"]
+    fields = ["career_track", "title", "description", "intro_video", "poster", "subject", "level"]
+
+# create serializer for UserCourse
+class UserCourseSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserCourse
+    fields = ["user", "course", "active_tutorial", "active_practice"]
+
+    
 
 class VideoSerializer(serializers.ModelSerializer):
   class Meta:

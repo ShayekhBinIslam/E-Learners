@@ -3,6 +3,9 @@
 import os
 import sys
 # import dotenv
+from loguru import logger
+logger.remove()
+logger.add("log.log")
 
 
 def main():

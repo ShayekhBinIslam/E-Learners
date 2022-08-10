@@ -155,6 +155,7 @@ class Chapter(models.Model):
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
   course = models.ForeignKey(Course, on_delete=models.CASCADE)
+  progress = models.IntegerField(default=0)
   
 
 class Tutorial(models.Model):
@@ -227,6 +228,13 @@ class UserTutorials(models.Model):
   tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
   progress = models.CharField(max_length=200)
 
+
+class UserCourse(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  course = models.ForeignKey(Course, on_delete=models.CASCADE)
+  active_tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, null=True)
+  active_practice = models.ForeignKey(Practice, on_delete=models.CASCADE, null=True)
+  
 
 class UserCareerTrack(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
