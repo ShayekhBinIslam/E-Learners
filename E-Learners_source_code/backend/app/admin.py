@@ -18,6 +18,7 @@ from .models import (
   Practice,
   Question,
   Option,
+  UserCourse,
   UserPractice,
   UserQuestions,
   UserCareerTrack,
@@ -82,3 +83,5 @@ admin.site.register(FreeSlot)
 admin.site.register(QuizQuestion)
 
 admin.site.register(Answer)
+
+admin.site.register(UserCourse)
