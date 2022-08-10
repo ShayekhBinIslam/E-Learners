@@ -139,7 +139,8 @@ class Course(models.Model):
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
   intro_video = models.ForeignKey(Video, on_delete=models.SET_NULL, null=True)
-  poster = models.CharField(max_length=500, default="")
+  # poster = models.CharField(max_length=500, default="")
+  poster = models.ImageField()
   subject = models.CharField(max_length=100, default="subject")
   level = models.CharField(max_length=2,
                           #  choices=[(tag, tag.value) for tag in Levels], 
@@ -163,10 +164,12 @@ class Tutorial(models.Model):
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
   video = models.ForeignKey(Video, on_delete=models.SET_NULL, null=True)
-  poster = models.CharField(max_length=500, default="")
+  # poster = models.CharField(max_length=500, default="")
+  poster = models.ImageField()
   subject = models.CharField(max_length=100, default="subject")
   level = models.CharField(max_length=2,
-                           choices=[(tag, tag.value) for tag in Levels], blank=True)
+                          #  choices=[(tag, tag.value) for tag in Levels], 
+                           blank=True)
   order = models.IntegerField(default=0)
 
 
@@ -186,7 +189,8 @@ class Practice(models.Model):
   description = models.CharField(max_length=5000, default="default")
   duration = models.IntegerField(default=0) # duration in seconds
   level = models.CharField(max_length=2,
-                           choices=[(tag, tag.value) for tag in Levels], blank=True)
+                          #  choices=[(tag, tag.value) for tag in Levels], 
+                           blank=True)
 
 
 class Question(models.Model):
@@ -194,13 +198,15 @@ class Question(models.Model):
   # practice = models.ForeignKey(Quiz, on_delete=models.CASCADE)
   practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
-  picture = models.CharField(max_length=500, default="")
+  # picture = models.CharField(max_length=500, default="")
+  picture = models.ImageField()
 
 
 class Option(models.Model):
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
-  picture = models.CharField(max_length=500, default="")
+  # picture = models.CharField(max_length=500, default="")
+  picture = models.ImageField()
 
 class Answer(models.Model):
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -220,7 +226,8 @@ class UserQuestions(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
   status = models.CharField(max_length=2,
-                           choices=[(tag, tag.value) for tag in QuestionStatus], blank=True)
+                          #  choices=[(tag, tag.value) for tag in QuestionStatus], 
+                           blank=True)
 
 
 class UserTutorials(models.Model):
@@ -272,7 +279,8 @@ class QuizQuestion(models.Model):
 class QuizOption(models.Model):
   question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
-  picture = models.CharField(max_length=500, default="")
+  # picture = models.CharField(max_length=500, default="")
+  picture = models.ImageField()
 
 class QuizAnswer(models.Model):
   question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
