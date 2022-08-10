@@ -8,6 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import axios from 'axios'
+
 
 import "../index.css";
 import "../styles/CareerTracks.css";
@@ -387,12 +389,39 @@ function CourseContent() {
       setActiveMode(2);
     }
 
+    const [chapters, setChapters] = useState([]);
+    console.log(localStorage.getItem('user_id'))
+    const { courseid } = useParams();
+
+
+    useEffect(() => {
+
+      // fechTracks();
+      let data;
+      // localStorage.setItem('trackid', '1')
+      // let trackid = localStorage.getItem('trackid')
+      // console.log("course id", localStorage.getItem('courseid'))
+
+      // let courseid = "1"
+      
+      console.log("course id", courseid)
+      axios.get(`http://localhost:8000/getChapterList/?courseid=${courseid}`)
+        .then(res=>{
+          data = res.data;
+          setChapters(data)
+          console.log(data)
+        })
+        .catch(err=>{})
+      
+  
+    }, []);
+
     if (isEnrolled) {
       return (
         <div className="courselist-container">
           <div className="courseList-header-course">Chapters</div>
           <div className="course-table-course">
-            {chapterList.map((out) => (
+            {chapters.map((out) => (
               <div>
                 <div>
                   <div className="progressRow">
@@ -401,8 +430,8 @@ function CourseContent() {
                         <div className="id">{out.id}</div>
                       </div>
                       <div className="table-col">
-                        <div className="name">{out.name}</div>
-                        <div className="des">{out.des}</div>
+                        <div className="name">{out.title}</div>
+                        <div className="des">{out.description}</div>
                       </div>
                       <div className="table-col"></div>
                       <div className="table-col"></div>

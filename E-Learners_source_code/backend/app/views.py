@@ -15,6 +15,7 @@ from app.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 # from rest_framework import viewsets
+from loguru import logger
 
 from .models import *
 from .serializer import *
@@ -150,7 +151,12 @@ def get_course_list(request):
 
   # name, des = CareerTrack.objects.filter(id = idd).values('title', 'description')
   
-  res = CareerTrack.objects.filter(id = idd).values('title', 'description')
+  res = CareerTrack.objects.filter(id = idd).values('title', 'description', 'intro_video_id')
+  print(res)
+  video_id = int(res[0]['intro_video_id'])
+  print(video_id)
+  video_link = Video.objects.filter(id=video_id).values('link')[0]['link']
+  print(video_link)
 
   # print(name, des)
   #print(type(res), res[0])
@@ -172,18 +178,34 @@ def get_course_list(request):
  # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
 
   print(output2)
-
   dictO = {
     "name": res[0]["title"],
     "des": res[0]["description"],
-    "courses": output2
+    "video": video_link,
+    "courses": output2,
   }
 
   print(dictO)
- 
-
   return Response(dictO)
 
+
+@api_view(['GET'])
+def get_chapter_list(request):
+  courseid = request.GET.get('courseid', '')
+  print('Course id is {}'.format(courseid))
+
+  output = [
+      # {"id": output.course_id}
+      {'id': output.id, 'title': output.title, 'description': output.description, 
+      'progress': output.progress}
+      # output
+      for output in Chapter.objects.filter(course__id = courseid)
+  ]
+
+  # logger.info(vars(output[0]))
+  logger.info(output)
+  
+  return Response(output)
   
 
 # @api_view(['GET'])
