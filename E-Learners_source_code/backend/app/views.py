@@ -209,6 +209,20 @@ def get_chapter_list(request):
 
 
   
+@api_view(['GET'])
+def get_tutorial_list(request):
+  chapterid = request.GET.get('chapterid', '')
+  print('Chapter id is {}'.format(chapterid))
+  output = [
+    # output
+    {'id': output.id, 'title': output.title, 'progress': "50", 'length': "9 mins"}
+    for output in Tutorial.objects.filter(chapter__id = chapterid)
+  ]
+
+  logger.info(output)
+  
+  return Response(output)
+
 
 # @api_view(['GET'])
 # def showSingleStudent(request, pk):
