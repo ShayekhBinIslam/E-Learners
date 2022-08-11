@@ -15,6 +15,7 @@ from app.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 # from rest_framework import viewsets
+from loguru import logger
 
 from .models import *
 from .serializer import *
@@ -37,7 +38,8 @@ class UserRegistrationView(APIView):
     serializer.is_valid(raise_exception=True)
     user = serializer.save()
     token = get_tokens_for_user(user)
-    return Response({'token':token, 'msg':'Registration Successful','id': user.pk}, status=status.HTTP_201_CREATED)
+    return Response({'token':token,'name':user.name, 'msg':'Registration Successful','id': user.pk}, status=status.HTTP_201_CREATED)
+    # return Response({'token':token, 'msg':'Registration Successful', 'id': user.pk}, status=status.HTTP_201_CREATED)
 
 class UserLoginView(APIView):
   renderer_classes = [UserRenderer]
@@ -49,7 +51,7 @@ class UserLoginView(APIView):
     user = authenticate(email=email, password=password)
     if user is not None:
       token = get_tokens_for_user(user)
-      return Response({'token':token,'msg':'Login Success','id': user.pk}, status=status.HTTP_200_OK)
+      return Response({'token':token,'name':user.name,'msg':'Login Success','id': user.pk}, status=status.HTTP_200_OK)
     else:
       return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
 
@@ -113,7 +115,7 @@ def getadminslist(request):
       {"employee": output.employee, "department": output.department}
       for output in React.objects.all()
   ]
-  print(output)
+  # print(output)
   return Response(output)
 
 @api_view(["GET"])
@@ -125,7 +127,7 @@ def get_videos(request):
     for output in Video.objects.all()
   ]
 
-  print(output)
+  # print(output)
 
   return Response(output)
 
@@ -138,13 +140,90 @@ def get_tracks_list(request):
       for output in CareerTrack.objects.all()
   ]
 
-  print(request.GET.get('track', ''))
+  # print(request.GET.get('track', ''))
 
   return Response(output)
 
+@api_view(["GET"])
+def get_course_list(request):
+  serializer_class1 = CourseSerializer
+
+  idd = request.GET.get('trackid', '')
+
+  # name, des = CareerTrack.objects.filter(id = idd).values('title', 'description')
+  
+  res = CareerTrack.objects.filter(id = idd).values('title', 'description', 'intro_video_id')
+  # print(res)
+  video_id = int(res[0]['intro_video_id'])
+  # print(video_id)
+  video_link = Video.objects.filter(id=video_id).values('link')[0]['link']
+  # print(video_link)
+
+  # print(name, des)
+  #print(type(res), res[0])
+
+  output = [
+      {"id": output.course_id}
+      for output in TrackCourse.objects.filter(career_track__id = idd)
+  ]
+
+  output2 = []
+  
+  for i in output:
+    output2.extend(
+        list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+        for output3 in Course.objects.filter(id = i["id"]))
+    )
+
+
+ # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
+
+  # print(output2)
+  dictO = {
+    "name": res[0]["title"],
+    "des": res[0]["description"],
+    "video": video_link,
+    "courses": output2,
+  }
+
+  # print(dictO)
+  return Response(dictO)
+
+
+@api_view(['GET'])
+def get_chapter_list(request):
+  courseid = request.GET.get('courseid', '')
+  # print('Course id is {}'.format(courseid))
+
+  output = [
+      # {"id": output.course_id}
+      {'id': output.id, 'title': output.title, 'description': output.description, 
+      'progress': output.progress}
+      # output
+      for output in Chapter.objects.filter(course__id = courseid)
+  ]
+
+  # logger.info(vars(output[0]))
+  logger.info(output)
+  
+  return Response(output)
 
 
   
+@api_view(['GET'])
+def get_tutorial_list(request):
+  chapterid = request.GET.get('chapterid', '')
+  # print('Chapter id is {}'.format(chapterid))
+  output = [
+    # output
+    {'id': output.id, 'title': output.title, 'progress': "50", 'length': "9 mins"}
+    for output in Tutorial.objects.filter(chapter__id = chapterid)
+  ]
+
+  logger.info(output)
+  
+  return Response(output)
+
 
 # @api_view(['GET'])
 # def showSingleStudent(request, pk):
@@ -161,8 +240,8 @@ def logininfo(request):
   if serilizer.is_valid():
     serilizer.save()
 
-  print(serilizer.data)
-  print(request.data)
+  # print(serilizer.data)
+  # print(request.data)
   return Response(serilizer.data)
 
 
@@ -183,3 +262,35 @@ def logininfo(request):
 #     product.delete()
 
 #     return Response('Items delete successfully!')
+
+
+@api_view(['POST'])
+def save_user_course(request):
+
+  print(request.data)
+
+  courseid = request.data.get('course')
+  userid = request.data.get('user')
+  tutorialid = request.data.get('active_tutorial')
+  practiceid = request.data.get('active_practice')
+
+  print(courseid, userid, tutorialid, practiceid)
+  
+
+  output = [
+    {'id': output.id,}
+    # output
+    for output in UserCourse.objects.filter(course__id = courseid, user__id = userid)
+  ]
+
+  # print("output:::")
+  # print(output)
+
+  if len(output)>0:
+    UserCourse.objects.filter(id=output[0]["id"]).update(active_tutorial=tutorialid, active_practice=practiceid)
+  else:
+    serializer = UserCourseSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+  return Response('Item save successfully!')

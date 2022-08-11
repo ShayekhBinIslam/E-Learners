@@ -4,8 +4,10 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 
+from django.utils.translation import gettext_lazy
+
 # from django.contrib.auth.models import User
-from enum import Enum
+from enum import Enum, unique
 
 #  Custom User Manager
 class UserManager(BaseUserManager):
@@ -91,10 +93,15 @@ class React(models.Model):
   # _field_ = models.CharField(max_length=200)
 
 # https://pythonguides.com/python-django-get-enum-choices/
-class Levels(Enum):
-  BG = "Beginner"
-  IM = "Intermediate"
-  AV = "Advanced"
+# class Levels(Enum):
+#   BG = "Beginner"
+#   IM = "Intermediate"
+#   AV = "Advanced"
+
+class Levels(models.TextChoices):
+  BEGINNER = 'BG', gettext_lazy('Beginner')
+  INTERMEDIATE = 'IM', gettext_lazy('Intermediate')
+  ADVANCED = 'AV', gettext_lazy('Advanced')
 
 
 # User extension
@@ -135,19 +142,36 @@ class CareerTrack(models.Model):
 
 
 class Course(models.Model):
+  # class YearInSchool(models.TextChoices):
+  #   FRESHMAN = 'FR', gettext_lazy('Freshman')
+  #   SOPHOMORE = 'SO', gettext_lazy('Sophomore')
+  #   JUNIOR = 'JR', gettext_lazy('Junior')
+  #   SENIOR = 'SR', gettext_lazy('Senior')
+  #   GRADUATE = 'GR', gettext_lazy('Graduate')
+  # class Levels(models.TextChoices):
+  #   BEGINNER = 'BG', gettext_lazy('Beginner')
+  #   INTERMEDIATE = 'IM', gettext_lazy('Intermediate')
+  #   ADVANCED = 'AV', gettext_lazy('Advanced')
+
+
   career_track = models.ManyToManyField(CareerTrack, through='TrackCourse')
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
   intro_video = models.ForeignKey(Video, on_delete=models.SET_NULL, null=True)
-  poster = models.CharField(max_length=500, default="")
+  # poster = models.CharField(max_length=500, default="")
+  poster = models.ImageField()
   subject = models.CharField(max_length=100, default="subject")
   level = models.CharField(max_length=2,
                           #  choices=[(tag, tag.value) for tag in Levels],
-                           blank=True)
+                           #blank=True)
+                          #  choices=[(tag, tag.value) for tag in Levels], 
+                          # choices=YearInSchool.choices,
+                          choices=Levels.choices,
+                          blank=True)
 
 class TrackCourse(models.Model):
-  career_track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE)
-  course = models.ForeignKey(Course, on_delete=models.CASCADE)
+  career_track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE,related_name="track")
+  course = models.ForeignKey(Course,related_name="course", on_delete=models.CASCADE)
   order = models.IntegerField()
 
 
@@ -155,6 +179,7 @@ class Chapter(models.Model):
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
   course = models.ForeignKey(Course, on_delete=models.CASCADE)
+  progress = models.IntegerField(default=0)
   
 
 class Tutorial(models.Model):
@@ -162,10 +187,13 @@ class Tutorial(models.Model):
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
   video = models.ForeignKey(Video, on_delete=models.SET_NULL, null=True)
-  poster = models.CharField(max_length=500, default="")
+  # poster = models.CharField(max_length=500, default="")
+  poster = models.ImageField()
   subject = models.CharField(max_length=100, default="subject")
   level = models.CharField(max_length=2,
-                           choices=[(tag, tag.value) for tag in Levels], blank=True)
+                          #  choices=[(tag, tag.value) for tag in Levels], 
+                          choices=Levels.choices,
+                           blank=True)
   order = models.IntegerField(default=0)
 
 
@@ -185,7 +213,9 @@ class Practice(models.Model):
   description = models.CharField(max_length=5000, default="default")
   duration = models.IntegerField(default=0) # duration in seconds
   level = models.CharField(max_length=2,
-                           choices=[(tag, tag.value) for tag in Levels], blank=True)
+                          #  choices=[(tag, tag.value) for tag in Levels], 
+                          choices=Levels.choices,
+                           blank=True)
 
 
 class Question(models.Model):
@@ -193,13 +223,15 @@ class Question(models.Model):
   # practice = models.ForeignKey(Quiz, on_delete=models.CASCADE)
   practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
-  picture = models.CharField(max_length=500, default="")
+  # picture = models.CharField(max_length=500, default="")
+  picture = models.ImageField()
 
 
 class Option(models.Model):
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
-  picture = models.CharField(max_length=500, default="")
+  # picture = models.CharField(max_length=500, default="")
+  picture = models.ImageField()
 
 class Answer(models.Model):
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -211,15 +243,24 @@ class UserPractice(models.Model):
   practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
   # progress = # derive from questions  
 
-class QuestionStatus(Enum):
-  RT = "right"
-  WG = "wrong"
+# class QuestionStatus(Enum):
+#   RT = "Right"
+#   WG = "Wrong"
+#   NA = "Not Answered"
+
+class QuestionStatus(models.TextChoices):
+    RIGHT = 'RT', gettext_lazy('Right')
+    WRONG = 'WG', gettext_lazy('Wrong')
+    NOT_ANSWERED = 'NA', gettext_lazy('Not Answered')
+
 
 class UserQuestions(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
   status = models.CharField(max_length=2,
-                           choices=[(tag, tag.value) for tag in QuestionStatus], blank=True)
+                          #  choices=[(tag, tag.value) for tag in QuestionStatus], 
+                          choices=QuestionStatus.choices,
+                           blank=True)
 
 
 class UserTutorials(models.Model):
@@ -227,6 +268,16 @@ class UserTutorials(models.Model):
   tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
   progress = models.CharField(max_length=200)
 
+
+class UserCourse(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  course = models.ForeignKey(Course, on_delete=models.CASCADE)
+  active_tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, null=True)
+  active_practice = models.ForeignKey(Practice, on_delete=models.CASCADE, null=True)
+
+  class Meta:
+    unique_together = ('user', 'course')
+  
 
 class UserCareerTrack(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -264,7 +315,8 @@ class QuizQuestion(models.Model):
 class QuizOption(models.Model):
   question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
   title = models.CharField(max_length=200)
-  picture = models.CharField(max_length=500, default="")
+  # picture = models.CharField(max_length=500, default="")
+  picture = models.ImageField()
 
 class QuizAnswer(models.Model):
   question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)

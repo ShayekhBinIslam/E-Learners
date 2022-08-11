@@ -8,6 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import axios from 'axios'
+
 
 import "../index.css";
 import "../styles/CareerTracks.css";
@@ -382,17 +384,72 @@ function CourseContent() {
   };
 
   function ChapterListEnrolled() {
-
-    function gotoChapter(){
-      setActiveMode(2);
+    var userCourse = {
+      "user": 1,
+      "course": 1,
+      "active_tutorial": 2,
+      "active_practice": 1,
     }
+
+    function gotoChapter(chapter_id){
+      setActiveMode(2);
+      axios({
+        method: "post",
+        url: "http://localhost:8000/saveUserCourse/",
+        data: userCourse,
+      })
+        .then(function (response) {
+          //handle success
+        //   console.log(response);
+        //   Navigate('/UserDashboard');
+            
+            // setRegSuccess(true);
+            // setUserData(response.data); //setting user data
+            // setUserID(response.data.id);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+          // setRegSuccess(false);
+        });
+
+      localStorage.setItem("chapter_id", chapter_id);
+      console.log("Chapter id: " + chapter_id);
+    }
+
+    const [chapters, setChapters] = useState([]);
+    console.log(localStorage.getItem('user_id'))
+    const { courseid } = useParams();
+
+
+    useEffect(() => {
+
+      // fechTracks();
+      let data;
+      // localStorage.setItem('trackid', '1')
+      // let trackid = localStorage.getItem('trackid')
+      // console.log("course id", localStorage.getItem('courseid'))
+
+      // let courseid = "1"
+      
+      console.log("course id", courseid)
+      axios.get(`http://localhost:8000/getChapterList/?courseid=${courseid}`)
+        .then(res=>{
+          data = res.data;
+          setChapters(data)
+          console.log(data)
+        })
+        .catch(err=>{})
+      
+  
+    }, []);
 
     if (isEnrolled) {
       return (
         <div className="courselist-container">
           <div className="courseList-header-course">Chapters</div>
           <div className="course-table-course">
-            {chapterList.map((out) => (
+            {chapters.map((out) => (
               <div>
                 <div>
                   <div className="progressRow">
@@ -401,8 +458,8 @@ function CourseContent() {
                         <div className="id">{out.id}</div>
                       </div>
                       <div className="table-col">
-                        <div className="name">{out.name}</div>
-                        <div className="des">{out.des}</div>
+                        <div className="name">{out.title}</div>
+                        <div className="des">{out.description}</div>
                       </div>
                       <div className="table-col"></div>
                       <div className="table-col"></div>
@@ -410,7 +467,7 @@ function CourseContent() {
                       <div className="table-col"></div>
 
                       <div className="table-col">
-                        <button className="btn-table" onClick={gotoChapter}>Enter</button>
+                        <button className="btn-table" onClick={() => gotoChapter(out.id)}>Enter</button>
                       </div>
                     </div>
                     <div className="progressRow-row">
@@ -520,14 +577,41 @@ function ChapterContent() {
   };
 
   function TutorialsListEnrolled() {
+    const [tutorials, setTutorials] = useState([]);
+    // console.log(localStorage.getItem('user_id'))
+    // const { courseid } = useParams();
+    const chapter_id = localStorage.getItem('chapter_id');
+
+
+    useEffect(() => {
+
+      // fechTracks();
+      let data;
+      // localStorage.setItem('trackid', '1')
+      // let trackid = localStorage.getItem('trackid')
+      // console.log("course id", localStorage.getItem('courseid'))
+
+      // let courseid = "1"
+      
+      console.log("chapter_id", chapter_id)
+      axios.get(`http://localhost:8000/getTutorialList/?chapterid=${chapter_id}`)
+        .then(res=>{
+          data = res.data;
+          setTutorials(data)
+          console.log(data)
+        })
+        .catch(err=>{})
+      
+  
+    }, []);
     if (isEnrolled) {
       return (
         <div className="tutorials-container">
           <div className="courseRecom-header">
-            Tutorials ({tutorialsList.length})
+            Tutorials ({tutorials.length})
           </div>
           <div className="tutorials-grid">
-            {tutorialsList.map((out) => (
+            {tutorials.map((out) => (
               <div className="tutorrialsCard">
                 
                 <div className="courseRecomCard">

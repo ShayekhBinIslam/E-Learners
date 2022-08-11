@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios'
+import ReactPlayer from "react-player"
 
 import "../index.css";
 import "../styles/CareerTracks.css";
@@ -15,53 +16,93 @@ export default function CareerTracks() {
 
 
   const [tracks, setTracks] = useState([]);
+  const [course, setCourse] = useState([]);
+  const [trackscontent, setTrackContent] = useState({
+    "name": "name",
+    "des": "des",
+    "video": "",
+    "courses": []
+  });
 
   function fechTracks(){
     let data;
-    axios.get('http://localhost:8000/getTrackList/')
+    axios.get('http://localhost:8000/getCourseList/?trackid=1')
       .then(res=>{
         data = res.data;
-        setTracks(
+        setTrackContent(
           data
         );
       })
       .catch(err=>{})
 
-      console.log(tracks);
 
-      tracks.forEach((out, i) => {
-         if(out.id==trackid){
-          setTrackName(out.name);
-         }
-        });
+      setCourse(trackscontent.courses)
+      setTrackName(trackscontent.name)
+      setTrackDes(trackscontent.des)
       
   }
+
+  function logResult() {
+    return 2 + 2;
+  }
+
+  const [played, setPlayed] = useState(0);
+  const [video, setVideo] = useState();
+  console.log(played)
 
 
   useEffect(() => {
 
-    fechTracks();
+    // fechTracks();
+    let data;
+    localStorage.setItem('trackid', '1')
+    console.log(localStorage.getItem('trackid'))
+    axios.get('http://localhost:8000/getCourseList/?trackid=1')
+      .then(res=>{
+        data = res.data;
+        setTrackContent(
+          data
+        );
+      })
+      .catch(err=>{})
+      setCourse(trackscontent.courses)
+      setTrackName(trackscontent.name)
+      setTrackDes(trackscontent.des)
+      setVideo(trackscontent.video)
 
-  },[]);
+    // let data;
+    axios.get('http://localhost:8000/get_video/')
+      .then(res=>{
+        data = res.data;
+        // this.setState({
+        //   details: data
+        // });
+        console.log(data[0].link);
+        console.log(window.location.pathname)
+        setVideo(data[0].link)
+      })
+      .catch(err=>{})
 
-  const course = [
-    {
-      id: 0,
-      name: "FrontEnd Basics",
-      des: "This is Web FrontEnd Basics Course",
-      progress: "25",
-      isRunning : true
-    },
-    {
-      id: 1,
-      name: "Frontend Advance",
-      des: "This is Frontend Advance Course",
-      progress: "75",
-      isRunning : false
-    },
-    { id: 2, name: "React", des: "This is React Course",progress: "35",isRunning : false },
-    { id: 3, name: "Angular", des: "This is Angular Course",progress: "0",isRunning : false },
-  ];
+  }, [video]);
+
+  // const course = [
+  //   {
+  //     id: 0,
+  //     name: "FrontEnd Basics",
+  //     des: "This is Web FrontEnd Basics Course",
+  //     progress: "25",
+  //     isRunning : true
+  //   },
+  //   {
+  //     id: 1,
+  //     name: "Frontend Advance",
+  //     des: "This is Frontend Advance Course",
+  //     progress: "75",
+  //     isRunning : false
+  //   },
+  //   { id: 2, name: "React", des: "This is React Course",progress: "35",isRunning : false },
+  //   { id: 3, name: "Angular", des: "This is Angular Course",progress: "0",isRunning : false },
+  // ];
 
   // const tracks = [
   //   {
@@ -215,6 +256,10 @@ export default function CareerTracks() {
   };
 
   function CourseListEnrolled() {
+    const set_courseid = (courseid) => {
+      localStorage.setItem('courseid', courseid)
+    };
+
     if (isEnrolled) {
       return (
         <div className="courselist-container">
@@ -251,7 +296,7 @@ export default function CareerTracks() {
                         </div>
                     </div>
                     <div className="table-col">
-                      <a href={"/CareerTracks/".concat(trackid.toString()).concat("/Course/").concat(out.id)} className="btn-table">
+                      <a onClick={() => set_courseid(out.id)} href={"/CareerTracks/".concat(trackid.toString()).concat("/Course/").concat(out.id)} className="btn-table">
                         Enter
                       </a>
                     </div>
@@ -343,6 +388,7 @@ export default function CareerTracks() {
           </div>
 
           <div className="tracksProfile-picture">
+          {/* <div> */}
             {/* <div className="tracksProfile-picture-background" style={{ 
               backgroundImage: `url(../assets/card/${TRACKS[trackid].image})` 
             }}>
@@ -350,14 +396,36 @@ export default function CareerTracks() {
             </div> */}
             <div className="tutorrialsCard">
             <div className="courseRecomCard">
-              <img
+
+              {/* <img
                 className="card_image"
                 src={require("../assets/Home/profilephoto.jpg")}
-              ></img>
-              <div className="CourseRecom-topText"></div>
-              <div className="courseRecom-btn">
+              ></img> */}
+
+
+              {/* <div className="CourseRecom-topText"></div> */}
+              {/* <div className="courseRecom-btn"> */}
+              <div>
                 <a href="#" className="playbtn">
-                  <img src={require("../assets/card/playbtn.jpg")}></img>
+                  {/* <img src={require("../assets/card/playbtn.jpg")}></img> */}
+                  {video? 
+                  <ReactPlayer 
+                    // onProgress={}
+                    width="400px"
+                    controls
+                    // url='https://www.youtube.com/watch?v=9nkR2LLPiYo'
+                    // url='../../../backend/media/video/22/video_file.mp4'
+                    // url="http://localhost:8000/media/video/22/video_file.mp4"
+                    
+                    url={"http://localhost:8000/media/" + video}
+                    // url={video}
+                    
+                    onProgress={(progress) => {
+                      setPlayed(progress.playedSeconds);
+                      // console.log(progress);
+                    }}
+                  /> : ""
+                }
                 </a>
               </div>
             </div>
@@ -365,7 +433,7 @@ export default function CareerTracks() {
           </div>
         </div>
       </div>
-
+ 
       <div>
         <RecommendationCard />
       </div>

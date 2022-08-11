@@ -18,6 +18,7 @@ from .models import (
   Practice,
   Question,
   Option,
+  UserCourse,
   UserPractice,
   UserQuestions,
   UserCareerTrack,
@@ -32,7 +33,6 @@ from .models import (
   UserCareerTrack,
   UserPractice,
   UserQuestions,
-  Video
 )
 from app.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -82,12 +82,6 @@ admin.site.register(UserTutorials)
 admin.site.register(FreeSlot)
 admin.site.register(QuizQuestion)
 
-
-
-
-
-
-
 admin.site.register(Answer)
 
 
@@ -98,3 +92,4 @@ admin.site.register(Answer)
 
 
 
+admin.site.register(UserCourse)

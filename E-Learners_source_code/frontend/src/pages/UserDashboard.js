@@ -5,6 +5,7 @@ import "../styles/CareerTracks.css";
 import { TRACKS } from "../shared/tracks";
 import "../styles/Course.css";
 import "../styles/UserDashboard.css"
+import { useEffect } from "react";
 
 // function RenderCompletedItem({ course }) {
 //   //console.log(course.image);
@@ -32,6 +33,15 @@ import "../styles/UserDashboard.css"
 export default function UserDashboard(props) {
   const { trackid } = useParams();
   console.log(localStorage.getItem('user_id'));
+  const reloadCount= sessionStorage.getItem('reloadCount');
+  useEffect(() => {
+    if(reloadCount < 2) {
+      sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem('reloadCount');
+    }
+  }, []);
 
   // let TrackName = TRACKS[trackid].name;
   // let TrackDes = TRACKS[trackid].des;
