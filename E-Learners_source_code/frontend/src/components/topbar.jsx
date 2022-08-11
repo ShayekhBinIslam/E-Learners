@@ -268,7 +268,7 @@ function DropdownMenu() {
   function fechTracks(){
     let data;
     let trackid=1;
-    axios.get('http://localhost:8000/getTrackList/?track=2')
+    axios.get('http://localhost:8000/getTrackList/')
       .then(res=>{
         data = res.data;
         setTracks(
@@ -315,6 +315,9 @@ function DropdownMenu() {
   }
 
   function setActiveDesName(id1, des1, name1) {
+    localStorage.setItem('active_track_id',id1)
+    localStorage.setItem('active_track_des',des1)
+    localStorage.setItem('active_track_name',name1)
     setActiveId(id1);
     setActiveDes(des1);
     setActiveTrack(name1);
