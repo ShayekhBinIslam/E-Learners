@@ -253,7 +253,7 @@ def get_Quiz(request):
   for i in questions:
     QAnswer.extend(
         list({"id": output3.id, "optionid":output3.correct_option}
-        for output3 in Answer.objects.filter(question__id = i["id"], option__id = correct_option))
+        for output3 in Answer.objects.filter(question__id = i["id"]))
     )
 
   print(QAnswer)
