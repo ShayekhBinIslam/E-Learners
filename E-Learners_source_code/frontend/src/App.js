@@ -13,6 +13,7 @@ import Course from "./pages/Course";
 import UserDashboard from "./pages/UserDashboard";
 import { TRACKS } from "./shared/tracks";
 import Video from "./pages/Video";
+import Quiz from "./pages/Quiz";
 
 import Practice from "./pages/Practice";
 
@@ -42,6 +43,8 @@ function App() {
           <Route path="/CareerTracks/:trackid/User/:userid" element={<CareerTracks/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid" element={<Course/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid/practice" element={<Practice/>}/>
+          <Route path="/CareerTracks/:trackid/Course/:courseid/practice/:practiceid" element={<Quiz/>}/>
+
           <Route path="/videos" element={<Video/>}/>
         </Routes>
       </div>

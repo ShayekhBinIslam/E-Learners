@@ -162,7 +162,6 @@ const recomChapterList = [
 export default function Course() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
 
-
   const navigate = useNavigate();
 
   function gotoPractice(){

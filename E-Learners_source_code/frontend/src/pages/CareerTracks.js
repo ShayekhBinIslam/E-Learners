@@ -57,7 +57,7 @@ export default function CareerTracks() {
     let data;
     localStorage.setItem('trackid', '1')
     console.log(localStorage.getItem('trackid'))
-    axios.get('http://localhost:8000/getCourseList/?trackid=1')
+    axios.get(`http://localhost:8000/getCourseList/?trackid=${trackid}`)
       .then(res=>{
         data = res.data;
         setTrackContent(
