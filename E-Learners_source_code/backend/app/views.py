@@ -143,6 +143,32 @@ def get_tracks_list(request):
   # print(request.GET.get('track', ''))
 
   return Response(output)
+@api_view(["GET"])
+def get_usertrack_details(request):
+  serializer_class = UserTrackSerializer
+  track_id = request.GET.get('trackid','')
+  user_id = request.GET.get('userid', '')
+  print("userid")
+  print(user_id)
+  print("trackid")
+  print(track_id)
+  
+  output = [
+      {"user_id": output.user_id,"track_id": output.track_id,"join_date":output.join_date,"isEnrolled":output.isEnrolled}
+      for output in UserCareerTrack.objects.filter(user__id = user_id,track__id=track_id)
+  ]
+  print(output)
+  # output2 = []
+  
+  # for i in output:
+  #   output2.extend(
+  #       list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+  #       for output3 in Course.objects.filter(id = i["id"]))
+  #   )
+
+  # print(request.GET.get('track', ''))
+
+  return Response(output)
 
 @api_view(["GET"])
 def get_course_list(request):

@@ -283,6 +283,7 @@ class UserCareerTrack(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE)
   join_date = models.DateTimeField(default=datetime.datetime.now())
+  isEnrolled = models.BooleanField(default=False)
 
 
 class Attribute(models.Model):
