@@ -162,6 +162,8 @@ class Course(models.Model):
   poster = models.ImageField()
   subject = models.CharField(max_length=100, default="subject")
   level = models.CharField(max_length=2,
+                          #  choices=[(tag, tag.value) for tag in Levels],
+                           #blank=True)
                           #  choices=[(tag, tag.value) for tag in Levels], 
                           # choices=YearInSchool.choices,
                           choices=Levels.choices,
