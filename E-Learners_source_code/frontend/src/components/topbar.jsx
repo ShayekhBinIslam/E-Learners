@@ -7,6 +7,7 @@ import { CSSTransition } from "react-transition-group";
 import { useNavigate } from "react-router-dom";
 import { Navigate } from 'react-router-dom';
 import { TRACKS } from "../shared/tracks";
+import { Link } from 'react-router-dom';
 
 import "../styles/dropdown.css";
 
@@ -128,6 +129,10 @@ export default function Topbar() {
       const name = e.target.name;
       setFormValues({ ...formValues, [name]: e.target.value });
   };
+  const navToHome = () => {
+    localStorage.setItem('user_name','');
+
+  }
   
 
   
@@ -154,9 +159,10 @@ export default function Topbar() {
         <div className="topRight">
           
           
-          { localStorage.getItem('user_name') ?  
-          <div  className="topbaricnos" onClick={() => setShowRegisterForm(!showRegisterForm)}>logout</div> :
-          <div  className="topbaricnos" onClick={() => setShowRegisterForm(!showRegisterForm)}>Login</div> }
+          { localStorage.getItem('user_name') ? 
+
+          <div  className="topbaricnos" ><Link to="/" className="topbaricnos" style={{ textDecoration: 'none'}}><Button className="topbaricnos" role='button' onClick={navToHome}>logout</Button>  </Link></div> :
+          <div  className="topbaricnos" onClick={() => setShowRegisterForm(!showRegisterForm)}><Button className="topbaricnos" role='button'>Login</Button></div> }
           <Dialog
                 open={showRegisterForm}
                 fullWidth
@@ -202,9 +208,21 @@ export default function Topbar() {
                               >
                                   Login
                               </Button> */}
-                              <a 
-                                className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
-                                href={"/UserDashboard/".concat(runningID.toString())}>Log in</a>
+                              <button
+                                            
+                                  style={{ marginLeft: '15px' }}
+                                  variant="contained"
+                                  color="primary"
+                                  type='submit'
+                                  disableElevation
+                                  className='btn-table'
+                              >Login
+                              
+                              {/* <a disableElevation href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
+                              </button>
+                              {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
+                              {loginSuccess ? localStorage.setItem('user_name',userName) : '' }
+                              {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
                           </Grid>
                       </Grid>
                   </form>
