@@ -13,6 +13,7 @@ export default function CareerTracks() {
 
   const [TrackName, setTrackName] = useState();
   const [TrackDes, setTrackDes] = useState();
+  const [isEnrolled,setisEnrolled] = useState(false);
 
 
   const [tracks, setTracks] = useState([]);
@@ -48,15 +49,17 @@ export default function CareerTracks() {
 
   const [played, setPlayed] = useState(0);
   const [video, setVideo] = useState();
+  
   console.log(played)
 
 
   useEffect(() => {
 
     // fechTracks();
-    let data;
-    localStorage.setItem('trackid', '1')
-    console.log(localStorage.getItem('trackid'))
+    let data,trackid,userid;
+    trackid = localStorage.getItem('active_track_id')
+    userid = localStorage.getItem('user_id')
+    console.log(trackid)
     axios.get(`http://localhost:8000/getCourseList/?trackid=${trackid}`)
       .then(res=>{
         data = res.data;
@@ -69,7 +72,22 @@ export default function CareerTracks() {
       setTrackName(trackscontent.name)
       setTrackDes(trackscontent.des)
       setVideo(trackscontent.video)
-
+    //GET USERTRACKS
+    axios.get(`http://localhost:8000/getUserTrackDetails/?trackid=${trackid}&userid=${userid}`)
+      .then(res=>{
+        
+        data = res.data;
+        setisEnrolled(data[0].isEnrolled)
+        // setTrackContent(
+        //   data
+        // );
+      })
+      .catch(err=>{})
+      
+      // setCourse(trackscontent.courses)
+      // setTrackName(trackscontent.name)
+      // setTrackDes(trackscontent.des)
+      // setVideo(trackscontent.video)
     // let data;
     axios.get('http://localhost:8000/get_video/')
       .then(res=>{
@@ -121,7 +139,7 @@ export default function CareerTracks() {
   //   { id: 4, name: "Design", des: "This is Desing Career Track" , isRunning : false},
   // ];
 
-  let isEnrolled = true;
+  // let isEnrolled = true;
 
   let buttonName = "Start";
   if (isEnrolled) {
