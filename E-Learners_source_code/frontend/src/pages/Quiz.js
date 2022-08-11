@@ -125,10 +125,7 @@ export default function Quiz() {
     });
 
     const qqq = {
-      id: 0,
       name: "quiz demo",
-      des: "demo",
-      video: "",
       questions: [
         {
           question: "question 1",
@@ -189,6 +186,7 @@ export default function Quiz() {
 
         setActiveMode(2);
       } else {
+        setSelected(-1);
         setCurrQues(currQues + 1);
       }
     };
@@ -231,7 +229,9 @@ export default function Quiz() {
         setActiveMode(2);
       } else {
         console.log("next");
+        setSelected(-1);
         setCurrQues(currQues + 1);
+
       }
     };
 

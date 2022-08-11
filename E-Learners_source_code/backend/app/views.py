@@ -254,6 +254,13 @@ def get_tutorial_list(request):
 def get_Quiz(request):
   quizid = request.GET.get('quizid', '')
   print('quiz id is {}'.format(quizid))
+
+  Quizname = [
+    # output
+    {'title': output.title}
+    for output in Practice.objects.filter(id = quizid)
+  ]
+
   questions = [
     # output
     {'id': output.id, 'title': output.title}
@@ -286,28 +293,44 @@ def get_Quiz(request):
 
   QAnswername = []
   for i in QAnswer:
-    QAnswer.extend(
+    QAnswername.extend(
         list({"title":output3.title}
-        for output3 in Option.objects.filter(option__id = i["option_id"]))
+        for output3 in Option.objects.filter(id = i["optionid"]))
     )
 
-  print(QAnswer)
+  print(QAnswername)
 
 
   Questions = []
 
+  QOptionsSent = []
+  for i in range(len(QOptions)): 
+    QOptionsSentRow = []
+    for j in range(len(QOptions[i])):
+      QOptionsSentRow.append(QOptions[i][j]["name"])
+    QOptionsSent.append(QOptionsSentRow)
+  
+  QAnswerSent = []
 
- # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
+  for i in range(len(QAnswername)):
+    QAnswerSentRow = []
+    QAnswerSentRow.append(QAnswername[i]["title"])
+    QAnswerSent.append(QAnswerSentRow)
 
-  # print(output2)
+  for i in range(len(questions)):
+    Questions.append({
+      "id": questions[i]["id"],
+      "question": questions[i]["title"],
+      "qOptions": QOptionsSent[i],
+      "qAnswers": QAnswerSent[i],
+    })
+
   dictO = {
-    "name": res[0]["title"],
-    "des": res[0]["description"],
-    "video": video_link,
-    "courses": output2,
+    "name": Quizname[0]["title"],
+    "questions": Questions,
   }
 
-  # print(dictO)
+  print(dictO)
   return Response(dictO)
 
 
