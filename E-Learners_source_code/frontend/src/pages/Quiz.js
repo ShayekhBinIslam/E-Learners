@@ -5,6 +5,8 @@ import "../styles/Quiz.css";
 import { ReactComponent as ArrowIcon } from "../icons/caret.svg";
 import { useState, useEffect, useRef } from "react";
 
+import axios from 'axios'
+
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -147,7 +149,21 @@ export default function Quiz() {
     };
 
     useEffect(() => {
-      setQuizContent(qqq);
+
+      let data;
+      localStorage.setItem('quizid', '1')
+      console.log(localStorage.getItem('trackid'))
+      var quizid = localStorage.getItem('quizid')
+      axios.get(`http://localhost:8000/getQuiz/?quizid=${quizid}`)
+        .then(res=>{
+          data = res.data;
+          setQuizContent(
+            data
+          );
+        })
+        .catch(err=>{})
+
+      // setQuizContent(qqq);
       setQuestions(quizContent.questions);
 
       var length = quizContent.questions.length;

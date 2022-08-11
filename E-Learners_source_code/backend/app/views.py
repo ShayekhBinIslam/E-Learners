@@ -224,6 +224,67 @@ def get_tutorial_list(request):
   
   return Response(output)
 
+@api_view(['GET'])
+def get_Quiz(request):
+  quizid = request.GET.get('quizid', '')
+  print('quiz id is {}'.format(quizid))
+  questions = [
+    # output
+    {'id': output.id, 'title': output.title}
+    for output in Question.objects.filter(practice__id = quizid)
+  ]
+
+  print(questions)
+  QOptions = []
+  
+  c = 0
+  for i in questions:
+    QOptions.insert(c, 
+        list({"id": output3.id, "name":output3.title}
+        for output3 in Option.objects.filter(question__id = i["id"]))
+    )
+    c = c + 1
+
+  print(QOptions)
+
+
+  QAnswer = []
+  
+  for i in questions:
+    QAnswer.extend(
+        list({"id": output3.id, "optionid":output3.correct_option}
+        for output3 in Answer.objects.filter(question__id = i["id"], option__id = correct_option))
+    )
+
+  print(QAnswer)
+
+  QAnswername = []
+  for i in QAnswer:
+    QAnswer.extend(
+        list({"title":output3.title}
+        for output3 in Option.objects.filter(option__id = i["option_id"]))
+    )
+
+  print(QAnswer)
+
+
+  Questions = []
+
+
+ # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
+
+  # print(output2)
+  dictO = {
+    "name": res[0]["title"],
+    "des": res[0]["description"],
+    "video": video_link,
+    "courses": output2,
+  }
+
+  # print(dictO)
+  return Response(dictO)
+
+
 
 # @api_view(['GET'])
 # def showSingleStudent(request, pk):
@@ -283,8 +344,6 @@ def save_user_course(request):
     for output in UserCourse.objects.filter(course__id = courseid, user__id = userid)
   ]
 
-  # print("output:::")
-  # print(output)
 
   if len(output)>0:
     UserCourse.objects.filter(id=output[0]["id"]).update(active_tutorial=tutorialid, active_practice=practiceid)
