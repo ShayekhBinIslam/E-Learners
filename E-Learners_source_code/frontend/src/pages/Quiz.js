@@ -356,6 +356,8 @@ export default function Quiz() {
 
     if (activeMode === 2) {
       return (
+        <div>
+          <div className="QuizEndContainerTop"></div>
         <div className="QuizEndContainer">
           <div className="QuizEndHeader">
             <div className="QuizEndHeaderTitle">
@@ -376,6 +378,7 @@ export default function Quiz() {
               Back
             </button>
           </div>
+        </div>
         </div>
       );
     }

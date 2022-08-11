@@ -167,3 +167,24 @@
     font-size: 18px;
     font-family: "Poppins SemiBold";
 }
+
+.QuizEndContainer{
+    width: 80%;
+    border-radius: 10px;
+    margin-left: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    color: white;
+    font-family: "Poppins SemiBold";
+    text-align: center;
+    padding-bottom: 50px;
+    z-index: 5;
+    background-image: linear-gradient(to right, #9600FF, #AEBAF8);
+}
+
+.QuizEndContainerTop{
+    height: 50px;
+}
