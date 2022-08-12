@@ -239,6 +239,7 @@ def get_chapter_list(request):
 @api_view(['GET'])
 def get_tutorial_list(request):
   chapterid = request.GET.get('chapterid', '')
+  userid = request.GET.get('userid', '')
   # print('Chapter id is {}'.format(chapterid))
   output = [
     # output
@@ -246,9 +247,71 @@ def get_tutorial_list(request):
     for output in Tutorial.objects.filter(chapter__id = chapterid)
   ]
 
-  logger.info(output)
+  practice = [
+    {'id': output.id, 'title': output.title, 'description': output.description, 'length': output.duration, 'level': output.level}
+    for output in Practice.objects.filter(chapter__id = chapterid)
+  ]
+
+  practiceStatus = []
   
-  return Response(output)
+  c = 0
+  for i in practice:
+
+    questions = [
+      {'id': output.id}
+      for output in Question.objects.filter(practice__id = i["id"])
+    ]
+
+    QStatus = []
+    cc = 0
+    for i in questions:
+      QStatus.insert(cc, 
+          list({"status":output3.status}
+          for output3 in UserQuestions.objects.filter(question = i["id"], user = userid))
+      )
+      cc = cc + 1
+    
+    QAnswer = []
+  
+    for i in questions:
+      QAnswer.extend(
+          list({"id": output3.id, "optionid":output3.correct_option_id}
+          for output3 in Answer.objects.filter(question__id = i["id"]))
+      )
+    
+    QAnswername = []
+    for i in QAnswer:
+      QAnswername.extend(
+          list({"title":output3.title}
+          for output3 in Option.objects.filter(id = i["optionid"]))
+      )
+    
+    correct = 0
+    for i in range(QStatus):
+      if (QStatus[i][0]["status"] == QAnswername[i][0]["title"]):
+        correct = correct+1
+      
+
+
+    practiceStatus.insert(c, 
+        round(correct*100/len(questions))
+    )
+    c = c + 1
+
+  print(practiceStatus)
+
+
+  logger.info(output)
+
+  dictD = {
+    "tutorialsList": output,
+    "PracticeList": practice,
+    "PracticeStatus": practiceStatus
+  }
+
+  print(dictD)
+  
+  return Response(dictD)
 
 @api_view(['GET'])
 def get_Quiz(request):
@@ -513,9 +576,6 @@ def get_quiz_status(request):
       "qOptions": QOptionsSent[i],
       "qAnswers": QAnswerSent[i],
     })
-
-
-
 
   questions = [
     # output

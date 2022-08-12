@@ -398,18 +398,9 @@ function CourseContent() {
         data: userCourse,
       })
         .then(function (response) {
-          //handle success
-        //   console.log(response);
-        //   Navigate('/UserDashboard');
-            
-            // setRegSuccess(true);
-            // setUserData(response.data); //setting user data
-            // setUserID(response.data.id);
         })
         .catch(function (response) {
-          //handle error
           console.log(response);
-          // setRegSuccess(false);
         });
 
       localStorage.setItem("chapter_id", chapter_id);
@@ -600,15 +591,15 @@ function ChapterContent() {
           console.log(data)
         })
         .catch(err=>{})
-      
-  
     }, []);
+    
     if (isEnrolled) {
       return (
         <div className="tutorials-container">
           <div className="courseRecom-header">
             Tutorials ({tutorials.length})
           </div>
+          <div className="tutorials-practice">
           <div className="tutorials-grid">
             {tutorials.map((out) => (
               <div className="tutorrialsCard">
@@ -630,10 +621,14 @@ function ChapterContent() {
                   
                 </div>
                 <div className="tutorialsName">{out.title}</div>
-              
+
                 
               </div>
             ))}
+          </div>
+          <div className="inChapterpracticeList">
+              
+          </div>
           </div>
         </div>
       );
