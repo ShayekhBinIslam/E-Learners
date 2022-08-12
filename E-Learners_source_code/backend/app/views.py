@@ -239,7 +239,7 @@ def get_chapter_list(request):
 @api_view(['GET'])
 def get_tutorial_list(request):
   chapterid = request.GET.get('chapterid', '')
-  userid = request.GET.get('userid', '')
+  userid = 1 #request.GET.get('userid', '')
   # print('Chapter id is {}'.format(chapterid))
   output = [
     # output
@@ -252,6 +252,9 @@ def get_tutorial_list(request):
     for output in Practice.objects.filter(chapter__id = chapterid)
   ]
 
+  print("paisi practice")
+  print(practice)
+
   practiceStatus = []
   
   c = 0
@@ -262,41 +265,50 @@ def get_tutorial_list(request):
       for output in Question.objects.filter(practice__id = i["id"])
     ]
 
+    print("paisi questions")
+    # print(questions)
+
     QStatus = []
     cc = 0
-    for i in questions:
+    for j in questions:
       QStatus.insert(cc, 
           list({"status":output3.status}
-          for output3 in UserQuestions.objects.filter(question = i["id"], user = userid))
+          for output3 in UserQuestions.objects.filter(question = j["id"], user = userid))
       )
       cc = cc + 1
     
+    print("paisi QStatus")
+    # print(QStatus)
+
     QAnswer = []
   
-    for i in questions:
+    for j in questions:
       QAnswer.extend(
           list({"id": output3.id, "optionid":output3.correct_option_id}
-          for output3 in Answer.objects.filter(question__id = i["id"]))
+          for output3 in Answer.objects.filter(question__id = j["id"]))
       )
     
     QAnswername = []
-    for i in QAnswer:
+    for j in QAnswer:
       QAnswername.extend(
           list({"title":output3.title}
-          for output3 in Option.objects.filter(id = i["optionid"]))
+          for output3 in Option.objects.filter(id = j["optionid"]))
       )
+
+    print("paisi QAnswername")
+    # print(QAnswername)
     
     correct = 0
-    for i in range(QStatus):
-      if (QStatus[i][0]["status"] == QAnswername[i][0]["title"]):
+    for j in range(len(QStatus)):
+      if (QStatus[j][0]["status"] == QAnswername[j]["title"]):
         correct = correct+1
       
-
-
     practiceStatus.insert(c, 
-        round(correct*100/len(questions))
+        round(correct*100/(len(questions)+0.02))
     )
     c = c + 1
+
+    correct = 0
 
   print(practiceStatus)
 
@@ -312,6 +324,9 @@ def get_tutorial_list(request):
   print(dictD)
   
   return Response(dictD)
+
+
+
 
 @api_view(['GET'])
 def get_Quiz(request):
