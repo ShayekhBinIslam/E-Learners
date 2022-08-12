@@ -133,6 +133,11 @@ export default function Topbar() {
     localStorage.setItem('user_name','');
 
   }
+  const navToUserProfile = () => {
+    // localStorage.setItem('user_name','');
+    <Navigate to={"/UserProfile/"} />
+
+  }
   
 
   
@@ -228,11 +233,19 @@ export default function Topbar() {
                   </form>
               </DialogContent>
           </Dialog>
-          <img
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            alt=""
-            className="topAvatar"
-          />
+          <Link to="/UserProfile/" className="topbaricnos" style={{ textDecoration: 'none'}}>
+            <Button className="topbaricnos" role='button' onClick={navToUserProfile}>
+              <img
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                alt=""
+                className="topAvatar"
+              />
+            </Button>
+          </Link>
+          {/* <button className="topbaricnos" role='button' onClick={navToUserProfile}>
+            
+          </button> */}
+          
         </div>
       </div>
     </div>

@@ -131,7 +131,7 @@ class CourseSerializer(serializers.ModelSerializer):
 class UserCourseSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserCourse
-    fields = ["user", "course", "active_tutorial", "active_practice"]
+    fields = ["user", "course", "active_tutorial", "active_practice","status"]
 class UserTrackSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserCareerTrack

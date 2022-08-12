@@ -48,6 +48,9 @@ urlpatterns = [
     path('getChapterList/', views.get_chapter_list, name="getChapterList"),
     # path('getUserTrackList/', views.get_usertracks_list, name="getUserTrackList"),
     path('getUserTrackDetails/', views.get_usertrack_details, name="getUserTrackDetails"),
+    path('getUserTrackCompleted/', views.get_usertrack_completed, name="getUserTrackCompleted"),
+    path('getUserTrackRunning/', views.get_usertrack_running, name="getUserTrackRunning"),
+
 
     path('saveUserCourse/', views.save_user_course, name="saveUserCourse"),
     
