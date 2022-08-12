@@ -257,10 +257,11 @@ class QuestionStatus(models.TextChoices):
 class UserQuestions(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
-  status = models.CharField(max_length=2,
-                          #  choices=[(tag, tag.value) for tag in QuestionStatus], 
-                          choices=QuestionStatus.choices,
-                           blank=True)
+  # status = models.CharField(max_length=2,
+  #                         #  choices=[(tag, tag.value) for tag in QuestionStatus], 
+  #                         choices=QuestionStatus.choices,
+  #                          blank=True)
+  status = models.CharField(max_length=200)
 
 
 class UserTutorials(models.Model):

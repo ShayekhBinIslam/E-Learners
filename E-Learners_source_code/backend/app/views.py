@@ -434,3 +434,118 @@ def save_question_status(request):
   print("done")
 
   return Response('Item save successfully!')
+
+
+@api_view(['GET'])
+def get_quiz_status(request):
+  quizid = request.GET.get('quizid', '')
+  userid = request.GET.get('userid', '')
+  
+  print('dhuksi kintu bujhlam na quiz id is {}'.format(quizid))
+
+
+  Quizname = [
+    # output
+    {'title': output.title}
+    for output in Practice.objects.filter(id = quizid)
+  ]
+
+  questions = [
+    # output
+    {'id': output.id, 'title': output.title}
+    for output in Question.objects.filter(practice__id = quizid)
+  ]
+
+  print(questions)
+  QOptions = []
+  
+  c = 0
+  for i in questions:
+    QOptions.insert(c, 
+        list({"id": output3.id, "name":output3.title}
+        for output3 in Option.objects.filter(question__id = i["id"]))
+    )
+    c = c + 1
+
+  print(QOptions)
+
+
+  QAnswer = []
+  
+  for i in questions:
+    QAnswer.extend(
+        list({"id": output3.id, "optionid":output3.correct_option_id}
+        for output3 in Answer.objects.filter(question__id = i["id"]))
+    )
+
+  print(QAnswer)
+
+  QAnswername = []
+  for i in QAnswer:
+    QAnswername.extend(
+        list({"title":output3.title}
+        for output3 in Option.objects.filter(id = i["optionid"]))
+    )
+
+  print(QAnswername)
+
+
+  Questions = []
+
+  QOptionsSent = []
+  for i in range(len(QOptions)): 
+    QOptionsSentRow = []
+    for j in range(len(QOptions[i])):
+      QOptionsSentRow.append(QOptions[i][j]["name"])
+    QOptionsSent.append(QOptionsSentRow)
+  
+  QAnswerSent = []
+
+  for i in range(len(QAnswername)):
+    QAnswerSentRow = []
+    QAnswerSentRow.append(QAnswername[i]["title"])
+    QAnswerSent.append(QAnswerSentRow)
+
+  for i in range(len(questions)):
+    Questions.append({
+      "id": questions[i]["id"],
+      "question": questions[i]["title"],
+      "qOptions": QOptionsSent[i],
+      "qAnswers": QAnswerSent[i],
+    })
+
+
+
+
+  questions = [
+    # output
+    {'id': output.id}
+    for output in Question.objects.filter(practice__id = quizid)
+  ]
+
+  print(questions)
+  print("hoise question print ki jani")
+  QStatus = []
+
+  c = 0
+  for i in questions:
+    QStatus.insert(c, 
+        list({"question": output3.question_id, "status":output3.status}
+        for output3 in UserQuestions.objects.filter(question = i["id"], user = userid))
+    )
+    c = c + 1
+  
+  print(QStatus)
+  print("hoise status print ki jani")
+
+  dictO = {
+    "name": Quizname[0]["title"],
+    "questions": Questions,
+  }
+
+  quizResultContent = {
+    "quizContent" : dictO,
+    "status": QStatus,
+  }
+
+  return Response(quizResultContent)
