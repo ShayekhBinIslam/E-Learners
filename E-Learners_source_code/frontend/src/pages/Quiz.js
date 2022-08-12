@@ -586,7 +586,6 @@ export default function Quiz() {
                       <div
                         className={`${handleSelect(index)}`}
                         key={index}
-                        // onClick={() => handleCheck(index)}
                       >
                         <div className={`${handleSelectOrder(index)}`}>
                           {index + 1}
@@ -602,8 +601,12 @@ export default function Quiz() {
                       onChange={(e) => {
                         textAreaAnswer = e.target.value;
                       }}
-                      placeholder="Enter your answer here"
+                      placeholder={quizResultContent.status[currQues][0].status}
                     ></textarea>
+                    { quizResultContent.status[currQues][0].status === quizResultContent.quizContent.questions[currQues].qAnswers[0] ? 
+                    (<div className="QuizItemOptionItemCorrectTextAns">Your Answer is correct</div>)
+                    :(<div className="QuizItemOptionItemCorrectTextAns">Answer: {quizResultContent.quizContent.questions[currQues].qAnswers[0]}</div>)}
+                    
                   </div>
                 )}
               </div>
