@@ -1,4 +1,5 @@
 # from django.shortcuts import render
+import tempfile
 from urllib import response
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -143,6 +144,149 @@ def get_tracks_list(request):
   # print(request.GET.get('track', ''))
 
   return Response(output)
+
+@api_view(["GET"])
+def get_usertrack_completed(request):
+  serializer_class = UserTrackSerializer
+  # track_id = request.GET.get('trackid','')
+  user_id = request.GET.get('userid', '')
+  print("userid")
+  print(user_id)
+  # print("trackid")
+  # print(track_id)
+  # getting all user tracks
+  output = [
+      {"track_id": output.track_id}
+      for output in UserCareerTrack.objects.filter(user__id = user_id,isEnrolled = True)
+  ]
+  print(output)
+  result = []
+  temp_track = []
+  # now find the courses under each track
+  
+  for i in output:
+    output2 = []
+    output2.extend(
+      list({"course_id": output3.id}
+        for output3 in TrackCourse.objects.filter(career_track__id = i["track_id"]))
+    )
+    print(output2)
+    # now check if any of the courses has running status
+    flag = 0
+    for j in output2:
+      for output3 in UserCourse.objects.filter(user__id = user_id,course__id = j["course_id"]):
+        print(output3.status)
+        status = output3.status
+        if status == "R":
+          print(status)
+          print(i)
+          print(j)
+          flag = 1
+          continue
+    if flag == 0:
+      temp_track.append(i["track_id"])
+      # # if any running append to the list
+      result.extend(
+        list({"id": output4.id,"title":output4.title,"des":output4.description}
+        for output4 in CareerTrack.objects.filter(id = i["track_id"]))
+      )
+          
+
+  # for i in temp_track :
+  #   # if any running append to the list
+  #   result.extend(
+  #     list({"id": output4.id,"title":output4.title,"des":output4.description,"intro_video":output4.intro_video}
+  #     for output4 in CareerTrack.objects.filter(id = i["track_id"]))
+  #   )
+  print(result)
+  dictO = {
+    
+    "completed_tracks": result,
+  }
+
+
+
+  # output2 = []
+  
+  # for i in output:
+  #   output2.extend(
+  #       list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+  #       for output3 in Course.objects.filter(id = i["id"]))
+  #   )
+
+  # print(request.GET.get('track', ''))
+
+  return Response(dictO)
+
+@api_view(["GET"])
+def get_usertrack_running(request):
+  serializer_class = UserTrackSerializer
+  # track_id = request.GET.get('trackid','')
+  user_id = request.GET.get('userid', '')
+  # print("userid")
+  # print(user_id)
+  # print("trackid")
+  # print(track_id)
+  # getting all user tracks
+  output = [
+      {"track_id": output.track_id}
+      for output in UserCareerTrack.objects.filter(user__id = user_id,isEnrolled = True)
+  ]
+  # print(output)
+  result = []
+  temp_track = []
+  # now find the courses under each track
+  
+  for i in output:
+    output2 = []
+    output2.extend(
+      list({"course_id": output3.id}
+        for output3 in TrackCourse.objects.filter(career_track__id = i["track_id"]))
+    )
+    # print(output2)
+    # now check if any of the courses has running status
+    for j in output2:
+      for output3 in UserCourse.objects.filter(user__id = user_id,course__id = j["course_id"]):
+        
+        # print(output3.status)
+        status = output3.status
+        if status == "R":
+          # print(status)
+          # print(i)
+          # print(j)
+          temp_track.append(i["track_id"])
+          # # if any running append to the list
+          result.extend(
+            list({"id": output4.id,"title":output4.title,"des":output4.description}
+            for output4 in CareerTrack.objects.filter(id = i["track_id"]))
+          )
+          break
+
+  # for i in temp_track :
+  #   # if any running append to the list
+  #   result.extend(
+  #     list({"id": output4.id,"title":output4.title,"des":output4.description,"intro_video":output4.intro_video}
+  #     for output4 in CareerTrack.objects.filter(id = i["track_id"]))
+  #   )
+  # print(result)
+  dictO = {
+    
+    "running_tracks": result,
+  }
+
+
+
+  # output2 = []
+  
+  # for i in output:
+  #   output2.extend(
+  #       list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+  #       for output3 in Course.objects.filter(id = i["id"]))
+  #   )
+
+  # print(request.GET.get('track', ''))
+
+  return Response(dictO)
 @api_view(["GET"])
 def get_usertrack_details(request):
   serializer_class = UserTrackSerializer

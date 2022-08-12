@@ -102,6 +102,10 @@ class Levels(models.TextChoices):
   BEGINNER = 'BG', gettext_lazy('Beginner')
   INTERMEDIATE = 'IM', gettext_lazy('Intermediate')
   ADVANCED = 'AV', gettext_lazy('Advanced')
+class UserCourseStatus(models.TextChoices):
+  
+  RUNNING = 'R', gettext_lazy('RUNNING')
+  COMPLETED = 'C', gettext_lazy('COMPLETED')
 
 
 # User extension
@@ -275,6 +279,7 @@ class UserCourse(models.Model):
   course = models.ForeignKey(Course, on_delete=models.CASCADE)
   active_tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, null=True)
   active_practice = models.ForeignKey(Practice, on_delete=models.CASCADE, null=True)
+  status = models.CharField(max_length=200,choices=UserCourseStatus.choices,blank=True)
 
   class Meta:
     unique_together = ('user', 'course')
@@ -285,6 +290,7 @@ class UserCareerTrack(models.Model):
   track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE)
   join_date = models.DateTimeField(default=datetime.datetime.now())
   isEnrolled = models.BooleanField(default=False)
+  
 
 
 class Attribute(models.Model):
