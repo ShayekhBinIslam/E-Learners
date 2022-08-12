@@ -402,3 +402,35 @@ def save_user_course(request):
     serializer.save()
 
   return Response('Item save successfully!')
+
+
+@api_view(['POST'])
+def save_question_status(request):
+
+  print(request.data)
+  print(request.data["status"])
+
+  output = [
+    {'id': output.id,}
+    # output
+    for output in UserQuestions.objects.filter(user__id = request.data["user"], question__id = request.data["question"])
+  ]
+
+  print(output)
+  print(len(output))
+ # print(output[0]["id"])
+  
+
+  if len(output)>0:
+    print("update")
+    UserQuestions.objects.filter(id=output[0]["id"]).update(status=request.data["status"])
+
+  else:
+    print("create")
+    serializer = UserQuestionsSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+  print("done")
+
+  return Response('Item save successfully!')

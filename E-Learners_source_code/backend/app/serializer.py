@@ -143,3 +143,8 @@ class VideoSerializer(serializers.ModelSerializer):
   class Meta:
     model = Video
     fields = ["link"]
+
+class UserQuestionsSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserQuestions
+    fields = ["user", "question", "status"]

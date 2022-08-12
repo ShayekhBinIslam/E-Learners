@@ -87,19 +87,8 @@ export default function Quiz() {
   function QuizContent() {
     const [currQues, setCurrQues] = useState(0);
     const [quizscore, setQuizScore] = useState(0);
-
-    const quizResult = {
-      id: 0,
-      questions: [
-        {
-          index: 0,
-          status: "Not Answered",
-        },
-      ],
-    };
   
     var questionsStatus = [];
-
     var textAreaAnswer = "";
 
     const [questions, setQuestions] = useState([
@@ -124,31 +113,11 @@ export default function Quiz() {
       ],
     });
 
-    const qqq = {
-      name: "quiz demo",
-      questions: [
-        {
-          question: "question 1",
-          qOptions: ["option 1", "option 2", "option 3"],
-          qAnswers: ["option 2",],
-        },
-        {
-          question: "question 2",
-          qOptions: ["option 1", "option 2"],
-          qAnswers: ["option 1",],
-        },
-        {
-          question: "question 3",
-          qOptions: [],
-          qAnswers: ["nice",],
-        },
-      ],
-    };
-
     useEffect(() => {
 
       let data;
       localStorage.setItem('quizid', '1')
+      localStorage.setItem('userid', '1')
       console.log(localStorage.getItem('trackid'))
       var quizid = localStorage.getItem('quizid')
       axios.get(`http://localhost:8000/getQuiz/?quizid=${quizid}`)
@@ -166,7 +135,7 @@ export default function Quiz() {
       var length = quizContent.questions.length;
       questionsStatus = new Array(length);
       for (var i = 0; i < length; i++) {
-        questionsStatus.push("Not Answered");
+        questionsStatus.push("NA");
       }
       
     }, [JSON.stringify(quizContent)]);
@@ -174,50 +143,65 @@ export default function Quiz() {
     const [selected, setSelected] = useState(-1);
 
     const handleSkip = () => {
-      questionsStatus[currQues] = "Not Answered";
-      if (currQues === quizContent.questions.length - 1) {
-        
-        var length = quizContent.questions.length;
-        setTotalQuestions(length);
-        setCurrQues(0);
-        setScores(quizscore);
-        setQuizScore(0);
-        setSelected(-1);
+      questionsStatus[currQues] = "NA";
 
-        setActiveMode(2);
-      } else {
-        setSelected(-1);
-        setCurrQues(currQues + 1);
-      }
+      axios({
+        method: "post",
+        url: "http://localhost:8000/saveQuestionStatus/",
+        data: {user: localStorage.getItem('userid'), question: questions[currQues].id, status: questionsStatus[currQues]},
+      })
+        .then(function (response) {
+            updateQuestionPage();
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+     
     };
 
     const handleSubmit = () => {
       if (questions[currQues].qOptions.length === 0) {
         console.log(textAreaAnswer);
         if (quizContent.questions[currQues].qAnswers[0] === textAreaAnswer) {
-          questionsStatus[currQues] = "Right";
+          questionsStatus[currQues] = "RT";
           setQuizScore(quizscore + 1);
           console.log("Right milseeeee");
           console.log("quizscore", quizscore);
           
         } else {
-          questionsStatus[currQues] = "Wrong";
+          questionsStatus[currQues] = "WG";
         }
       } else if (selected === -1) {
-        questionsStatus[currQues] = "Not Answered";
+        questionsStatus[currQues] = "NA";
       } else if (
         quizContent.questions[currQues].qAnswers[0] ===
         quizContent.questions[currQues].qOptions[selected]
       ) {
-        questionsStatus[currQues] = "Right";
+        questionsStatus[currQues] = "RT";
         setQuizScore(quizscore + 1);
         console.log("Right milse");
         console.log("quizscore", quizscore);
         
       } else {
-        questionsStatus[currQues] = "Wrong";
+        questionsStatus[currQues] = "WG";
       }
 
+
+      axios({
+        method: "post",
+        url: "http://localhost:8000/saveQuestionStatus/",
+        data: {user: localStorage.getItem('userid'), question: questions[currQues].id, status: questionsStatus[currQues]},
+      })
+        .then(function (response) {
+            updateQuestionPage();
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+
+    };
+
+    function updateQuestionPage(){
       if (currQues === quizContent.questions.length - 1) {
         setCurrQues(0);
         setSelected(-1);
@@ -231,9 +215,8 @@ export default function Quiz() {
         console.log("next");
         setSelected(-1);
         setCurrQues(currQues + 1);
-
       }
-    };
+    }
 
     const handleSelect = (i) => {
       if (selected === i) {

@@ -53,6 +53,7 @@ urlpatterns = [
     
     path('getTutorialList/', views.get_tutorial_list, name="getTutorialList"),
     path('getQuiz/', views.get_Quiz, name="getQuiz"),
+    path('saveQuestionStatus/', views.save_question_status, name="saveQuestionStatus"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
     path("get_video/", views.get_videos, name="get_video"),
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
