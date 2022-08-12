@@ -216,6 +216,8 @@ class Practice(models.Model):
                           #  choices=[(tag, tag.value) for tag in Levels], 
                           choices=Levels.choices,
                            blank=True)
+  # order = models.IntegerField(default=0)
+  # type = models.CharField(max_length=200)
 
 
 class Question(models.Model):

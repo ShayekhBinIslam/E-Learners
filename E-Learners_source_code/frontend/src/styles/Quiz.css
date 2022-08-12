@@ -199,25 +199,43 @@
 .QuizBtnSkip{
     margin-right: 20px;
     margin-left: 20px;
-    border-radius: 10px;
+    border-radius: 30px;
     width: 100px;
-    background-color: rgba(173, 61, 238, 0.438);
+    height: 50px;
+    font-size: 14px;
+    font-family: "Poppins SemiBold";
+    background-color: rgba(115, 46, 245, 0.082);
     border: 0ch;
-    box-shadow: 0 0 5px rgba(15, 15, 15, 0.699);
-    color: rgb(0, 0, 0);
+    box-shadow: 0 0 5px rgba(173, 61, 238, 0.638);
+    color: rgb(37, 6, 95);
+}
+
+.QuizBtnSkip2{
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 30px;
+    width: 150px;
+    height: 50px;
+    font-size: 18px;
+    font-family: "Poppins SemiBold";
+    background-color: rgba(123, 61, 238, 0.87);
+    border: 0ch;
+    box-shadow: 0 0 5px rgba(173, 61, 238, 0.438);
+    color: rgb(245, 245, 245);
 }
 
 .QuizBtnSubmit{
     margin-right: 20px;
-    border-radius: 10px;
-    width: 200px;
+    margin-left: 20px;
+    border-radius: 30px;
+    width: 180px;
     height: 50px;
-    background-color: rgba(9, 5, 252, 0.438);
-    border: 0ch;
-    box-shadow: 0 0 5px rgba(15, 15, 15, 0.699);
-    color: rgb(0, 0, 0);
     font-size: 18px;
     font-family: "Poppins SemiBold";
+    background-color: rgba(123, 61, 238, 0.87);
+    border: 0ch;
+    box-shadow: 0 0 5px rgba(173, 61, 238, 0.438);
+    color: rgb(245, 245, 245);
 }
 
 .QuizEndContainer{
@@ -239,4 +257,61 @@
 
 .QuizEndContainerTop{
     height: 50px;
+}
+
+.QuizBtnResult{
+    margin-right: 20px;
+    border-radius: 10px;
+    margin-top: 25px;
+    width: 120px;
+    height: 40px;
+    background-color: rgba(6, 57, 87, 0.651);
+    border: 0ch;
+    box-shadow: 0 0 5px rgba(15, 15, 15, 0.699);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-family: "Poppins SemiBold";
+
+    background-color: #c2fbd7;
+    border-radius: 100px;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+    color: green;
+}
+
+.QuizBtnRetake{
+    margin-right: 20px;
+    border-radius: 10px;
+    margin-top: 15px;
+    width: 120px;
+    height: 40px;
+    background-color: rgba(190, 6, 68, 0.712);
+    border: 0ch;
+    box-shadow: 0 0 5px rgba(15, 15, 15, 0.699);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-family: "Poppins SemiBold";
+
+    background-color: #c2fbd7;
+    border-radius: 100px;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+    color: green;
+}
+
+.QuizBtnBack{
+    margin-right: 20px;
+    border-radius: 10px;
+    margin-top: 15px;
+    width: 120px;
+    height: 40px;
+    background-color: rgba(6, 38, 87, 0.774);
+    border: 0ch;
+    box-shadow: 0 0 5px rgba(15, 15, 15, 0.699);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-family: "Poppins SemiBold";
+
+    background-color: #c2fbd7;
+    border-radius: 100px;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+    color: green;
 }

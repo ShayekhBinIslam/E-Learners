@@ -40,7 +40,7 @@ export default function UserDashboard(props) {
       window.location.reload();
     } else {
       sessionStorage.removeItem('reloadCount');
-    }
+    } 
   }, []);
 
   // let TrackName = TRACKS[trackid].name;
