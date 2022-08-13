@@ -102,6 +102,10 @@ class Levels(models.TextChoices):
   BEGINNER = 'BG', gettext_lazy('Beginner')
   INTERMEDIATE = 'IM', gettext_lazy('Intermediate')
   ADVANCED = 'AV', gettext_lazy('Advanced')
+class UserCourseStatus(models.TextChoices):
+  
+  RUNNING = 'R', gettext_lazy('RUNNING')
+  COMPLETED = 'C', gettext_lazy('COMPLETED')
 
 
 # User extension
@@ -162,6 +166,8 @@ class Course(models.Model):
   poster = models.ImageField()
   subject = models.CharField(max_length=100, default="subject")
   level = models.CharField(max_length=2,
+                          #  choices=[(tag, tag.value) for tag in Levels],
+                           #blank=True)
                           #  choices=[(tag, tag.value) for tag in Levels], 
                           # choices=YearInSchool.choices,
                           choices=Levels.choices,
@@ -214,6 +220,8 @@ class Practice(models.Model):
                           #  choices=[(tag, tag.value) for tag in Levels], 
                           choices=Levels.choices,
                            blank=True)
+  # order = models.IntegerField(default=0)
+  # type = models.CharField(max_length=200)
 
 
 class Question(models.Model):
@@ -255,10 +263,11 @@ class QuestionStatus(models.TextChoices):
 class UserQuestions(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
-  status = models.CharField(max_length=2,
-                          #  choices=[(tag, tag.value) for tag in QuestionStatus], 
-                          choices=QuestionStatus.choices,
-                           blank=True)
+  # status = models.CharField(max_length=2,
+  #                         #  choices=[(tag, tag.value) for tag in QuestionStatus], 
+  #                         choices=QuestionStatus.choices,
+  #                          blank=True)
+  status = models.CharField(max_length=200)
 
 
 class UserTutorials(models.Model):
@@ -272,6 +281,7 @@ class UserCourse(models.Model):
   course = models.ForeignKey(Course, on_delete=models.CASCADE)
   active_tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE, null=True)
   active_practice = models.ForeignKey(Practice, on_delete=models.CASCADE, null=True)
+  status = models.CharField(max_length=200,choices=UserCourseStatus.choices,blank=True)
 
   class Meta:
     unique_together = ('user', 'course')
@@ -281,6 +291,8 @@ class UserCareerTrack(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   track = models.ForeignKey(CareerTrack, on_delete=models.CASCADE)
   join_date = models.DateTimeField(default=datetime.datetime.now())
+  isEnrolled = models.BooleanField(default=False)
+  
 
 
 class Attribute(models.Model):

@@ -46,12 +46,22 @@ urlpatterns = [
     path('getTrackList/', views.get_tracks_list, name="TrackList"),
     path('getCourseList/', views.get_course_list, name="CourseList"),
     path('getChapterList/', views.get_chapter_list, name="getChapterList"),
+    # path('getUserTrackList/', views.get_usertracks_list, name="getUserTrackList"),
+    path('getUserTrackDetails/', views.get_usertrack_details, name="getUserTrackDetails"),
+    path('getUserTrackCompleted/', views.get_usertrack_completed, name="getUserTrackCompleted"),
+    path('getUserTrackRunning/', views.get_usertrack_running, name="getUserTrackRunning"),
+
 
     path('saveUserCourse/', views.save_user_course, name="saveUserCourse"),
     
     path('getTutorialList/', views.get_tutorial_list, name="getTutorialList"),
+    path('getQuiz/', views.get_Quiz, name="getQuiz"),
+    path('saveQuestionStatus/', views.save_question_status, name="saveQuestionStatus"),
+    path('getQuizStatus/', views.get_quiz_status, name="getQuizStatus"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
     path("get_video/", views.get_videos, name="get_video"),
+    path("save_video_progress/", views.save_video_progress, name="save_video_progress"),
+
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
     #     path('addStudent', views.addStudent, name='add-student'),
     #     path('updateStudent/<int:pk>/', views.updateStudent, name='update-student'),

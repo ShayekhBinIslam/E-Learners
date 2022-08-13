@@ -131,11 +131,23 @@ class CourseSerializer(serializers.ModelSerializer):
 class UserCourseSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserCourse
-    fields = ["user", "course", "active_tutorial", "active_practice"]
+    fields = ["user", "course", "active_tutorial", "active_practice","status"]
+class UserTrackSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserCareerTrack
+    fields = ["user", "track", "join_date", "isEnrolled"]
 
-    
+class UserTutorialsSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserTutorials
+    fields = ["user", "tutorial", "progress"]
 
 class VideoSerializer(serializers.ModelSerializer):
   class Meta:
     model = Video
     fields = ["link"]
+
+class UserQuestionsSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserQuestions
+    fields = ["user", "question", "status"]

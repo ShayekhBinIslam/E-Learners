@@ -13,6 +13,7 @@ import Course from "./pages/Course";
 import UserDashboard from "./pages/UserDashboard";
 import { TRACKS } from "./shared/tracks";
 import Video from "./pages/Video";
+import Quiz from "./pages/Quiz";
 
 import Practice from "./pages/Practice";
 
@@ -21,6 +22,7 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import UserProfile from "./pages/UserProfile";
 
 // import {useEffct} from 'react';
 
@@ -42,7 +44,10 @@ function App() {
           <Route path="/CareerTracks/:trackid/User/:userid" element={<CareerTracks/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid" element={<Course/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid/practice" element={<Practice/>}/>
+          <Route path="/CareerTracks/:trackid/Course/:courseid/practice/:practiceid/mode/:mode" element={<Quiz/>}/>
+
           <Route path="/videos" element={<Video/>}/>
+          <Route path="/UserProfile/" element={<UserProfile/>}/>
         </Routes>
       </div>
       

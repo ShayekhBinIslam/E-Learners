@@ -83,4 +83,13 @@ admin.site.register(FreeSlot)
 admin.site.register(QuizQuestion)
 
 admin.site.register(Answer)
+
+
+
+
+
+
+
+
+
 admin.site.register(UserCourse)

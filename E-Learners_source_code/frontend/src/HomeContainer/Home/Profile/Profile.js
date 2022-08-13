@@ -29,8 +29,11 @@ export default function () {
       const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
       const [loginAuth,setloginAuth] = useState(true);
       const [loginSuccess,setloginSuccess] = useState(false);
-      const [regSuccess,setRegSuccess] = useState(false);
+      const [regSuccess,setregSuccess] = useState(false);
+
+    //   const [regSuccess,setRegSuccess] = useState(false);
       const [userID,setUserID] = useState('');
+      const [userName,setUserName] = useState('');
       const [userData, setUserData] = useState({});
       const runningID = runningTrack.id;
       
@@ -52,22 +55,23 @@ export default function () {
             headers: { "Content-Type": "multipart/form-data" },
           })
             .then(function (response) {
+              setregSuccess(true);
+              setUserID(response.data.id);
+              setUserName(response.data.name);
+              
               //handle success
             //   console.log(response);
             //   Navigate('/UserDashboard');
-                
-                setRegSuccess(true);
-                setUserData(response.data); //setting user data
-                setUserID(response.data.id);
             })
             .catch(function (response) {
               //handle error
               console.log(response);
-              setRegSuccess(false);
+              setregSuccess(false);
             });
 
       };
       const onSubmit2 = (e) => {
+        
         e.preventDefault();
         const data = new FormData(e.currentTarget);
         const actualData = {
@@ -93,8 +97,10 @@ export default function () {
               console.log(response.status);
               setUserData(response.data); //setting user data
               setUserID(response.data.id);
+              setUserName(response.data.name);
             //   localStorage.setItem('user_id',userID.toString());
               console.log(userID);
+              console.log(userName);
               <Navigate to={"/UserDashboard/".concat(userID.toString())} replace={true} />
               
             })
@@ -106,6 +112,7 @@ export default function () {
               console.log(error);
             //   localStorage.setItem('user_id',userID.toString());
             });
+            // window.location.reload(true);
         
       };
       const handleInputChange = (e) => {
@@ -232,8 +239,11 @@ export default function () {
                                         
                                         {/* <a disableElevation href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                         </button>
-                                        {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
                                         {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
+                                        {loginSuccess ? localStorage.setItem('user_name',userName) : '' }
+                                        {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
+                                        
+                                        
 
                                     </Grid>
                                 </Grid>
@@ -321,9 +331,11 @@ export default function () {
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                             Sign up
                                         </button>
-
                                         {regSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
+
+                                        {/* {regSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' } */}
                                         {regSuccess ? localStorage.setItem('user_id',userID) : '' }
+                                        {regSuccess ? localStorage.setItem('user_name',userName) : '' }
                                     </Grid>
                                 </Grid>
                             </form>

@@ -5,7 +5,9 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import { TRACKS } from "../shared/tracks";
+import { Link } from 'react-router-dom';
 
 import "../styles/dropdown.css";
 
@@ -48,8 +50,15 @@ const fistDes = "This is Web Development Career Track";
 const runningTrack = TRACKS.filter((track) => track.isRunning)[0];
 const runningID = runningTrack.id;
 
-export default function Topbar() {
 
+
+export default function Topbar() {
+  
+  
+  // if(localStorage.getItem('user_name') == ''){
+  //   window.location.reload(true);
+  // }
+  // window.location.reload(false)
 
   const [formValues, setFormValues] = useState({
     name: '',
@@ -58,19 +67,77 @@ export default function Topbar() {
     password: ''
   });
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [loginSuccess,setloginSuccess] = useState(false);
+
+
+  //   const [regSuccess,setRegSuccess] = useState(false);
+  const [userID,setUserID] = useState('');
+  const [userName,setUserName] = useState('');
+  const [userData, setUserData] = useState({});
+  const [token, setToken] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem("user_name") === null) {
+      setToken(false);
+    } else {
+      setToken(true);
+    }
+  }, []);
   const onSubmit = (e) => {
-      e.preventDefault();
-      const data = new FormData(e.currentTarget);
-      const actualData = {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const actualData = {
+        
         email: data.get('email'),
         password: data.get('password'),
-      } 
-      console.log(formValues);
+        
+    }
+    // console.log(formValues);
+    axios({
+        method: "post",
+        url: "http://localhost:8000/login/",
+        data: actualData,
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(response => {
+        
+            
+          //handle success
+          
+          setloginSuccess(true);
+          
+          console.log(response.status);
+          setUserData(response.data); //setting user data
+          setUserID(response.data.id);
+          setUserName(response.data.name);
+        //   localStorage.setItem('user_id',userID.toString());
+          console.log(userID);
+          console.log(userName);
+          <Navigate to={"/UserDashboard/".concat(userID.toString())} replace={true} />
+          
+        })
+        .catch((error) => {
+          //handle error
+          console.log("is it printing something");
+          
+        //   setloginSuccess(false);
+          console.log(error);
+        //   localStorage.setItem('user_id',userID.toString());
+        });
+    
   };
   const handleInputChange = (e) => {
       const name = e.target.name;
       setFormValues({ ...formValues, [name]: e.target.value });
   };
+  const navToHome = () => {
+    localStorage.setItem('user_name','');
+
+  }
+  const navToUserProfile = () => {
+    // localStorage.setItem('user_name','');
+    <Navigate to={"/UserProfile/"} />
+
+  }
   
 
   
@@ -92,9 +159,15 @@ export default function Topbar() {
             </div>
           </div>
         </div>
-
+        {console.log(localStorage.getItem('user_name'))}
+        
         <div className="topRight">
-          <div  className="topbaricnos" onClick={() => setShowRegisterForm(!showRegisterForm)}>login</div>
+          
+          
+          { localStorage.getItem('user_name') ? 
+
+          <div  className="topbaricnos" ><Link to="/" className="topbaricnos" style={{ textDecoration: 'none'}}><Button className="topbaricnos" role='button' onClick={navToHome}>logout</Button>  </Link></div> :
+          <div  className="topbaricnos" onClick={() => setShowRegisterForm(!showRegisterForm)}><Button className="topbaricnos" role='button'>Login</Button></div> }
           <Dialog
                 open={showRegisterForm}
                 fullWidth
@@ -140,19 +213,39 @@ export default function Topbar() {
                               >
                                   Login
                               </Button> */}
-                              <a 
-                                className="btn-right-mi" style={{ marginLeft: '15px' }} variant="contained" disableElevation
-                                href={"/UserDashboard/".concat(runningID.toString())}>Log in</a>
+                              <button
+                                            
+                                  style={{ marginLeft: '15px' }}
+                                  variant="contained"
+                                  color="primary"
+                                  type='submit'
+                                  disableElevation
+                                  className='btn-table'
+                              >Login
+                              
+                              {/* <a disableElevation href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
+                              </button>
+                              {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
+                              {loginSuccess ? localStorage.setItem('user_name',userName) : '' }
+                              {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
                           </Grid>
                       </Grid>
                   </form>
               </DialogContent>
           </Dialog>
-          <img
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            alt=""
-            className="topAvatar"
-          />
+          <Link to="/UserProfile/" className="topbaricnos" style={{ textDecoration: 'none'}}>
+            <Button className="topbaricnos" role='button' onClick={navToUserProfile}>
+              <img
+                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                alt=""
+                className="topAvatar"
+              />
+            </Button>
+          </Link>
+          {/* <button className="topbaricnos" role='button' onClick={navToUserProfile}>
+            
+          </button> */}
+          
         </div>
       </div>
     </div>
@@ -188,7 +281,7 @@ function DropdownMenu() {
   function fechTracks(){
     let data;
     let trackid=1;
-    axios.get('http://localhost:8000/getTrackList/?track=2')
+    axios.get('http://localhost:8000/getTrackList/')
       .then(res=>{
         data = res.data;
         setTracks(
@@ -212,6 +305,8 @@ function DropdownMenu() {
   const [activeId, setActiveId] = useState(firstTrack);
   const [activeDes, setActiveDes] = useState(fistDes);
   const [menuHeight, setMenuHeight] = useState(null);
+  // login check
+  const [isLogin,setisLogin] = useState(false)
   const dropdownRef = useRef(null);
 
   // const navigate = useNavigate();
@@ -225,7 +320,7 @@ function DropdownMenu() {
 
   useEffect(() => {
     setMenuHeight(tracks.length*50+50);
-  }, []);
+  });
 
   function calcHeight(el) {
     const height = el.offsetHeight;
@@ -233,6 +328,9 @@ function DropdownMenu() {
   }
 
   function setActiveDesName(id1, des1, name1) {
+    localStorage.setItem('active_track_id',id1)
+    localStorage.setItem('active_track_des',des1)
+    localStorage.setItem('active_track_name',name1)
     setActiveId(id1);
     setActiveDes(des1);
     setActiveTrack(name1);
