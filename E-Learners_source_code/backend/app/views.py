@@ -268,44 +268,47 @@ def get_recom_practice_list(request):
   # track_id = request.GET.get('trackid','')
   user_id = request.GET.get('userid', '')
   course_id = request.GET.get('courseid', '')
+  chapter_id = request.GET.get('chapterid', '')
+
   # print("userid")
   # print(user_id)
   # print("trackid")
   # print(track_id)
   # getting all user tracks
   practiceList = [
-      {"practice_id": output.track_id}
-      for output in UserCareerTrack.objects.filter(user__id = user_id,isEnrolled = True)
+      {"practice_id": output.id}
+      for output in Practice.objects.filter(chapter__id = chapter_id,type = "practice")
   ]
   # print(output)
   result = []
   temp_track = []
   # now find the courses under each track
   
-  for i in output:
+  for i in practiceList:
     output2 = []
     output2.extend(
-      list({"course_id": output3.id}
-        for output3 in TrackCourse.objects.filter(career_track__id = i["track_id"]))
+      list({"question_id": output3.id}
+        for output3 in Question.objects.filter(practice__id = i["practice_id"]))
     )
     # print(output2)
-    # now check if any of the courses has running status
+    # now check user question status
+    print(output2)
+    flag = 0
     for j in output2:
-      for output3 in UserCourse.objects.filter(user__id = user_id,course__id = j["course_id"]):
-        
-        # print(output3.status)
-        status = output3.status
-        if status == "R":
-          # print(status)
-          # print(i)
-          # print(j)
-          temp_track.append(i["track_id"])
-          # # if any running append to the list
-          result.extend(
-            list({"id": output4.id,"title":output4.title,"des":output4.description}
-            for output4 in CareerTrack.objects.filter(id = i["track_id"]))
-          )
+      for output3 in  UserQuestions.objects.filter(user__id = user_id,question__id = j["question_id"]):
+        if output3.status != "NA":
+          flag = 1
           break
+    # now if flag changes add to result
+    if flag == 0:
+      # # if any running append to the list
+      result.extend(
+        list({"id": output4.id,"title":output4.title,"des":output4.description,"level":output4.level}
+        for output4 in Practice.objects.filter(id = i["practice_id"]))
+      )
+      break
+          
+            
 
   # for i in temp_track :
   #   # if any running append to the list
@@ -316,7 +319,62 @@ def get_recom_practice_list(request):
   # print(result)
   dictO = {
     
-    "running_tracks": result,
+    "recompractice_list": result,
+  }
+
+
+
+  # output2 = []
+  
+  # for i in output:
+  #   output2.extend(
+  #       list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+  #       for output3 in Course.objects.filter(id = i["id"]))
+  #   )
+
+  # print(request.GET.get('track', ''))
+
+  return Response(dictO)
+
+@api_view(["GET"])
+def get_recom_tutorial_list(request):
+  serializer_class = UserTrackSerializer
+  # track_id = request.GET.get('trackid','')
+  user_id = request.GET.get('userid', '')
+  course_id = request.GET.get('courseid', '')
+  chapter_id = request.GET.get('chapterid', '')
+
+  # print("userid")
+  # print(user_id)
+  # print("trackid")
+  # print(track_id)
+  # getting all user tracks
+  tutorialList = [
+      {"tutorial_id": output.id}
+      for output in Tutorial.objects.filter(chapter__id = chapter_id)
+  ]
+  print("heeeeefefef\n")
+  print(tutorialList)
+  result = []
+  temp_track = []
+  # now find the courses under each track
+  
+  for i in tutorialList:
+    # output2 = []
+    for output3 in UserTutorials.objects.filter(tutorial__id = i["tutorial_id"],user__id = user_id):
+      
+      if int(output3.progress) < 100 :
+        result.extend(
+          list({"id": output4.id,"title":output4.title,"des":output4.description,"level":output4.level,"progress":output3.progress}
+            for output4 in Tutorial.objects.filter(id = i["tutorial_id"]))
+        )
+        break
+    if len(result) > 0 :
+      break
+  print(result)
+  dictO = {
+    
+    "recomtutorial_list": result,
   }
 
 
@@ -568,7 +626,7 @@ def get_chapter_list_for_quiz(request):
 @api_view(['GET'])
 def get_tutorial_list(request):
   chapterid = request.GET.get('chapterid', '')
-  userid = 1 #request.GET.get('userid', '')
+  userid = request.GET.get('userid', '')
   # print('Chapter id is {}'.format(chapterid))
   output = [
     # output
@@ -630,6 +688,8 @@ def get_tutorial_list(request):
     # print(QAnswername)
     
     correct = 0
+    print(QStatus)
+    print(QAnswername)
     for j in range(len(QStatus)):
       if (QStatus[j][0]["status"] == QAnswername[j]["title"]):
         correct = correct+1
