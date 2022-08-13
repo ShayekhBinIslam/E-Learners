@@ -81,7 +81,7 @@ export default function CareerTracks() {
     //   })
     //   .catch(err=>{})
 
-  }, [video]);
+  }, [JSON.stringify(trackscontent)]);
 
   // const course = [
   //   {
