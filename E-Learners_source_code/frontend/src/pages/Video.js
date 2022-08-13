@@ -23,6 +23,13 @@ export default function Course() {
       .catch(err=>{})
   });
 
+  function onProgress(state) {
+    // setPlayed(state.playedSeconds);
+    // console.log(progress);
+    console.log(state)
+    // console.log("played: " + state.playedSeconds);
+  }
+
   return (
     // console.log(process.cwd())
     // video = "http://localhost:8000/media/" + video
@@ -30,7 +37,7 @@ export default function Course() {
     <div>
       <ReactPlayer 
         // onProgress={}
-        controls
+        controls={true}
         // url='https://www.youtube.com/watch?v=9nkR2LLPiYo'
         // url='../../../backend/media/video/22/video_file.mp4'
         // url="http://localhost:8000/media/video/22/video_file.mp4"
@@ -38,10 +45,7 @@ export default function Course() {
         url={"http://localhost:8000/media/" + video}
         // url={video}
         
-        onProgress={(progress) => {
-          setPlayed(progress.playedSeconds);
-          // console.log(progress);
-        }}
+        onProgress={onProgress}
       />
 
     </div>

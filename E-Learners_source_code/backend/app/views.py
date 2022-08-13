@@ -158,6 +158,9 @@ def get_course_list(request):
   video_link = Video.objects.filter(id=video_id).values('link')[0]['link']
   print(video_link)
 
+  link2 = CareerTrack.objects.filter(id = idd).values('intro_video__link')
+  logger.info("link2: {}".format(link2))
+
   # print(name, des)
   #print(type(res), res[0])
 
@@ -189,10 +192,21 @@ def get_course_list(request):
   return Response(dictO)
 
 
+
+
 @api_view(['GET'])
 def get_chapter_list(request):
   courseid = request.GET.get('courseid', '')
   print('Course id is {}'.format(courseid))
+  logger.info("Get chapter list")
+
+  # Join UserTutorials with Tutorial
+  # user_id = 2
+  # tutorial_id = 1
+  # user_tutorial = UserTutorials.objects.filter(user_id=user_id, tutorial_id=tutorial_id)
+  # logger.info(user_tutorial)
+  # logger.info(user_tutorial.values('tutorial__title', 'user__name'))
+  
 
   output = [
       # {"id": output.course_id}
