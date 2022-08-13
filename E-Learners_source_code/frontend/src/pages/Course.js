@@ -163,6 +163,36 @@ const recomChapterList = [
 export default function Course() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
   const [isgotoPractice, setisGotoPractive] = useState(false);
+  const [recomPracticeList, setRecomPracticeList] = useState({
+    "running_tracks": [{"id":0,"title":"dfss","des":"sdfsdf"}]
+  });
+  useEffect(() => {
+
+    // fechTracks();
+    let data,trackid,userid,courseid;
+    trackid = localStorage.getItem('active_track_id')
+    userid = localStorage.getItem('user_id')
+    courseid = localStorage.getItem('courseid')
+    console.log(trackid)
+    axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}`)
+      .then(res=>{
+        data = res.data;
+        setRecomPracticeList(
+          data
+        );
+      })
+      .catch(err=>{})
+     
+    
+      
+      // setCourse(trackscontent.courses)
+      // setTrackName(trackscontent.name)
+      // setTrackDes(trackscontent.des)
+      // setVideo(trackscontent.video)
+    // let data;
+    
+
+  }, []);
 
   // const navigate = useNavigate();
 
