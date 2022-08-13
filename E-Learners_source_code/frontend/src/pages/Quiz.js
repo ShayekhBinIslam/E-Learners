@@ -236,6 +236,7 @@ export default function Quiz() {
         var length = quizContent.questions.length;
         setTotalQuestions(length);
         localStorage.setItem("mode", 2);
+        localStorage.setItem("quizscore", quizscore);
         setActiveMode(2);
 
       } else {
@@ -405,7 +406,7 @@ export default function Quiz() {
               </div>
               <div className="QuizEndHeaderScore">
                 {"Your score is "
-                  .concat(Scores)
+                  .concat(localStorage.getItem("quizscore"))
                   .concat("/")
                   .concat(totalQuestions)}
               </div>
@@ -504,6 +505,17 @@ export default function Quiz() {
 
     }, [JSON.stringify(quizResultContent)]);
 
+    function updateScore(){
+      let score = 0;
+      for(let i = 0; i < quizStatus.length; i++){
+        if(quizStatus[i].status === quizResultContent.quizContent.questions[i].qAnswers[0]){
+          score = score+1;
+        }
+      }
+
+      localStorage.setItem("quizscore", score);
+    }
+
     const handleNext = () => {
       if (currQues === quizContent.questions.length - 1) {
         setCurrQues(0);
@@ -511,6 +523,7 @@ export default function Quiz() {
         var length = quizContent.questions.length;
         setTotalQuestions(length);
         localStorage.setItem("mode", 2);
+        updateScore();
         setActiveMode(2);
       } else {
         console.log("next");
