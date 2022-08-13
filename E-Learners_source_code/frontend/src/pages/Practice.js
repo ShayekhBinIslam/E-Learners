@@ -296,7 +296,9 @@ export default function Practice() {
     const [activeId, setActiveId] = useState(props.list[0].id);
     const [activeDes, setActiveDes] = useState(props.list[0].des);
     const [menuHeight, setMenuHeight] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
     const dropdownRef = useRef(null);
+
 
     useEffect(() => {
       if (props.list.length < 4) {
@@ -310,6 +312,12 @@ export default function Practice() {
       setActiveId(id1);
       setActiveDes(des1);
       setActiveTrack(name1);
+
+      for(var i=0; i<props.list.length; i++){
+        if(props.list[i].id === id1){
+          setActiveIndex(i);
+        }
+      }
     }
 
     function DropdownItem(props) {
@@ -368,7 +376,11 @@ export default function Practice() {
               href={"/CareerTracks/"
                 .concat(trackid.toString())
                 .concat("/Course/")
-                .concat(activeId.toString())}
+                .concat(activeId.toString())
+                .concat("/Practice/")
+                .concat(props.idList[activeIndex][0].id.toString())
+                .concat("/mode/1")
+              }
             >
               Explore
             </a>
@@ -380,7 +392,11 @@ export default function Practice() {
               href={"/CareerTracks/"
                 .concat(trackid.toString())
                 .concat("/Course/")
-                .concat(activeId.toString())}
+                .concat(activeId.toString())
+                .concat("/Practice/")
+                .concat(props.idList[activeIndex][0].id.toString())
+                .concat("/mode/1")
+              }
             >
               Explore
             </a>
@@ -392,7 +408,11 @@ export default function Practice() {
               href={"/CareerTracks/"
                 .concat(trackid.toString())
                 .concat("/Course/")
-                .concat(activeId.toString())}
+                .concat(activeId.toString())
+                .concat("/Practice/")
+                .concat(props.idList[activeIndex][0].id.toString())
+                .concat("/mode/1")
+              }
             >
               Explore
             </a>
@@ -422,6 +442,7 @@ export default function Practice() {
           setChapterList(data.chapters);
           console.log("chapter list paisi", data);
           console.log(chapterList);
+          console.log(chapterListForQuiz);
         })
         .catch((err) => {});
     }, [JSON.stringify(chapterList)]);
@@ -445,7 +466,7 @@ export default function Practice() {
               <div className="tracksDropdown-container">
                 <div className="tracksDropdown-menu">
                   <NavItem icon={<ArrowIcon />}>
-                    <DropdownMenu list={chapterList} mode={"bp"}></DropdownMenu>
+                    <DropdownMenu list={chapterList} mode={"bp"} idList={chapterListForQuiz.quiz_BG}></DropdownMenu>
                   </NavItem>
                 </div>
               </div>
@@ -463,7 +484,7 @@ export default function Practice() {
               <div className="tracksDropdown-container">
                 <div className="tracksDropdown-menu">
                   <NavItem icon={<ArrowIcon />}>
-                    <DropdownMenu list={chapterList} mode={"ip"}></DropdownMenu>
+                    <DropdownMenu list={chapterList} mode={"ip"} idList={chapterListForQuiz.quiz_IM}></DropdownMenu>
                   </NavItem>
                 </div>
               </div>
@@ -486,7 +507,7 @@ export default function Practice() {
               <div className="tracksDropdown-container">
                 <div className="tracksDropdown-menu">
                   <NavItem icon={<ArrowIcon />}>
-                    <DropdownMenu list={chapterList} mode={"ap"}></DropdownMenu>
+                    <DropdownMenu list={chapterList} mode={"ap"} idList={chapterListForQuiz.quiz_AV}></DropdownMenu>
                   </NavItem>
                 </div>
               </div>

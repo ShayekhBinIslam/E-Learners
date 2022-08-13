@@ -36,14 +36,14 @@ const trackname = "Web Development";
 const coursename = "FrontEnd Basics";
 
 export default function Quiz() {
-  console.log(localStorage.getItem('mode'));
-  let modee = localStorage.getItem('mode');
-  const [activeMode, setActiveMode] = useState(parseInt(modee));
-  
+  // console.log(localStorage.getItem('mode'));
+  // let modee = localStorage.getItem('mode');
   const [Scores, setScores] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const { practiceid } = useParams();
   const { mode } = useParams();
+
+  const [activeMode, setActiveMode] = useState(parseInt(mode));
 
 
   console.log("activeMode", activeMode);
@@ -127,14 +127,14 @@ export default function Quiz() {
     useEffect(() => {
 
       let data;
-      localStorage.setItem("quizid", "1");
+      // localStorage.setItem("quizid", "1");
       localStorage.setItem("userid", "1");
       console.log(localStorage.getItem("trackid"));
       // var quizid = localStorage.getItem("quizid");
-      var quizid = practiceid;
+      // var quizid = practiceid;
 
       axios
-        .get(`http://localhost:8000/getQuiz/?quizid=${quizid}`)
+        .get(`http://localhost:8000/getQuiz/?quizid=${practiceid}`)
         .then((res) => {
           data = res.data;
           setQuizContent(data);
