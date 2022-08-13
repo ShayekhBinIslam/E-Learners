@@ -9,7 +9,7 @@ import axios from "axios";
 
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 let globalactiveMode = 1;
 
@@ -371,6 +371,9 @@ export default function Quiz() {
   }
 
   function QuizEndContent() {
+
+    const [isBack, setIsBack] = React.useState(false);
+
     const handleRetake = () => {
       localStorage.setItem("mode", 1);
       setScores(0);
@@ -378,13 +381,17 @@ export default function Quiz() {
       
     };
 
-    const handleBack = () => {};
+    // var navigate = useNavigate();
+
+    const handleBack = () => {
+      setIsBack(!isBack);
+      // navigate();
+    };
 
     const handleResult = () => {
       localStorage.setItem("mode", 3);
       setScores(0);
       setActiveMode(3);
-    
     };
 
     if (activeMode === 2) {
@@ -414,6 +421,8 @@ export default function Quiz() {
                 Back
               </button>
             </div>
+            {isBack ? <Navigate to={`/CareerTracks/${localStorage.getItem("trackid")}/Course/${localStorage.getItem("courseid")}`} /> : null}
+              
           </div>
         </div>
       );
