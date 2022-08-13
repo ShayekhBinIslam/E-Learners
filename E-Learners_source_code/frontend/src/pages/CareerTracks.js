@@ -69,17 +69,17 @@ export default function CareerTracks() {
       // setTrackDes(trackscontent.des)
       // setVideo(trackscontent.video)
     // let data;
-    axios.get('http://localhost:8000/get_video/')
-      .then(res=>{
-        data = res.data;
-        // this.setState({
-        //   details: data
-        // });
-        console.log(data[0].link);
-        console.log(window.location.pathname)
-        setVideo(data[0].link)
-      })
-      .catch(err=>{})
+    // axios.get('http://localhost:8000/get_video/')
+    //   .then(res=>{
+    //     data = res.data;
+    //     // this.setState({
+    //     //   details: data
+    //     // });
+    //     console.log(data[0].link);
+    //     console.log(window.location.pathname)
+    //     setVideo(data[0].link)
+    //   })
+    //   .catch(err=>{})
 
   }, [video]);
 

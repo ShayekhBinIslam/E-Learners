@@ -62,6 +62,7 @@ urlpatterns = [
     path('getQuizStatus/', views.get_quiz_status, name="getQuizStatus"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
     path("get_video/", views.get_videos, name="get_video"),
+    path("save_video_progress/", views.save_video_progress, name="save_video_progress"),
 
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
     #     path('addStudent', views.addStudent, name='add-student'),
