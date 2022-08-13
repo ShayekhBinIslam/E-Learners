@@ -1,11 +1,91 @@
 import React from "react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import { useState,useEffect } from "react";
+import { Navigate } from 'react-router-dom';
+import { TRACKS } from "../shared/tracks";
+import { Link } from 'react-router-dom';
+import axios from "axios";
+
+import { Modal } from "antd";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Grid,
+    TextField
+  } from '@material-ui/core';
 const UserProfile = () =>{
+    
+    const [showRegisterForm, setShowRegisterForm] = useState(false);
+    const [token, setToken] = useState(false);
+  
+    const [formValues, setFormValues] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        password: ''
+      });
+    // useEffect(() => {
+    // if (localStorage.getItem("user_name") === null) {
+    //     setToken(false);
+    // } else {
+    //     setToken(true);
+    // }
+    // }, []);
+    const handleInputChange = (e) => {
+        const name = e.target.name;
+        setFormValues({ ...formValues, [name]: e.target.value });
+    };
+    const onSubmit = (e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        const actualData = {
+            
+            email: data.get('email'),
+            password: data.get('password'),
+            
+        }
+        // console.log(formValues);
+        axios({
+            method: "post",
+            url: "http://localhost:8000/login/",
+            data: actualData,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+            .then(response => {
+            
+                
+              //handle success
+              
+            //   setloginSuccess(true);
+              
+            //   console.log(response.status);
+            //   setUserData(response.data); //setting user data
+            //   setUserID(response.data.id);
+            //   setUserName(response.data.name);
+            // //   localStorage.setItem('user_id',userID.toString());
+            //   console.log(userID);
+            //   console.log(userName);
+            //   <Navigate to={"/UserDashboard/".concat(userID.toString())} replace={true} />
+              
+            })
+            .catch((error) => {
+              //handle error
+              console.log("is it printing something");
+              
+            //   setloginSuccess(false);
+              console.log(error);
+            //   localStorage.setItem('user_id',userID.toString());
+            });
+        
+      };
+    
     return (
         <>
         <div className="container emp-profile">
-            <form action="" method="">
+            <div>
                 <div className="row">
                     <div className="col-md-4">
                         <img src={require("../assets/Home/profilephoto.jpg")} alt='no internet connection' width="400"/>
@@ -48,7 +128,76 @@ const UserProfile = () =>{
 
                     </div>
                     <div className="col-md-2 mt-5">
-                        <input type="submit"className="profile-edit-btn" value="Edit Profile" name="btnAddMore" ></input>
+                        <div >
+                            <button role="button" className="btn-right-mi" onClick={() => setShowRegisterForm(true)}>Edit Profile</button>
+                        </div>
+                        {console.log(showRegisterForm)}
+                        <Dialog
+                            open={showRegisterForm}
+                            
+                            fullWidth
+                            onClose={() => setShowRegisterForm(false)}
+                        >
+                            <DialogTitle>Log in</DialogTitle>
+                            <DialogContent>
+                                <form onSubmit={onSubmit}>
+                                    <Grid container spacing={4}>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                label="Email"
+                                                type="email"
+                                                name="email"
+                                                required
+                                                fullWidth
+                                                value={formValues.email}
+                                                onChange={handleInputChange}
+                                            />
+                                        </Grid>
+                                        
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                label="Password"
+                                                type="password"
+                                                required
+                                                name="password"
+                                                fullWidth
+                                                value={formValues.password}
+                                                onChange={handleInputChange}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Button variant="contained" onClick={() => setShowRegisterForm(false)} disableElevation>
+                                                Close
+                                            </Button>
+                                            {/* <Button
+                                                style={{ marginLeft: '15px' }}
+                                                variant="contained"
+                                                color="primary"
+                                                type='submit'
+                                                disableElevation
+                                            >
+                                                Login
+                                            </Button> */}
+                                            <button
+                                                        
+                                                style={{ marginLeft: '15px' }}
+                                                variant="contained"
+                                                color="primary"
+                                                type='submit'
+                                                disableElevation
+                                                className='btn-table'
+                                            >submit
+                                            
+                                            {/* <a disableElevation href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
+                                            </button>
+                                            {/* {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
+                                            {loginSuccess ? localStorage.setItem('user_name',userName) : '' }
+                                            {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' } */}
+                                        </Grid>
+                                    </Grid>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
 
                     </div>
 
@@ -146,7 +295,7 @@ const UserProfile = () =>{
 
                 </div>
 
-            </form>
+            </div>
         </div>
         </>
     )
