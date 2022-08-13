@@ -25,24 +25,6 @@ export default function CareerTracks() {
     "courses": []
   });
 
-  function fechTracks(){
-    let data;
-    axios.get('http://localhost:8000/getCourseList/?trackid=1')
-      .then(res=>{
-        data = res.data;
-        setTrackContent(
-          data
-        );
-      })
-      .catch(err=>{})
-
-
-      setCourse(trackscontent.courses)
-      setTrackName(trackscontent.name)
-      setTrackDes(trackscontent.des)
-      
-  }
-
   function logResult() {
     return 2 + 2;
   }
@@ -54,8 +36,6 @@ export default function CareerTracks() {
 
 
   useEffect(() => {
-
-    // fechTracks();
     let data,trackid,userid;
     trackid = localStorage.getItem('active_track_id')
     userid = localStorage.getItem('user_id')

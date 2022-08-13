@@ -449,6 +449,63 @@ def get_chapter_list(request):
   return Response(output)
 
 
+
+@api_view(['GET'])
+def get_chapter_list_for_quiz(request):
+  courseid = request.GET.get('courseid', '')
+  # print('Course id is {}'.format(courseid))
+
+  output = [
+      # {"id": output.course_id}
+      {'id': output.id, 'name': output.title, 'des': output.description}
+      # output
+      for output in Chapter.objects.filter(course__id = courseid)
+  ]
+
+  idsOfQuiz_BG = []
+  cc = 0
+  for j in output:
+    idsOfQuiz_BG.insert(cc, 
+        list({"id":output3.id}
+        for output3 in Practice.objects.filter(chapter = j["id"], type = "quiz", level = "BG"))
+    )
+    cc = cc + 1
+  
+  idsOfQuiz_IM = []
+  cc = 0
+  for j in output:
+    idsOfQuiz_IM.insert(cc, 
+        list({"id":output3.id}
+        for output3 in Practice.objects.filter(chapter = j["id"], type = "quiz", level = "IM"))
+    )
+    cc = cc + 1
+  
+  idsOfQuiz_AV = []
+  cc = 0
+  for j in output:
+    idsOfQuiz_AV.insert(cc, 
+        list({"id":output3.id}
+        for output3 in Practice.objects.filter(chapter = j["id"], type = "quiz", level = "AV"))
+    )
+    cc = cc + 1
+  
+  print("paisi QStatus")
+  print(idsOfQuiz_BG)
+
+  # logger.info(vars(output[0]))
+  #logger.info(output)
+
+  dictO = {
+    "chapters": output,
+    "quiz_BG": idsOfQuiz_BG,
+    "quiz_IM": idsOfQuiz_IM,
+    "quiz_AV": idsOfQuiz_AV,
+  }
+
+  print(dictO)
+  
+  return Response(dictO)
+
   
 @api_view(['GET'])
 def get_tutorial_list(request):
@@ -463,7 +520,7 @@ def get_tutorial_list(request):
 
   practice = [
     {'id': output.id, 'title': output.title, 'description': output.description, 'length': output.duration, 'level': output.level}
-    for output in Practice.objects.filter(chapter__id = chapterid)
+    for output in Practice.objects.filter(chapter__id = chapterid, type = "practice")
   ]
 
   print("paisi practice")

@@ -439,14 +439,7 @@ export default function Course() {
       const { courseid } = useParams();
 
       useEffect(() => {
-        // fechTracks();
         let data;
-        // localStorage.setItem('trackid', '1')
-        // let trackid = localStorage.getItem('trackid')
-        // console.log("course id", localStorage.getItem('courseid'))
-
-        // let courseid = "1"
-
         console.log("course id", courseid);
         axios
           .get(`http://localhost:8000/getChapterList/?courseid=${courseid}`)
