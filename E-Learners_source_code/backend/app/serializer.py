@@ -148,3 +148,8 @@ class UserQuestionsSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserQuestions
     fields = ["user", "question", "status"]
+
+class PracticeSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Practice
+    fields = ["chapter", "title", "description", "duration", "level", "order", "type"]

@@ -6,9 +6,9 @@ import { useState, useEffect, useRef } from "react";
 
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
-
+import axios from "axios";
 
 //mode = 1 for CourseContent
 //mode = 2 for ChapterContent
@@ -17,20 +17,20 @@ let globalactiveMode = 1;
 
 let activeChapterid = 1;
 
-const courses = [
-  {
-    id: 0,
-    name: "FrontEnd Basics",
-    des: "This is Web FrontEnd Basics Course",
-  },
-  {
-    id: 1,
-    name: "Frontend Advance",
-    des: "This is Frontend Advance Course",
-  },
-  { id: 2, name: "React", des: "This is React Course" },
-  { id: 3, name: "Angular", des: "This is Angular Course" },
-];
+// const courses = [
+//   {
+//     id: 0,
+//     name: "FrontEnd Basics",
+//     des: "This is Web FrontEnd Basics Course",
+//   },
+//   {
+//     id: 1,
+//     name: "Frontend Advance",
+//     des: "This is Frontend Advance Course",
+//   },
+//   { id: 2, name: "React", des: "This is React Course" },
+//   { id: 3, name: "Angular", des: "This is Angular Course" },
+// ];
 
 const firstTrack = "Frontend Basics";
 const fistDes = "This is Frontend Basics Course";
@@ -39,83 +39,26 @@ const trackid = 1;
 const trackname = "Web Development";
 const coursename = "FrontEnd Basics";
 
-const chapterList = [
-  {
-    id: 1,
-    name: "HTML",
-    des: "This is HTML Chapter",
-    progress: "70",
-  },
-  {
-    id: 2,
-    name: "CSS",
-    des: "This is CSS Chapter",
-    progress: "30",
-  },
-  {
-    id: 3,
-    name: "JavaScript",
-    des: "This is JavaScript Chapter",
-    progress: "20",
-  },
-];
-
-const tutorialsList = [
-  {
-    id: 1,
-    title: "Card with HTML5",
-    progress: "70",
-    length: "9 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-];
+// const chapterList = [
+//   {
+//     id: 1,
+//     name: "HTML",
+//     des: "This is HTML Chapter",
+//     progress: "70",
+//   },
+//   {
+//     id: 2,
+//     name: "CSS",
+//     des: "This is CSS Chapter",
+//     progress: "30",
+//   },
+//   {
+//     id: 3,
+//     name: "JavaScript",
+//     des: "This is JavaScript Chapter",
+//     progress: "20",
+//   },
+// ];
 
 const recomList = [
   {
@@ -136,36 +79,24 @@ const recomList = [
   },
 ];
 
-const recomChapterList = [
-  {
-    id: 1,
-    header: "Active Learning",
-    title: "Card with HTML5",
-    type: "Power Play",
-    progress: "70",
-    button: "continue",
-  },
-  {
-    id: 2,
-    header: "FrontEnd Basics",
-    title: "Practice",
-    type: "Test what you have learnt",
-    progress: "0",
-    button: "Practice Now",
-  },
-];
-
 export default function Practice() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
+  const [trackscontent, setTrackscontent] = useState([]);
 
-  // const navigate = useNavigate();
-  // const location = useLocation();
-
-
-  // function gotoLearn(){
-  //   var pn = location.pathname;
-  //   console.log(pn);
-  // }
+  useEffect(() => {
+    let data, trackid, userid;
+    trackid = 1;
+    trackid = localStorage.getItem("active_track_id");
+    userid = localStorage.getItem("user_id");
+    console.log(trackid);
+    axios
+      .get(`http://localhost:8000/getCourseList/?trackid=${trackid}`)
+      .then((res) => {
+        data = res.data;
+        setTrackscontent(data);
+      })
+      .catch((err) => {});
+  }, [JSON.stringify(trackscontent.courses)]);
 
   return (
     <div className="practice-container">
@@ -182,7 +113,10 @@ export default function Practice() {
             {coursename}
             <div className="tracksDropdown-menu">
               <NavItem icon={<ArrowIcon />}>
-                <DropdownMenu list={courses}></DropdownMenu>
+                <DropdownMenu
+                  list={trackscontent.courses}
+                  mode={"cr"}
+                ></DropdownMenu>
               </NavItem>
             </div>
           </div>
@@ -214,16 +148,13 @@ export default function Practice() {
 
     const { courseid } = useParams();
 
-    let CourseName = courses[courseid].name;
-    let CourseDes = courses[courseid].des;
+    // let CourseName = trackscontent.courses[courseid].name;
+    // let CourseDes = trackscontent.courses[courseid].des;
 
     let buttonName = "Start";
     if (isEnrolled) {
       buttonName = "Continue";
     }
-
-
-
 
     function RecommendationCard() {
       return (
@@ -250,9 +181,6 @@ export default function Practice() {
         </div>
       );
     }
-
-
-    
 
     const Progress = ({ done }) => {
       const [style, setStyle] = React.useState({});
@@ -349,16 +277,6 @@ export default function Practice() {
     }
   }
 
-
-
-  function Navbar(props) {
-    return (
-      <nav className="navbar">
-        <ul className="navbar-nav">{props.children}</ul>
-      </nav>
-    );
-  }
-
   function NavItem(props) {
     const [open, setOpen] = useState(false);
 
@@ -374,20 +292,19 @@ export default function Practice() {
 
   function DropdownMenu(props) {
     const [activeMenu, setActiveMenu] = useState("main");
-    const [activeTrack, setActiveTrack] = useState(firstTrack);
-    const [activeId, setActiveId] = useState(firstTrack);
-    const [activeDes, setActiveDes] = useState(fistDes);
+    const [activeTrack, setActiveTrack] = useState(props.list[0].name);
+    const [activeId, setActiveId] = useState(props.list[0].id);
+    const [activeDes, setActiveDes] = useState(props.list[0].des);
     const [menuHeight, setMenuHeight] = useState(null);
     const dropdownRef = useRef(null);
 
     useEffect(() => {
-      setMenuHeight(courses.length * 50 + 50);
-    }, []);
-
-    function calcHeight(el) {
-      const height = el.offsetHeight;
-      setMenuHeight(height);
-    }
+      if (props.list.length < 4) {
+        setMenuHeight(4 * 50 + 50);
+      } else {
+        setMenuHeight(props.list.length * 50 + 50);
+      }
+    }, [JSON.stringify(trackscontent.courses.length)]);
 
     function setActiveDesName(id1, des1, name1) {
       setActiveId(id1);
@@ -433,21 +350,82 @@ export default function Practice() {
           <h4>{activeTrack}</h4>
           <br></br>
           {activeDes}
-          <a
-            className="btn-right-mi"
-            href={"/CareerTracks/"
-              .concat(trackid.toString())
-              .concat("/Course/")
-              .concat(activeId.toString())}
-          >
-            Explore
-          </a>
+          {props.mode === "cr" ? (
+            <a
+              className="btn-right-mi"
+              href={"/CareerTracks/"
+                .concat(trackid.toString())
+                .concat("/Course/")
+                .concat(activeId.toString())}
+            >
+              Explore
+            </a>
+          ) : null}
+
+          {props.mode === "bp" ? (
+            <a
+              className="btn-right-mi"
+              href={"/CareerTracks/"
+                .concat(trackid.toString())
+                .concat("/Course/")
+                .concat(activeId.toString())}
+            >
+              Explore
+            </a>
+          ) : null}
+
+          {props.mode === "ip" ? (
+            <a
+              className="btn-right-mi"
+              href={"/CareerTracks/"
+                .concat(trackid.toString())
+                .concat("/Course/")
+                .concat(activeId.toString())}
+            >
+              Explore
+            </a>
+          ) : null}
+
+          {props.mode === "ap" ? (
+            <a
+              className="btn-right-mi"
+              href={"/CareerTracks/"
+                .concat(trackid.toString())
+                .concat("/Course/")
+                .concat(activeId.toString())}
+            >
+              Explore
+            </a>
+          ) : null}
         </div>
       </div>
     );
   }
 
   function PracticeMenu() {
+    const [chapterList, setChapterList] = useState([]);
+    const [chapterListForQuiz, setChapterListForQuiz] = useState([]);
+
+    useEffect(() => {
+      let data;
+      let courseid = 1;
+      localStorage.setItem("courseid", courseid);
+      courseid = localStorage.getItem("courseid");
+      console.log("course id", courseid);
+      axios
+        .get(
+          `http://localhost:8000/getChapterListForQuiz/?courseid=${courseid}`
+        )
+        .then((res) => {
+          data = res.data;
+          setChapterListForQuiz(data);
+          setChapterList(data.chapters);
+          console.log("chapter list paisi", data);
+          console.log(chapterList);
+        })
+        .catch((err) => {});
+    }, [JSON.stringify(chapterList)]);
+
     return (
       <div className="practiceMenu-container">
         <div className="courseRecom-header">Practice</div>
@@ -456,13 +434,18 @@ export default function Practice() {
           <div className="topbarWrapper">
             <div className="topbarLeft-container">
               <div className="topLeft">
-                <span className="logo">Easy Practices</span>
+                <span className="logo">
+                  <p>
+                    Beginner
+                    Practices&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </p>
+                </span>
               </div>
 
               <div className="tracksDropdown-container">
                 <div className="tracksDropdown-menu">
                   <NavItem icon={<ArrowIcon />}>
-                    <DropdownMenu list={chapterList}></DropdownMenu>
+                    <DropdownMenu list={chapterList} mode={"bp"}></DropdownMenu>
                   </NavItem>
                 </div>
               </div>
@@ -470,19 +453,40 @@ export default function Practice() {
           </div>
         </div>
 
-        
-
-        <div className="PracticeMenu-Hard">
+        <div className="PracticeMenu-medium">
           <div className="topbarWrapper">
             <div className="topbarLeft-container">
               <div className="topLeft">
-                <span className="logo">Hard Practices</span>
+                <span className="logo">Intermediate Practices</span>
               </div>
 
               <div className="tracksDropdown-container">
                 <div className="tracksDropdown-menu">
                   <NavItem icon={<ArrowIcon />}>
-                    <DropdownMenu list={chapterList}></DropdownMenu>
+                    <DropdownMenu list={chapterList} mode={"ip"}></DropdownMenu>
+                  </NavItem>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="PracticeMenu-Hard">
+          <div className="topbarWrapper">
+            <div className="topbarLeft-container">
+              <div className="topLeft">
+                <span className="logo">
+                  <p>
+                    Advance
+                    Practices&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </p>
+                </span>
+              </div>
+
+              <div className="tracksDropdown-container">
+                <div className="tracksDropdown-menu">
+                  <NavItem icon={<ArrowIcon />}>
+                    <DropdownMenu list={chapterList} mode={"ap"}></DropdownMenu>
                   </NavItem>
                 </div>
               </div>
@@ -493,5 +497,3 @@ export default function Practice() {
     );
   }
 }
-
-

@@ -46,6 +46,7 @@ urlpatterns = [
     path('getTrackList/', views.get_tracks_list, name="TrackList"),
     path('getCourseList/', views.get_course_list, name="CourseList"),
     path('getChapterList/', views.get_chapter_list, name="getChapterList"),
+    path('getChapterListForQuiz/', views.get_chapter_list_for_quiz, name="getChapterListForQuiz"),
     # path('getUserTrackList/', views.get_usertracks_list, name="getUserTrackList"),
     path('getUserTrackDetails/', views.get_usertrack_details, name="getUserTrackDetails"),
     path('getUserTrackCompleted/', views.get_usertrack_completed, name="getUserTrackCompleted"),
