@@ -5,7 +5,8 @@ import "../styles/CareerTracks.css";
 import { TRACKS } from "../shared/tracks";
 import "../styles/Course.css";
 import "../styles/UserDashboard.css"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from 'axios'
 
 // function RenderCompletedItem({ course }) {
 //   //console.log(course.image);
@@ -32,16 +33,61 @@ import { useEffect } from "react";
 
 export default function UserDashboard(props) {
   const { trackid } = useParams();
+  const [runningTrack, setRunningTrack] = useState([]);
+  const [completedTrack, setCompletedTrack] = useState([]);
+  const [running_track_content, setRunningTrackContent] = useState({
+    "running_tracks": [{"id":0,"title":"dfss","des":"sdfsdf"}]
+  });
+  const [completed_track_content, setCompletedTrackContent] = useState({
+    "completed_tracks": [{"id":0,"title":"dfss","des":"sdfsdf"}]
+  });
   console.log(localStorage.getItem('user_id'));
   const reloadCount= sessionStorage.getItem('reloadCount');
   useEffect(() => {
+    
+      
     if(reloadCount < 2) {
       sessionStorage.setItem('reloadCount', String(reloadCount + 1));
       window.location.reload();
     } else {
       sessionStorage.removeItem('reloadCount');
     }
+    let data,userid;
+    userid = localStorage.getItem('user_id')
+    console.log(userid)
+    
+    axios.get(`http://localhost:8000/getUserTrackRunning/?userid=${userid}`)
+      .then(res=>{
+        data = res.data;
+        console.log(data)
+        
+        setRunningTrackContent(
+          data
+        );
+    console.log(running_track_content)
+
+        
+        
+      })
+      .catch(err=>{})
+      axios.get(`http://localhost:8000/getUserTrackCompleted/?userid=${userid}`)
+      .then(res=>{
+        data = res.data;
+        console.log(data)
+        
+        setCompletedTrackContent(
+          data
+        );
+    console.log(completed_track_content)
+
+        
+        
+      })
+      .catch(err=>{})
+        
+    
   }, []);
+  
 
   // let TrackName = TRACKS[trackid].name;
   // let TrackDes = TRACKS[trackid].des;
@@ -82,16 +128,20 @@ export default function UserDashboard(props) {
   };
 
   function RunningCard() {
+    console.log(running_track_content)
+    
+    // setRunningTrack(running_track_content)
+    // console.log(runningTrack)
     return (
       <div className="courseRecom-container">
         <div className="courseRecom-header">Running Tracks</div>
 
         <div className="courseRecom-card-container">
-          {props.running.map((out) => (
+          {running_track_content.running_tracks.map((out) => (
             <div className="courseRecomCard">
-              <div className="CourseRecom-topText">{out.header}</div>
-              <div className="CourseRecom-title">{out.title}</div>
-              <div className="CourseRecom-bottomText">{out.type}</div>
+              <div className="CourseRecom-topText">{out.title}</div>
+              <div className="CourseRecom-title">{out.des}</div>
+              <div className="CourseRecom-bottomText">School Level</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track
@@ -156,11 +206,11 @@ export default function UserDashboard(props) {
         <div className="courseRecom-header">Completed Tracks</div>
 
         <div className="courseRecom-card-container">
-          {props.completed.map((out) => (
+          {completed_track_content.completed_tracks.map((out) => (
             <div className="courseRecomCard">
-              <div className="CourseRecom-topText">{out.header}</div>
-              <div className="CourseRecom-title">{out.title}</div>
-              <div className="CourseRecom-bottomText">{out.type}</div>
+              <div className="CourseRecom-topText">{out.title}</div>
+              <div className="CourseRecom-title">{out.des}</div>
+              <div className="CourseRecom-bottomText">School Level</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track
