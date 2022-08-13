@@ -36,9 +36,18 @@ const trackname = "Web Development";
 const coursename = "FrontEnd Basics";
 
 export default function Quiz() {
-  const [activeMode, setActiveMode] = useState(globalactiveMode);
+  console.log(localStorage.getItem('mode'));
+  let modee = localStorage.getItem('mode');
+  const [activeMode, setActiveMode] = useState(parseInt(modee));
+  
   const [Scores, setScores] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const { practiceid } = useParams();
+  const { mode } = useParams();
+
+
+  console.log("activeMode", activeMode);
+
 
   return (
     <div className="practice-container">
@@ -84,9 +93,12 @@ export default function Quiz() {
     </div>
   );
 
+
   function QuizContent() {
     const [currQues, setCurrQues] = useState(0);
     const [quizscore, setQuizScore] = useState(0);
+
+    
 
     var questionsStatus = [];
     var textAreaAnswer = "";
@@ -113,11 +125,14 @@ export default function Quiz() {
     });
 
     useEffect(() => {
+
       let data;
       localStorage.setItem("quizid", "1");
       localStorage.setItem("userid", "1");
       console.log(localStorage.getItem("trackid"));
-      var quizid = localStorage.getItem("quizid");
+      // var quizid = localStorage.getItem("quizid");
+      var quizid = practiceid;
+
       axios
         .get(`http://localhost:8000/getQuiz/?quizid=${quizid}`)
         .then((res) => {
@@ -134,6 +149,7 @@ export default function Quiz() {
       for (var i = 0; i < length; i++) {
         questionsStatus.push("NA");
       }
+
     }, [JSON.stringify(quizContent)]);
 
     const [selected, setSelected] = useState(-1);
@@ -157,6 +173,10 @@ export default function Quiz() {
           console.log(response);
         });
     };
+
+    // setTimeout(() => {
+    //   setActiveMode(mode);
+    // }, 2000)
 
     const handleSubmit = () => {
       if (questions[currQues].qOptions.length === 0) {
@@ -215,8 +235,9 @@ export default function Quiz() {
         setQuizScore(0);
         var length = quizContent.questions.length;
         setTotalQuestions(length);
-
+        localStorage.setItem("mode", 2);
         setActiveMode(2);
+
       } else {
         console.log("next");
         setSelected(-1);
@@ -279,6 +300,7 @@ export default function Quiz() {
     };
 
     if (activeMode === 1) {
+      
       return (
         <div className="QuizItemContainer">
           <div className="QuizItemHeader">
@@ -350,15 +372,19 @@ export default function Quiz() {
 
   function QuizEndContent() {
     const handleRetake = () => {
-      setActiveMode(1);
+      localStorage.setItem("mode", 1);
       setScores(0);
+      setActiveMode(1);
+      
     };
 
     const handleBack = () => {};
 
     const handleResult = () => {
-      setActiveMode(3);
+      localStorage.setItem("mode", 3);
       setScores(0);
+      setActiveMode(3);
+    
     };
 
     if (activeMode === 2) {
@@ -450,7 +476,8 @@ export default function Quiz() {
       localStorage.setItem("quizid", "1");
       localStorage.setItem("userid", "1");
       console.log(localStorage.getItem("trackid"));
-      var quizid = localStorage.getItem("quizid");
+       var quizid = localStorage.getItem("quizid");
+      //var quizid = practiceid;
 
       axios
         .get(`http://localhost:8000/getQuizStatus/?quizid=${quizid}&userid=${localStorage.getItem("userid")}`)
@@ -474,12 +501,27 @@ export default function Quiz() {
 
         var length = quizContent.questions.length;
         setTotalQuestions(length);
+        localStorage.setItem("mode", 2);
         setActiveMode(2);
       } else {
         console.log("next");
         setCurrQues(currQues + 1);
       }
     };
+
+    const handlePrevious = () => {
+      if (currQues === 0) {
+        setCurrQues(0);
+
+        var length = quizContent.questions.length;
+        setTotalQuestions(length);
+        // setActiveMode(2);
+      } else {
+        console.log("prev");
+        setCurrQues(currQues - 1);
+      }
+    };
+
 
     const handleSelect = (i) => {
       if (quizResultContent.status[currQues][0].status === quizResultContent.quizContent.questions[currQues].qOptions[i] 
@@ -611,7 +653,10 @@ export default function Quiz() {
                 )}
               </div>
               <div className="QuizItemButton">
-                <button className="QuizBtnSkip" onClick={() => handleNext()}>
+                <button className="QuizBtnSkip2" onClick={() => handlePrevious()}>
+                  Previous
+                </button>
+                <button className="QuizBtnSkip2" onClick={() => handleNext()}>
                   Next
                 </button>
               </div>

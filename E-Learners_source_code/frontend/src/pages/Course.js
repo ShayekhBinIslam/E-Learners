@@ -8,6 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import { Navigate } from 'react-router-dom';
+
 import axios from "axios";
 
 import "../index.css";
@@ -160,11 +162,14 @@ const recomChapterList = [
 
 export default function Course() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
+  const [isgotoPractice, setisGotoPractive] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   function gotoPractice() {
-    navigate("./practice");
+    // navigate("./practice");
+    // <Navigate to={"./practice/"} replace={true} />
+    setisGotoPractive(true);
   }
 
   return (
@@ -204,6 +209,7 @@ export default function Course() {
         </div>
       </div>
       {/* bodyContent */}
+      { isgotoPractice ? <Navigate to={"./practice"} replace={true} />: null}
       <div className="courseContent">
         <CourseContent />
         <ChapterContent />
@@ -211,13 +217,7 @@ export default function Course() {
     </div>
   );
 
-  function Navbar(props) {
-    return (
-      <nav className="navbar">
-        <ul className="navbar-nav">{props.children}</ul>
-      </nav>
-    );
-  }
+
 
   function NavItem(props) {
     const [open, setOpen] = useState(false);
@@ -577,15 +577,12 @@ export default function Course() {
       // console.log(localStorage.getItem('user_id'))
       // const { courseid } = useParams();
       const chapter_id = localStorage.getItem("chapter_id");
+      const [gotoQuizMode1, setGotoQuizMode1] = useState(false);
+      const [gotoQuizMode3, setGotoQuizMode3] = useState(false);
 
       useEffect(() => {
-        // fechTracks();
+        
         let data;
-        // localStorage.setItem('trackid', '1')
-        // let trackid = localStorage.getItem('trackid')
-        // console.log("course id", localStorage.getItem('courseid'))
-
-        // let courseid = "1"
 
         console.log("chapter_id", chapter_id);
         axios
@@ -607,6 +604,28 @@ export default function Course() {
         JSON.stringify(practices),
         JSON.stringify(practiceStatus),
       ]);
+
+      var navigate = useNavigate();
+
+      function gotoPracticeStart(id) {
+        localStorage.setItem("quizid", id);
+        
+        localStorage.setItem("mode", 1);
+
+        navigate(`./practice/${id}/mode/1`);
+        // <Navigate to={`./practice/${id}/mode/1`} replace={true} />
+       
+      }
+
+      function gotoPracticeResult(id) {
+        localStorage.setItem("quizid", id);
+        
+        localStorage.setItem("mode", 3);
+        navigate(`./practice/${id}/mode/3`);
+        // <Navigate to={`./practice/${id}/mode/3`} replace={true} />
+        
+      }
+
 
       if (isEnrolled) {
         return (
@@ -658,14 +677,15 @@ export default function Course() {
                             </div>
                             <div className="table-col">
                               <div className="practiceListName">
-                                {out.title}
+                                {out.title} {practiceStatus[index]>0?
+                                (<div>{practiceStatus[index]}%</div>):null}
                               </div>
                               <div className="practicelistbtncontainer">
                                 {practiceStatus[index] === 0 ? (
                                   <div className="table-col2">
                                     <button
                                       className="btn-table"
-                                      onClick={() => gotoPractice(out.id)}
+                                      onClick={() => gotoPracticeStart(out.id)}
                                     >
                                       Start
                                     </button>
@@ -674,9 +694,9 @@ export default function Course() {
                                   <div className="table-col2">
                                     <button
                                       className="btn-table"
-                                      onClick={() => gotoPractice(out.id)}
+                                      onClick={() => gotoPracticeStart(out.id)}
                                     >
-                                      Continue
+                                      Retake
                                     </button>
                                   </div>
                                 )}
@@ -685,7 +705,7 @@ export default function Course() {
                                   <div className="table-col2">
                                     <button
                                       className="btn-table"
-                                      onClick={() => gotoPractice(out.id)}
+                                      onClick={() => gotoPracticeResult(out.id)}
                                     >
                                       View Result
                                     </button>
@@ -704,6 +724,8 @@ export default function Course() {
                       </div>
                     </div>
                   ))}
+                  {/* { isgotoPractice ? <Navigate to={"./practice"} replace={true} />: null} */}
+      
                 </div>
               </div>
             </div>

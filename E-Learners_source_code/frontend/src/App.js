@@ -44,7 +44,7 @@ function App() {
           <Route path="/CareerTracks/:trackid/User/:userid" element={<CareerTracks/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid" element={<Course/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid/practice" element={<Practice/>}/>
-          <Route path="/CareerTracks/:trackid/Course/:courseid/practice/:practiceid" element={<Quiz/>}/>
+          <Route path="/CareerTracks/:trackid/Course/:courseid/practice/:practiceid/mode/:mode" element={<Quiz/>}/>
 
           <Route path="/videos" element={<Video/>}/>
           <Route path="/UserProfile/" element={<UserProfile/>}/>
