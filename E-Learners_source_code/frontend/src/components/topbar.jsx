@@ -279,6 +279,12 @@ function DropdownMenu() {
   const [tracks, setTracks] = useState([]);
 
   function fechTracks(){
+    
+  }
+
+
+  useEffect(() => {
+
     let data;
     let trackid=1;
     axios.get('http://localhost:8000/getTrackList/')
@@ -291,14 +297,8 @@ function DropdownMenu() {
       .catch(err=>{})
       console.log(tracks);
       setMenuHeight(tracks.length*50+50);
-  }
 
-
-  useEffect(() => {
-
-    fechTracks();
-
-  });
+  }, [JSON.stringify(tracks)]);
 
   const [activeMenu, setActiveMenu] = useState("main");
   const [activeTrack, setActiveTrack] = useState(firstTrack);

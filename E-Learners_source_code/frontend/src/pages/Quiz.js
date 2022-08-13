@@ -9,7 +9,7 @@ import axios from "axios";
 
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 let globalactiveMode = 1;
 
@@ -36,14 +36,14 @@ const trackname = "Web Development";
 const coursename = "FrontEnd Basics";
 
 export default function Quiz() {
-  console.log(localStorage.getItem('mode'));
-  let modee = localStorage.getItem('mode');
-  const [activeMode, setActiveMode] = useState(parseInt(modee));
-  
+  // console.log(localStorage.getItem('mode'));
+  // let modee = localStorage.getItem('mode');
   const [Scores, setScores] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const { practiceid } = useParams();
   const { mode } = useParams();
+
+  const [activeMode, setActiveMode] = useState(parseInt(mode));
 
 
   console.log("activeMode", activeMode);
@@ -127,14 +127,14 @@ export default function Quiz() {
     useEffect(() => {
 
       let data;
-      localStorage.setItem("quizid", "1");
+      // localStorage.setItem("quizid", "1");
       localStorage.setItem("userid", "1");
       console.log(localStorage.getItem("trackid"));
       // var quizid = localStorage.getItem("quizid");
-      var quizid = practiceid;
+      // var quizid = practiceid;
 
       axios
-        .get(`http://localhost:8000/getQuiz/?quizid=${quizid}`)
+        .get(`http://localhost:8000/getQuiz/?quizid=${practiceid}`)
         .then((res) => {
           data = res.data;
           setQuizContent(data);
@@ -236,6 +236,7 @@ export default function Quiz() {
         var length = quizContent.questions.length;
         setTotalQuestions(length);
         localStorage.setItem("mode", 2);
+        localStorage.setItem("quizscore", quizscore);
         setActiveMode(2);
 
       } else {
@@ -371,6 +372,9 @@ export default function Quiz() {
   }
 
   function QuizEndContent() {
+
+    const [isBack, setIsBack] = React.useState(false);
+
     const handleRetake = () => {
       localStorage.setItem("mode", 1);
       setScores(0);
@@ -378,13 +382,17 @@ export default function Quiz() {
       
     };
 
-    const handleBack = () => {};
+    // var navigate = useNavigate();
+
+    const handleBack = () => {
+      setIsBack(!isBack);
+      // navigate();
+    };
 
     const handleResult = () => {
       localStorage.setItem("mode", 3);
       setScores(0);
       setActiveMode(3);
-    
     };
 
     if (activeMode === 2) {
@@ -398,7 +406,7 @@ export default function Quiz() {
               </div>
               <div className="QuizEndHeaderScore">
                 {"Your score is "
-                  .concat(Scores)
+                  .concat(localStorage.getItem("quizscore"))
                   .concat("/")
                   .concat(totalQuestions)}
               </div>
@@ -414,6 +422,8 @@ export default function Quiz() {
                 Back
               </button>
             </div>
+            {isBack ? <Navigate to={`/CareerTracks/${localStorage.getItem("trackid")}/Course/${localStorage.getItem("courseid")}`} /> : null}
+              
           </div>
         </div>
       );
@@ -495,6 +505,17 @@ export default function Quiz() {
 
     }, [JSON.stringify(quizResultContent)]);
 
+    function updateScore(){
+      let score = 0;
+      for(let i = 0; i < quizStatus.length; i++){
+        if(quizStatus[i].status === quizResultContent.quizContent.questions[i].qAnswers[0]){
+          score = score+1;
+        }
+      }
+
+      localStorage.setItem("quizscore", score);
+    }
+
     const handleNext = () => {
       if (currQues === quizContent.questions.length - 1) {
         setCurrQues(0);
@@ -502,6 +523,7 @@ export default function Quiz() {
         var length = quizContent.questions.length;
         setTotalQuestions(length);
         localStorage.setItem("mode", 2);
+        updateScore();
         setActiveMode(2);
       } else {
         console.log("next");

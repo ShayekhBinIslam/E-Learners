@@ -122,15 +122,59 @@ def getadminslist(request):
 @api_view(["GET"])
 def get_videos(request):
   serializer_class = VideoSerializer
+  chapterid = request.GET.get('chapterid')
+  print("Chapterid: ", chapterid)
+  videonum = request.GET.get('videonum')
+  print("Videonum: ", videonum)
+  next_video = int(videonum) + 1
 
   output = [
-    {"link": str(output.link) }
-    for output in Video.objects.all()
+    # {"link": str(output.link) }
+    output
+    for output in Tutorial.objects.filter(chapter=chapterid, order=next_video)
   ]
 
-  # print(output)
+  print(output)
 
-  return Response(output)
+  if len(output) > 0:
+    output = [
+      # {"link": str(output.link) }
+      {"link": output["video__link"], 'order': output['order'], 'tutorial': output['id'], 'title': output['title'], 'description': output['description'], 'chapter_title': output['chapter__title']}
+      # output
+      for output in Tutorial.objects.filter(chapter=chapterid, order=next_video).values('id', 'video__link', 'order', 'title', 'description', 'chapter__title')
+    ]
+    print(output)
+    return Response(output)
+
+  return Response()
+
+
+@api_view(["POST"])
+def save_video_progress(request):
+  userid = request.data.get('user')
+  tutorial = request.data.get('tutorial')
+  progress = request.data.get('progress')
+  print("Userid: ", userid)
+  print("Tutorial: ", tutorial)
+  print("Progress: ", progress)
+
+  output = [
+    {'id': output.id,}
+    # output
+    for output in UserTutorials.objects.filter(tutorial__id = tutorial, user__id = userid)
+  ]
+
+  print(output)
+
+  if len(output)>0:
+    UserTutorials.objects.filter(id=output[0]["id"]).update(progress=progress)
+  else:
+    print("Serializing")
+    serializer = UserTutorialsSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+  
+  return Response("Success")
 
 
 @api_view(["GET"])
@@ -457,6 +501,9 @@ def get_course_list(request):
   video_link = Video.objects.filter(id=video_id).values('link')[0]['link']
   # print(video_link)
 
+  link2 = CareerTrack.objects.filter(id = idd).values('intro_video__link')
+  logger.info("link2: {}".format(link2))
+
   # print(name, des)
   #print(type(res), res[0])
 
@@ -488,10 +535,21 @@ def get_course_list(request):
   return Response(dictO)
 
 
+
+
 @api_view(['GET'])
 def get_chapter_list(request):
   courseid = request.GET.get('courseid', '')
-  # print('Course id is {}'.format(courseid))
+  print('Course id is {}'.format(courseid))
+  logger.info("Get chapter list")
+
+  # Join UserTutorials with Tutorial
+  # user_id = 2
+  # tutorial_id = 1
+  # user_tutorial = UserTutorials.objects.filter(user_id=user_id, tutorial_id=tutorial_id)
+  # logger.info(user_tutorial)
+  # logger.info(user_tutorial.values('tutorial__title', 'user__name'))
+  
 
   output = [
       # {"id": output.course_id}
@@ -572,9 +630,11 @@ def get_tutorial_list(request):
   # print('Chapter id is {}'.format(chapterid))
   output = [
     # output
-    {'id': output.id, 'title': output.title, 'progress': "50", 'length': "9 mins"}
+    {'id': output.id, 'title': output.title, 'poster': output.poster.url, 'order': output.order, 'progress': "50", 'length': "9 mins"}
     for output in Tutorial.objects.filter(chapter__id = chapterid)
   ]
+  
+  # print(x.url)
 
   practice = [
     {'id': output.id, 'title': output.title, 'description': output.description, 'length': output.duration, 'level': output.level}
