@@ -105,7 +105,7 @@ const recomChapterList = [
 ];
 
 export default function Course() {
-  const [activeMode, setActiveMode] = useState(localStorage.getItem("course_mode"));
+  const [activeMode, setActiveMode] = useState(globalactiveMode);
   const [isgotoPractice, setisGotoPractive] = useState(false);
   const [recomPracticeList, setRecomPracticeList] = useState({
     "running_tracks": [{"id":0,"title":"dfss","des":"sdfsdf"}]
@@ -117,15 +117,15 @@ export default function Course() {
     trackid = localStorage.getItem('active_track_id')
     userid = localStorage.getItem('user_id')
     courseid = localStorage.getItem('courseid')
-    console.log(trackid)
-    axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}`)
-      .then(res=>{
-        data = res.data;
-        setRecomPracticeList(
-          data
-        );
-      })
-      .catch(err=>{})
+    console.log("course -> trackid",trackid)
+    // axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}`)
+    //   .then(res=>{
+    //     data = res.data;
+    //     setRecomPracticeList(
+    //       data
+    //     );
+    //   })
+    //   .catch(err=>{})
      
     
       
@@ -366,15 +366,15 @@ export default function Course() {
         localStorage.setItem("course_mode", 2);
         localStorage.setItem("chapter_title", chapter_title);
         setActiveMode(2);
-        axios({
-          method: "post",
-          url: "http://localhost:8000/saveUserCourse/",
-          data: userCourse,
-        })
-          .then(function (response) {})
-          .catch(function (response) {
-            console.log(response);
-          });
+        // axios({
+        //   method: "post",
+        //   url: "http://localhost:8000/saveUserCourse/",
+        //   data: userCourse,
+        // })
+        //   .then(function (response) {})
+        //   .catch(function (response) {
+        //     console.log(response);
+        //   });
 
         localStorage.setItem("chapter_id", chapter_id);
         console.log("Chapter id: " + chapter_id);
@@ -386,20 +386,20 @@ export default function Course() {
 
       useEffect(() => {
         let data;
-        console.log("course id", courseid);
+        console.log("chapterListEnrolled course id", courseid);
         axios
           .get(`http://localhost:8000/getChapterList/?courseid=${courseid}`)
           .then((res) => {
             data = res.data;
             setChapters(data);
             console.log(data);
-
+            console.log("chapters", chapters);
             
           })
           .catch((err) => {});
       }, []);
 
-      if (isEnrolled) {
+      // if (isEnrolled) {
         return (
           <div className="courselist-container">
             <div className="courseList-header-course">Chapters</div>
@@ -441,7 +441,7 @@ export default function Course() {
           </div>
         );
       }
-    }
+    // }
 
     if (activeMode == 1) {
       return (
@@ -568,6 +568,8 @@ export default function Course() {
             console.log(data);
           })
           .catch((err) => {});
+
+          console.log("tutorialsListEnroled", tutorials);
       }, [
         JSON.stringify(tutorials),
         JSON.stringify(practices),
@@ -596,6 +598,13 @@ export default function Course() {
       }
 
 
+      function gotoVideoPage(order){
+        localStorage.setItem("videoOrder", 1);
+        navigate(`/Videos`);
+       // console.log("video id", id);
+      }
+
+
       if (isEnrolled) {
         return (
           <div className="tutorials-container">
@@ -612,15 +621,17 @@ export default function Course() {
                     <div className="courseRecomCard">
                       <img
                         className="card_image"
-                        src={require("../assets/Home/profilephoto.jpg")}
+                        // src={require("../assets/Home/profilephoto.jpg")}
+                        src={"http://localhost:8000"+out.poster}
                       ></img>
                       <div className="CourseRecom-topText">{out.length}</div>
                       <div className="courseRecom-btn">
-                        <a href="#" className="playbtn">
+                        <button className="playbtn"
+                        onClick={() => gotoVideoPage(out.order)}>
                           <img
                             src={require("../assets/card/playbtn.jpg")}
                           ></img>
-                        </a>
+                        </button>
                       </div>
                       <div className="progressRow-row">
                         <Progress done={out.progress} />

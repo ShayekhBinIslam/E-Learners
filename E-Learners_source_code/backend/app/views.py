@@ -139,9 +139,9 @@ def get_videos(request):
   if len(output) > 0:
     output = [
       # {"link": str(output.link) }
-      {"link": output["video__link"], 'order': output['order'], 'tutorial': output['id']}
+      {"link": output["video__link"], 'order': output['order'], 'tutorial': output['id'], 'title': output['title'], 'description': output['description'], 'chapter_title': output['chapter__title']}
       # output
-      for output in Tutorial.objects.filter(chapter=chapterid, order=next_video).values('id', 'video__link', 'order')
+      for output in Tutorial.objects.filter(chapter=chapterid, order=next_video).values('id', 'video__link', 'order', 'title', 'description', 'chapter__title')
     ]
     print(output)
     return Response(output)
@@ -572,9 +572,11 @@ def get_tutorial_list(request):
   # print('Chapter id is {}'.format(chapterid))
   output = [
     # output
-    {'id': output.id, 'title': output.title, 'progress': "50", 'length': "9 mins"}
+    {'id': output.id, 'title': output.title, 'poster': output.poster.url, 'order': output.order, 'progress': "50", 'length': "9 mins"}
     for output in Tutorial.objects.filter(chapter__id = chapterid)
   ]
+  
+  # print(x.url)
 
   practice = [
     {'id': output.id, 'title': output.title, 'description': output.description, 'length': output.duration, 'level': output.level}
