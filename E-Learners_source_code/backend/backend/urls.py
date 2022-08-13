@@ -50,6 +50,7 @@ urlpatterns = [
     path('getUserTrackDetails/', views.get_usertrack_details, name="getUserTrackDetails"),
     path('getUserTrackCompleted/', views.get_usertrack_completed, name="getUserTrackCompleted"),
     path('getUserTrackRunning/', views.get_usertrack_running, name="getUserTrackRunning"),
+    path('getRecomPracticeList/', views.get_recom_practice_list, name="getRecomPracticeList"),
 
 
     path('saveUserCourse/', views.save_user_course, name="saveUserCourse"),
