@@ -1,0 +1,61 @@
+.videoContainer{
+    display: flex;
+
+}
+
+.videPlayerSide{
+    width: 80%;
+
+
+}
+
+.videoHeader{
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.video-chapter{
+
+}
+
+.videoPlayer{
+
+}
+
+.video-details{
+
+}
+
+.videoTitle{
+
+}
+
+.videoDescription{
+
+}
+
+.videobtn{
+
+}
+
+.nextVideobtn{
+
+}
+
+.prevVideobtn{
+
+}
+
+.closeVideobtn{
+
+}
+
+.VideoPlaylist-Side{
+
+
+}

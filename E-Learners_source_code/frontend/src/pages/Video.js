@@ -3,6 +3,7 @@ import ReactPlayer from "react-player"
 import axios from 'axios'
 import { OutlinedInput } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
+import "../styles/video.css"
 
 export default function Course() {
   const playerRef = React.useRef();
@@ -99,14 +100,14 @@ export default function Course() {
     // video = "http://localhost:8000/media/" + video
 
     
-    
+    <div><div className="videoHeader">
+    <div className="video-chapter">{chapter_title}
+      </div>
+      <button className="closeVideobtn" onClick={closeVideo}> Exit </button>
+    </div>
     <div className="videoContainer">
       <div className="videPlayerSide">
-      <div className="videoHeader">
-      <div className="video-chapter">{chapter_title}
-        </div>
-        <button onClick={closeVideo}> Exit </button>
-      </div>
+      
     
       <div className="videoPlayer">
 
@@ -133,14 +134,15 @@ export default function Course() {
       </div>
 
       <div className="videobtn">
-        <button onClick={nextVideo}> Next </button>    
-        <button onClick={prevVideo}> Previous </button>
+        <button className="nextVideobtn" onClick={nextVideo}> Next </button>    
+        <button className="prevVideobtn" onClick={prevVideo}> Previous </button>
       </div>
       </div>
 
       <div className="VideoPlaylist-Side">
         <TutorialsListEnrolled/>
       </div>
+    </div>
     </div>
 
   );
