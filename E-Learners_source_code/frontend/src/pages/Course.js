@@ -44,83 +44,27 @@ const trackid = 1;
 const trackname = "Web Development";
 const coursename = "FrontEnd Basics";
 
-const chapterList = [
-  {
-    id: 1,
-    name: "HTML",
-    des: "This is HTML Chapter",
-    progress: "70",
-  },
-  {
-    id: 2,
-    name: "CSS",
-    des: "This is CSS Chapter",
-    progress: "30",
-  },
-  {
-    id: 3,
-    name: "JavaScript",
-    des: "This is JavaScript Chapter",
-    progress: "20",
-  },
-];
+// const chapterList = [
+//   {
+//     id: 1,
+//     name: "HTML",
+//     des: "This is HTML Chapter",
+//     progress: "70",
+//   },
+//   {
+//     id: 2,
+//     name: "CSS",
+//     des: "This is CSS Chapter",
+//     progress: "30",
+//   },
+//   {
+//     id: 3,
+//     name: "JavaScript",
+//     des: "This is JavaScript Chapter",
+//     progress: "20",
+//   },
+// ];
 
-const tutorialsList = [
-  {
-    id: 1,
-    title: "Card with HTML5",
-    progress: "70",
-    length: "9 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-];
 
 const recomList = [
   {
@@ -161,8 +105,38 @@ const recomChapterList = [
 ];
 
 export default function Course() {
-  const [activeMode, setActiveMode] = useState(globalactiveMode);
+  const [activeMode, setActiveMode] = useState(localStorage.getItem("course_mode"));
   const [isgotoPractice, setisGotoPractive] = useState(false);
+  const [recomPracticeList, setRecomPracticeList] = useState({
+    "running_tracks": [{"id":0,"title":"dfss","des":"sdfsdf"}]
+  });
+  useEffect(() => {
+
+    // fechTracks();
+    let data,trackid,userid,courseid;
+    trackid = localStorage.getItem('active_track_id')
+    userid = localStorage.getItem('user_id')
+    courseid = localStorage.getItem('courseid')
+    console.log(trackid)
+    axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}`)
+      .then(res=>{
+        data = res.data;
+        setRecomPracticeList(
+          data
+        );
+      })
+      .catch(err=>{})
+     
+    
+      
+      // setCourse(trackscontent.courses)
+      // setTrackName(trackscontent.name)
+      // setTrackDes(trackscontent.des)
+      // setVideo(trackscontent.video)
+    // let data;
+    
+
+  }, []);
 
   // const navigate = useNavigate();
 
@@ -388,7 +362,9 @@ export default function Course() {
         active_practice: 1,
       };
 
-      function gotoChapter(chapter_id) {
+      function gotoChapter(chapter_id, chapter_title) {
+        localStorage.setItem("course_mode", 2);
+        localStorage.setItem("chapter_title", chapter_title);
         setActiveMode(2);
         axios({
           method: "post",
@@ -409,14 +385,7 @@ export default function Course() {
       const { courseid } = useParams();
 
       useEffect(() => {
-        // fechTracks();
         let data;
-        // localStorage.setItem('trackid', '1')
-        // let trackid = localStorage.getItem('trackid')
-        // console.log("course id", localStorage.getItem('courseid'))
-
-        // let courseid = "1"
-
         console.log("course id", courseid);
         axios
           .get(`http://localhost:8000/getChapterList/?courseid=${courseid}`)
@@ -424,6 +393,8 @@ export default function Course() {
             data = res.data;
             setChapters(data);
             console.log(data);
+
+            
           })
           .catch((err) => {});
       }, []);
@@ -453,7 +424,7 @@ export default function Course() {
                         <div className="table-col">
                           <button
                             className="btn-table"
-                            onClick={() => gotoChapter(out.id)}
+                            onClick={() => gotoChapter(out.id, out.title)}
                           >
                             Enter
                           </button>
@@ -489,15 +460,13 @@ export default function Course() {
   function ChapterContent() {
     let isEnrolled = true;
 
-    let ChpaterName = chapterList[activeChapterid].name;
-    let ChapterDes = courses[activeChapterid].des;
-
     let buttonName = "Start";
     if (isEnrolled) {
       buttonName = "Continue";
     }
 
     function goBackToCourseContent() {
+      localStorage.setItem("course_mode", 1);
       setActiveMode(1);
     }
 
@@ -511,7 +480,7 @@ export default function Course() {
             >
               {"<-"}
             </button>
-            {ChpaterName}
+            {localStorage.getItem("chapter_title")}
           </div>
 
           <div className="courseRecom-card-container">

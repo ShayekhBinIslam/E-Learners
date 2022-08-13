@@ -263,6 +263,76 @@ def get_usertrack_completed(request):
   return Response(dictO)
 
 @api_view(["GET"])
+def get_recom_practice_list(request):
+  serializer_class = UserTrackSerializer
+  # track_id = request.GET.get('trackid','')
+  user_id = request.GET.get('userid', '')
+  course_id = request.GET.get('courseid', '')
+  # print("userid")
+  # print(user_id)
+  # print("trackid")
+  # print(track_id)
+  # getting all user tracks
+  practiceList = [
+      {"practice_id": output.track_id}
+      for output in UserCareerTrack.objects.filter(user__id = user_id,isEnrolled = True)
+  ]
+  # print(output)
+  result = []
+  temp_track = []
+  # now find the courses under each track
+  
+  for i in output:
+    output2 = []
+    output2.extend(
+      list({"course_id": output3.id}
+        for output3 in TrackCourse.objects.filter(career_track__id = i["track_id"]))
+    )
+    # print(output2)
+    # now check if any of the courses has running status
+    for j in output2:
+      for output3 in UserCourse.objects.filter(user__id = user_id,course__id = j["course_id"]):
+        
+        # print(output3.status)
+        status = output3.status
+        if status == "R":
+          # print(status)
+          # print(i)
+          # print(j)
+          temp_track.append(i["track_id"])
+          # # if any running append to the list
+          result.extend(
+            list({"id": output4.id,"title":output4.title,"des":output4.description}
+            for output4 in CareerTrack.objects.filter(id = i["track_id"]))
+          )
+          break
+
+  # for i in temp_track :
+  #   # if any running append to the list
+  #   result.extend(
+  #     list({"id": output4.id,"title":output4.title,"des":output4.description,"intro_video":output4.intro_video}
+  #     for output4 in CareerTrack.objects.filter(id = i["track_id"]))
+  #   )
+  # print(result)
+  dictO = {
+    
+    "running_tracks": result,
+  }
+
+
+
+  # output2 = []
+  
+  # for i in output:
+  #   output2.extend(
+  #       list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+  #       for output3 in Course.objects.filter(id = i["id"]))
+  #   )
+
+  # print(request.GET.get('track', ''))
+
+  return Response(dictO)
+@api_view(["GET"])
 def get_usertrack_running(request):
   serializer_class = UserTrackSerializer
   # track_id = request.GET.get('trackid','')
@@ -437,6 +507,63 @@ def get_chapter_list(request):
   return Response(output)
 
 
+
+@api_view(['GET'])
+def get_chapter_list_for_quiz(request):
+  courseid = request.GET.get('courseid', '')
+  # print('Course id is {}'.format(courseid))
+
+  output = [
+      # {"id": output.course_id}
+      {'id': output.id, 'name': output.title, 'des': output.description}
+      # output
+      for output in Chapter.objects.filter(course__id = courseid)
+  ]
+
+  idsOfQuiz_BG = []
+  cc = 0
+  for j in output:
+    idsOfQuiz_BG.insert(cc, 
+        list({"id":output3.id}
+        for output3 in Practice.objects.filter(chapter = j["id"], type = "quiz", level = "BG"))
+    )
+    cc = cc + 1
+  
+  idsOfQuiz_IM = []
+  cc = 0
+  for j in output:
+    idsOfQuiz_IM.insert(cc, 
+        list({"id":output3.id}
+        for output3 in Practice.objects.filter(chapter = j["id"], type = "quiz", level = "IM"))
+    )
+    cc = cc + 1
+  
+  idsOfQuiz_AV = []
+  cc = 0
+  for j in output:
+    idsOfQuiz_AV.insert(cc, 
+        list({"id":output3.id}
+        for output3 in Practice.objects.filter(chapter = j["id"], type = "quiz", level = "AV"))
+    )
+    cc = cc + 1
+  
+  print("paisi QStatus")
+  print(idsOfQuiz_BG)
+
+  # logger.info(vars(output[0]))
+  #logger.info(output)
+
+  dictO = {
+    "chapters": output,
+    "quiz_BG": idsOfQuiz_BG,
+    "quiz_IM": idsOfQuiz_IM,
+    "quiz_AV": idsOfQuiz_AV,
+  }
+
+  print(dictO)
+  
+  return Response(dictO)
+
   
 @api_view(['GET'])
 def get_tutorial_list(request):
@@ -451,7 +578,7 @@ def get_tutorial_list(request):
 
   practice = [
     {'id': output.id, 'title': output.title, 'description': output.description, 'length': output.duration, 'level': output.level}
-    for output in Practice.objects.filter(chapter__id = chapterid)
+    for output in Practice.objects.filter(chapter__id = chapterid, type = "practice")
   ]
 
   print("paisi practice")
