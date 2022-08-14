@@ -628,6 +628,10 @@ def get_tutorial_list(request):
   chapterid = request.GET.get('chapterid', '')
   userid = request.GET.get('userid', '')
   # print('Chapter id is {}'.format(chapterid))
+
+  print('User id is {}'.format(userid))
+  print('Chapter id is {}'.format(chapterid))
+
   output = [
     # output
     {'id': output.id, 'title': output.title, 'poster': output.poster.url, 'order': output.order, 'progress': "50", 'length': "9 mins"}
@@ -667,7 +671,7 @@ def get_tutorial_list(request):
       cc = cc + 1
     
     print("paisi QStatus")
-    # print(QStatus)
+    print(QStatus)
 
     QAnswer = []
   
@@ -685,14 +689,15 @@ def get_tutorial_list(request):
       )
 
     print("paisi QAnswername")
-    # print(QAnswername)
+    print(QAnswername)
     
     correct = 0
     print(QStatus)
     print(QAnswername)
     for j in range(len(QStatus)):
-      if (QStatus[j][0]["status"] == QAnswername[j]["title"]):
-        correct = correct+1
+      if len(QStatus[j]) > 0:
+        if (QStatus[j][0]["status"] == QAnswername[j]["title"]):
+          correct = correct+1
       
     practiceStatus.insert(c, 
         round(correct*100/(len(questions)+0.02))

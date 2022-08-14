@@ -115,6 +115,8 @@ export default function Course() {
           // onProgress={}
           ref={playerRef}
           controls={true}
+          width="1100px"
+          height="600px"
           // url='https://www.youtube.com/watch?v=9nkR2LLPiYo'
           // url='../../../backend/media/video/22/video_file.mp4'
           // url="http://localhost:8000/media/video/22/video_file.mp4"
@@ -126,17 +128,22 @@ export default function Course() {
           onReady={() => onReady(1)}
         />
 
+<div className="videobtn">
+        <button className="prevVideobtn" onClick={prevVideo}> Previous </button>
+        <button className="nextVideobtn" onClick={nextVideo}> Next </button>    
+
       </div>
+
+      </div>
+
+      
 
       <div className="video-details">
       <div className="videoTitle">{title}</div>
       <div className="videoDescription">{description}</div>
       </div>
 
-      <div className="videobtn">
-        <button className="nextVideobtn" onClick={nextVideo}> Next </button>    
-        <button className="prevVideobtn" onClick={prevVideo}> Previous </button>
-      </div>
+      
       </div>
 
       <div className="VideoPlaylist-Side">

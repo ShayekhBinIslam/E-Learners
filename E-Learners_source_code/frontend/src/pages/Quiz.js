@@ -42,6 +42,7 @@ export default function Quiz() {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const { practiceid } = useParams();
   const { mode } = useParams();
+  localStorage.setItem("quizid", practiceid);
 
   const [activeMode, setActiveMode] = useState(parseInt(mode));
 
@@ -128,7 +129,7 @@ export default function Quiz() {
 
       let data;
       // localStorage.setItem("quizid", "1");
-      localStorage.setItem("userid", "1");
+      // localStorage.setItem("userid", "1");
       console.log(localStorage.getItem("trackid"));
       // var quizid = localStorage.getItem("quizid");
       // var quizid = practiceid;
@@ -161,7 +162,7 @@ export default function Quiz() {
         method: "post",
         url: "http://localhost:8000/saveQuestionStatus/",
         data: {
-          user: localStorage.getItem("userid"),
+          user: localStorage.getItem("user_id"),
           question: questions[currQues].id,
           status: questionsStatus[currQues],
         },
@@ -214,7 +215,7 @@ export default function Quiz() {
         method: "post",
         url: "http://localhost:8000/saveQuestionStatus/",
         data: {
-          user: localStorage.getItem("userid"),
+          user: localStorage.getItem("user_id"),
           question: questions[currQues].id,
           status: questionsStatus[currQues],
         },
@@ -236,7 +237,7 @@ export default function Quiz() {
         var length = quizContent.questions.length;
         setTotalQuestions(length);
         localStorage.setItem("mode", 2);
-        localStorage.setItem("quizscore", quizscore);
+        localStorage.setItem("quizscore", quizscore+1);
         setActiveMode(2);
 
       } else {
@@ -483,14 +484,14 @@ export default function Quiz() {
 
     useEffect(() => {
       let data;
-      localStorage.setItem("quizid", "1");
-      localStorage.setItem("userid", "1");
+      // localStorage.setItem("quizid", "1");
+      // localStorage.setItem("userid", "1");
       console.log(localStorage.getItem("trackid"));
        var quizid = localStorage.getItem("quizid");
       //var quizid = practiceid;
 
       axios
-        .get(`http://localhost:8000/getQuizStatus/?quizid=${quizid}&userid=${localStorage.getItem("userid")}`)
+        .get(`http://localhost:8000/getQuizStatus/?quizid=${quizid}&userid=${localStorage.getItem("user_id")}`)
         .then((res) => {
           data = res.data;
           setQuizResultContent(data);
@@ -508,11 +509,12 @@ export default function Quiz() {
     function updateScore(){
       let score = 0;
       for(let i = 0; i < quizStatus.length; i++){
-        if(quizStatus[i].status === quizResultContent.quizContent.questions[i].qAnswers[0]){
+        if(quizResultContent.status[i][0].status === quizResultContent.quizContent.questions[i].qAnswers[0]){
           score = score+1;
         }
       }
 
+      console.log("show result scoreeee:  ",score);
       localStorage.setItem("quizscore", score);
     }
 
