@@ -190,6 +190,23 @@ def get_tracks_list(request):
   return Response(output)
 
 @api_view(["GET"])
+def get_user_details(request):
+  serializer_class = CareerTrackSerializer
+  user_id = request.GET.get('userid', '') 
+  output = [
+      {"id": output.id, "name": output.name, "mail": output.email, "Expert": "Web Developer"}
+      for output in User.objects.filter(id = user_id)
+  ]
+  dictO = {
+    
+    "user_contents": output,
+  }
+  print(dictO)
+
+  # print(request.GET.get('track', ''))
+
+  return Response(dictO)
+@api_view(["GET"])
 def get_usertrack_completed(request):
   serializer_class = UserTrackSerializer
   # track_id = request.GET.get('trackid','')
