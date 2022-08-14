@@ -631,10 +631,10 @@ def get_tutorial_list(request):
 
   print('User id is {}'.format(userid))
   print('Chapter id is {}'.format(chapterid))
-
+  import random
   output = [
     # output
-    {'id': output.id, 'title': output.title, 'poster': output.poster.url, 'order': output.order, 'progress': "50", 'length': "9 mins"}
+    {'id': output.id, 'title': output.title, 'poster': output.poster.url, 'order': output.order, 'progress': "30", 'length': "9 mins"}
     for output in Tutorial.objects.filter(chapter__id = chapterid)
   ]
   
