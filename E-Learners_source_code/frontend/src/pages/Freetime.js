@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { React, useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 
@@ -9,6 +9,20 @@ export default function Freetime() {
   const [endTime, setEndTime] = useState(moment().format("00:00"));
   console.log(startDate)
   console.log(endDate)
+  const [freeslot, setFreeSlot] = useState([{}]);
+
+
+  useEffect(() => {
+    let data
+    axios.get(`http://localhost:8000/get_freeslot/?user_id=${localStorage.getItem('user_id')}`)
+      .then(res=>{
+        data = res.data;
+        // setFreeSlot(data);
+        console.log(data)
+      })
+
+  }, [freeslot]);
+  
 
   const addFreeslot = async () =>  {
     console.log(startDate)
@@ -45,6 +59,9 @@ export default function Freetime() {
 
   return (
     <div>
+      {freeslot.map((out => 
+        <div> </div>
+      ))}
       <h1> Enter Freetime: </h1>
       <div className="form-group">
         {/* Inpute date */}
