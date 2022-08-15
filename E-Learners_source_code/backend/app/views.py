@@ -820,12 +820,17 @@ def get_freeslot(request):
   print('User id is {}'.format(user_id))
 
   output = [
-    output  
+    # output  
+    {
+      'id': output.id, 
+      'start_date': output.start_date.strftime("%Y-%m-%d %H:%M"), 
+      'end_date': output.end_date.strftime("%Y-%m-%d %H:%M")
+    }
     for output in FreeSlot.objects.filter(user__id = user_id)
   ]
   print(output)
 
-  return Response()
+  return Response(output)
 
 
 @api_view(["POST"])

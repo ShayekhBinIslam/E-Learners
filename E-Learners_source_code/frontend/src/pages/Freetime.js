@@ -17,11 +17,11 @@ export default function Freetime() {
     axios.get(`http://localhost:8000/get_freeslot/?user_id=${localStorage.getItem('user_id')}`)
       .then(res=>{
         data = res.data;
-        // setFreeSlot(data);
+        setFreeSlot(data);
         console.log(data)
       })
 
-  }, [freeslot]);
+  },[JSON.stringify(freeslot)]);
   
 
   const addFreeslot = async () =>  {
@@ -59,9 +59,14 @@ export default function Freetime() {
 
   return (
     <div>
+      
       {freeslot.map((out => 
-        <div> </div>
+      <div className="container">
+        <div> {out.start_date} </div>
+        <div> {out.end_date} </div>
+        </div>
       ))}
+      
       <h1> Enter Freetime: </h1>
       <div className="form-group">
         {/* Inpute date */}
