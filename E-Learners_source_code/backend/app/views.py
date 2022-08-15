@@ -841,6 +841,25 @@ def add_freeslot(request):
   end_time = request.data.get('end_time', '')
   user_id = request.data.get('user_id', '')
 
+  start_date = datetime.datetime.strptime(start_date + " " + start_time, "%Y-%m-%d %H:%M")
+  end_date = datetime.datetime.strptime(end_date + " " + end_time, "%Y-%m-%d %H:%M")
+  print(start_date, end_date)
+  # request.data['start_date'] = start_date
+  # request.data['end_date'] = end_date
+  # print(request.data)
+  data = {
+    'user': user_id,
+    'start_date': start_date,
+    'end_date': end_date,
+  }
+
+  print(data)
+  serializer = FreeSlotSerializer(data=data)
+  
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
   print('start date is {}'.format(start_date))
   print('start time is {}'.format(start_time))
   print('end date is {}'.format(end_date))
