@@ -305,8 +305,8 @@ class UserAttribute(models.Model):
   attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
   value = models.IntegerField(default=0)
 
-class ChapterAttribute(models.Model):
-  chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+class TutorialAttribute(models.Model):
+  tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
   attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
   value = models.IntegerField(default=0)
 
