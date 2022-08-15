@@ -44,27 +44,83 @@ const trackid = 1;
 const trackname = "Web Development";
 const coursename = "FrontEnd Basics";
 
-// const chapterList = [
-//   {
-//     id: 1,
-//     name: "HTML",
-//     des: "This is HTML Chapter",
-//     progress: "70",
-//   },
-//   {
-//     id: 2,
-//     name: "CSS",
-//     des: "This is CSS Chapter",
-//     progress: "30",
-//   },
-//   {
-//     id: 3,
-//     name: "JavaScript",
-//     des: "This is JavaScript Chapter",
-//     progress: "20",
-//   },
-// ];
+const chapterList = [
+  {
+    id: 1,
+    name: "HTML",
+    des: "This is HTML Chapter",
+    progress: "70",
+  },
+  {
+    id: 2,
+    name: "CSS",
+    des: "This is CSS Chapter",
+    progress: "30",
+  },
+  {
+    id: 3,
+    name: "JavaScript",
+    des: "This is JavaScript Chapter",
+    progress: "20",
+  },
+];
 
+const tutorialsList = [
+  {
+    id: 1,
+    title: "Card with HTML5",
+    progress: "70",
+    length: "9 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+  {
+    id: 2,
+    title: "Form with HTML5",
+    progress: "0",
+    length: "19 mins",
+  },
+];
 
 const recomList = [
   {
@@ -105,23 +161,40 @@ const recomChapterList = [
 ];
 
 export default function Course() {
-  const [activeMode, setActiveMode] = useState(localStorage.getItem("course_mode"));
+  const [activeMode, setActiveMode] = useState(globalactiveMode);
   const [isgotoPractice, setisGotoPractive] = useState(false);
   const [recomPracticeList, setRecomPracticeList] = useState({
-    "running_tracks": [{"id":0,"title":"dfss","des":"sdfsdf"}]
+    "recompractice_list": [{"id":0,"title":"dfss","des":"sdfsdf","level":"begginner"}]
   });
+  const [recomTutorialList, setRecomTutorialList] = useState({
+    "recomtutorial_list": [{"id":0,"title":"dfss","des":"sdfsdf","level":"begginner","progress":"0"}]
+  });
+  
   useEffect(() => {
 
     // fechTracks();
-    let data,trackid,userid,courseid;
+    let data,trackid,userid,courseid,chapterid;
     trackid = localStorage.getItem('active_track_id')
     userid = localStorage.getItem('user_id')
     courseid = localStorage.getItem('courseid')
+    chapterid = localStorage.getItem('chapter_id')
     console.log(trackid)
-    axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}`)
+    axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}&chapterid=${chapterid}`)
       .then(res=>{
         data = res.data;
         setRecomPracticeList(
+          data
+        );
+      })
+      .catch(err=>{})
+    // recom tutorial
+    userid = localStorage.getItem('user_id')
+    courseid = localStorage.getItem('courseid')
+    chapterid = localStorage.getItem('chapter_id')
+    axios.get(`http://localhost:8000/getRecomTutorialList/?userid=${userid}&courseid=${courseid}&chapterid=${chapterid}`)
+      .then(res=>{
+        data = res.data;
+        setRecomTutorialList(
           data
         );
       })
@@ -137,6 +210,9 @@ export default function Course() {
     
 
   }, []);
+  
+  
+  
 
   // const navigate = useNavigate();
 
@@ -363,18 +439,34 @@ export default function Course() {
       };
 
       function gotoChapter(chapter_id, chapter_title) {
-        localStorage.setItem("course_mode", 2);
+        localStorage.setItem("course_mode", 2);	
         localStorage.setItem("chapter_title", chapter_title);
+
         setActiveMode(2);
-        axios({
-          method: "post",
-          url: "http://localhost:8000/saveUserCourse/",
-          data: userCourse,
-        })
-          .then(function (response) {})
-          .catch(function (response) {
-            console.log(response);
-          });
+        
+
+          // fechTracks();
+          
+           
+          
+            
+            // setCourse(trackscontent.courses)
+            // setTrackName(trackscontent.name)
+            // setTrackDes(trackscontent.des)
+            // setVideo(trackscontent.video)
+          // let data;
+          
+      
+        
+        // axios({
+        //   method: "post",
+        //   url: "http://localhost:8000/saveUserCourse/",
+        //   data: userCourse,
+        // })
+        //   .then(function (response) {})
+        //   .catch(function (response) {
+        //     console.log(response);
+        //   });
 
         localStorage.setItem("chapter_id", chapter_id);
         console.log("Chapter id: " + chapter_id);
@@ -385,6 +477,7 @@ export default function Course() {
       const { courseid } = useParams();
 
       useEffect(() => {
+        
         let data;
         console.log("course id", courseid);
         axios
@@ -393,8 +486,6 @@ export default function Course() {
             data = res.data;
             setChapters(data);
             console.log(data);
-
-            
           })
           .catch((err) => {});
       }, []);
@@ -460,10 +551,15 @@ export default function Course() {
   function ChapterContent() {
     let isEnrolled = true;
 
+    let ChpaterName = chapterList[activeChapterid].name;
+    let ChapterDes = courses[activeChapterid].des;
+
     let buttonName = "Start";
     if (isEnrolled) {
       buttonName = "Continue";
     }
+   
+    
 
     function goBackToCourseContent() {
       localStorage.setItem("course_mode", 1);
@@ -471,6 +567,8 @@ export default function Course() {
     }
 
     function RecommendationCard() {
+      
+      
       return (
         <div className="courseRecom-container">
           <div className="courseRecom-header">
@@ -484,14 +582,34 @@ export default function Course() {
           </div>
 
           <div className="courseRecom-card-container">
-            {recomChapterList.map((out) => (
+          {console.log(recomTutorialList)}
+            {console.log(recomPracticeList)}
+           
+            {recomPracticeList.recompractice_list.map((out) => (
               <div className="courseRecomCard">
-                <div className="CourseRecom-topText">{out.header}</div>
+                <div className="CourseRecom-topText">Recommendation Practice</div>
                 <div className="CourseRecom-title">{out.title}</div>
-                <div className="CourseRecom-bottomText">{out.type}</div>
+                <div className="CourseRecom-bottomText">{out.des}</div>
+                <div className="CourseRecom-bottomText2">{out.level}</div>
                 <div className="courseRecom-btn">
                   <a href="#" className="btn-right-mi">
-                    {out.button}
+                    Continue
+                  </a>
+                </div>
+                <div className="progressRow-row">
+                  <Progress done={0} />
+                </div>
+              </div>
+            ))}
+            {recomTutorialList.recomtutorial_list.map((out) => (
+              <div className="courseRecomCard">
+                <div className="CourseRecom-topText">Recommendation Tutorial</div>
+                <div className="CourseRecom-title">{out.title}</div>
+                <div className="CourseRecom-bottomText">{out.des}</div>
+                <div className="CourseRecom-bottomText2">{out.level}</div>
+                <div className="courseRecom-btn">
+                  <a href="#" className="btn-right-mi">
+                    Continue
                   </a>
                 </div>
                 <div className="progressRow-row">
@@ -595,6 +713,12 @@ export default function Course() {
         
       }
 
+      function gotoVideoPage(order){	
+        localStorage.setItem("videoOrder", 1);	
+        navigate(`/Videos`);	
+       // console.log("video id", id);	
+      }
+
 
       if (isEnrolled) {
         return (
@@ -612,15 +736,17 @@ export default function Course() {
                     <div className="courseRecomCard">
                       <img
                         className="card_image"
-                        src={require("../assets/Home/profilephoto.jpg")}
+                        // src={require("../assets/Home/profilephoto.jpg")}
+                        src={"http://localhost:8000"+out.poster}
                       ></img>
                       <div className="CourseRecom-topText">{out.length}</div>
                       <div className="courseRecom-btn">
-                        <a href="#" className="playbtn">
-                          <img
-                            src={require("../assets/card/playbtn.jpg")}
-                          ></img>
-                        </a>
+                      <button className="playbtn"	
+                        onClick={() => gotoVideoPage(out.order)}>	
+                          <img	
+                            src={require("../assets/card/playbtn.jpg")}	
+                          ></img>	
+                        </button>
                       </div>
                       <div className="progressRow-row">
                         <Progress done={out.progress} />
