@@ -270,6 +270,8 @@ class UserQuestions(models.Model):
   status = models.CharField(max_length=200)
 
 
+
+
 class UserTutorials(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
@@ -305,6 +307,11 @@ class UserAttribute(models.Model):
 
 class ChapterAttribute(models.Model):
   chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+  attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+  value = models.IntegerField(default=0)
+
+class PracticeAttribute(models.Model):
+  practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
   attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
   value = models.IntegerField(default=0)
 

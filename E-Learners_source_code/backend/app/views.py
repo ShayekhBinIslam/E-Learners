@@ -1,6 +1,4 @@
 # from django.shortcuts import render
-import tempfile
-from urllib import response
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -815,6 +813,37 @@ def get_Quiz(request):
 #     student = Student.objects.get(id=pk)
 #     serilizer = StudentSerializer(student, many=False)
 #     return Response(serilizer.data)
+
+@api_view(['GET'])
+def get_freeslot(request):
+  user_id = request.GET.get('user_id', '')
+  print('User id is {}'.format(user_id))
+
+  output = [
+    output  
+    for output in FreeSlot.objects.filter(user__id = user_id)
+  ]
+  print(output)
+
+  return Response()
+
+
+@api_view(["POST"])
+def add_freeslot(request):
+  start_date = request.data.get('start_date', '')
+  start_time = request.data.get('start_time', '')
+  end_date = request.data.get('end_date', '')
+  end_time = request.data.get('end_time', '')
+  user_id = request.data.get('user_id', '')
+
+  print('start date is {}'.format(start_date))
+  print('start time is {}'.format(start_time))
+  print('end date is {}'.format(end_date))
+  print('end time is {}'.format(end_time))
+  print('user id is {}'.format(user_id))
+
+  return Response()
+
 
 
 @api_view(["POST"])
