@@ -14,6 +14,7 @@ import UserDashboard from "./pages/UserDashboard";
 import { TRACKS } from "./shared/tracks";
 import Video from "./pages/Video";
 import Quiz from "./pages/Quiz";
+import Freetime from "./pages/Freetime";
 
 import Practice from "./pages/Practice";
 
@@ -47,6 +48,7 @@ function App() {
           <Route path="/CareerTracks/:trackid/Course/:courseid/practice/:practiceid/mode/:mode" element={<Quiz/>}/>
 
           <Route path="/videos" element={<Video/>}/>
+          <Route path="/freetime" element={<Freetime/>}/>
           <Route path="/UserProfile/" element={<UserProfile/>}/>
         </Routes>
       </div>
