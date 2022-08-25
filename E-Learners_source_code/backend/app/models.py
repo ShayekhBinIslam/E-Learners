@@ -125,6 +125,17 @@ class Video(models.Model):
   # link = models.CharField(max_length=200)
   link = models.FileField(upload_to="video/%y")
   # more metadata such as duration
+  duration = models.IntegerField(default=0)
+
+  def save(self, *args, **kwargs):
+    super(Video, self).save(*args, **kwargs)
+    from backend.settings import MEDIA_ROOT
+    video_link = MEDIA_ROOT/str(self.link)
+    from moviepy.editor import VideoFileClip
+    clip = VideoFileClip(str(video_link))
+    duration_seconds       = int(clip.duration)
+    self.duration = duration_seconds
+    super(Video, self).save(*args, **kwargs)
 
 
 class FreeSlot(models.Model):
