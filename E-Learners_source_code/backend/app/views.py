@@ -18,6 +18,7 @@ from loguru import logger
 
 from .models import *
 from .serializer import *
+from backend.settings import MEDIA_URL
 
 
 # Create your views here.
@@ -818,6 +819,45 @@ def get_Quiz(request):
 def get_freeslot(request):
   user_id = request.GET.get('user_id', '')
   print('User id is {}'.format(user_id))
+
+  # Get the enrolled tracks of the user
+  enrolled_tracks = UserCareerTrack.objects.filter(user=user_id)
+  enrolled_tracks_ids = [track.track_id for track in enrolled_tracks]
+  print(("enrolled_tracks", enrolled_tracks_ids))
+  if len(enrolled_tracks_ids) > 0:
+    current_track = enrolled_tracks_ids[0]
+    # courses = Course.objects.filter(track=enrolled_tracks_ids)
+    print("current_track", current_track)
+    courses = Course.objects.filter(career_track=current_track)
+    print("courses", courses)
+    for course in courses:
+      print(course.id)
+      chapters = Chapter.objects.filter(course=course.id)
+      print("chapters", chapters)
+      for chapter in chapters:
+        tutorials = Tutorial.objects.filter(chapter=chapter.id)
+        practices = Practice.objects.filter(chapter=chapter.id)
+        print("tutorials", tutorials)
+        print("practices", practices)
+        ordered_tasks = []
+        for tutorial in tutorials:
+          print("tutorial order", tutorial.order)
+          video = Video.objects.filter(id=tutorial.video_id)
+          print("video", video)
+          video_link = video[0].link
+          print("video_link", video_link)
+          ordered_tasks.append((tutorial.order, tutorial))
+        print("ordered_tasks", ordered_tasks)
+        for practice in practices:
+          print("practice order", practice.order)
+          ordered_tasks.append((practice.order, practice))
+        print("ordered_tasks", ordered_tasks)
+      break
+      # practices = Practice.objects.filter(chapter__id=course.id)
+      # for tutorial in tutorials:
+        # print(tutorial.id)
+  
+  
 
   output = [
     # output  
