@@ -25,6 +25,8 @@ export default function CareerTracks() {
     "courses": []
   });
 
+  // const [trackscontent, setTrackContent] = useState([{}]);
+
   function logResult() {
     return 2 + 2;
   }

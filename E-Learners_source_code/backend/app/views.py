@@ -825,6 +825,91 @@ def daterange(start_date, end_date):
 # start_date = date(2013, 1, 1)
 # end_date = date(2015, 6, 2)
 
+def get_track_attribute_values(track_id):
+  attributes = Attribute.objects.all()
+  # print("attributes", attributes)
+  print(len(attributes))
+  import numpy as np
+
+  # courses = Course.objects.filter(track=enrolled_tracks_ids)
+  # print("current_track", track_id)
+  courses = Course.objects.filter(career_track=track_id)
+  # print("courses", courses) 
+  track_attribute_value = np.zeros((len(attributes),))
+  for course in courses:
+    # print(course.id)
+    chapters = Chapter.objects.filter(course=course.id)
+    # print("chapters", chapters)
+    for chapter in chapters:
+      tutorials = Tutorial.objects.filter(chapter=chapter.id)
+      practices = Practice.objects.filter(chapter=chapter.id)
+      for tutorial in tutorials:
+        for i, attr in enumerate(attributes):
+          x = TutorialAttribute.objects.filter(tutorial_id=tutorial.id, attribute_id=attr.id).values('value')
+          # print("attr", x)
+          if len(x) > 0:
+            track_attribute_value[i] += x[0]['value']
+      
+      for practice in practices:
+        for i, attr in enumerate(attributes):
+          x = PracticeAttribute.objects.filter(practice_id=practice.id, attribute_id=attr.id).values('value')
+          # print("attr", x)
+          if len(x) > 0:
+            track_attribute_value[i] += x[0]['value']
+
+  print("track_attribute_value", track_attribute_value)
+  return track_attribute_value
+
+
+@api_view(['GET'])
+def get_attribute_recommendation(request):
+  user_id = request.GET.get('user_id', '')
+  print('User id is {}'.format(user_id))
+  enrolled_tracks = UserCareerTrack.objects.filter(user=user_id)
+  enrolled_tracks_ids = [track.track_id for track in enrolled_tracks]
+  print("enrolled_tracks", enrolled_tracks_ids)
+  all_tracks = [x["id"] for x in CareerTrack.objects.all().values('id')]
+  print("all_tracks", all_tracks)
+  not_enrolled_tracks = list(set(all_tracks) - set(enrolled_tracks_ids))
+  print("not_enrolled_tracks", not_enrolled_tracks)
+
+  if len(not_enrolled_tracks) == 0:
+    return Response({"message": "No tracks to recommend"})
+
+  # return Response({})
+
+  enrolled_track_attribute_values = []
+  for current_track in enrolled_tracks_ids:
+    value = get_track_attribute_values(current_track)
+    enrolled_track_attribute_values.append(value)
+  
+  import numpy as np
+  avg_track_value = np.mean(enrolled_track_attribute_values, axis=0)  
+  print("enrolled_track_attribute_values", enrolled_track_attribute_values)
+  print("avg_track_value", avg_track_value)
+
+  not_enrolled_track_attribute_values = []
+  dot_products = []
+  for current_track in not_enrolled_tracks:
+    value = get_track_attribute_values(current_track)
+    not_enrolled_track_attribute_values.append(value)
+    dot_products.append(np.dot(avg_track_value, value))
+  
+  print("not_enrolled_track_attribute_values", not_enrolled_track_attribute_values)
+  print("dot_products", dot_products)
+  max_dot = np.argmax(dot_products)
+  dot_products[max_dot] = 1000
+  min_dot = np.argmin(dot_products)
+  print("max_dot", max_dot)
+  print("min_dot", min_dot)
+  similar_track = not_enrolled_tracks[max_dot]
+  dissimilar_track = not_enrolled_tracks[min_dot]
+  print("similar_track", similar_track)
+  print("dissimilar_track", dissimilar_track)
+
+  
+  return Response({})
+
 @api_view(['GET'])
 def get_freeslot(request):
   user_id = request.GET.get('user_id', '')
