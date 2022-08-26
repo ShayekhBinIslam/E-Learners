@@ -825,6 +825,39 @@ def daterange(start_date, end_date):
 # start_date = date(2013, 1, 1)
 # end_date = date(2015, 6, 2)
 
+def get_course_attribute_values(course_id):
+  attributes = Attribute.objects.all()
+  # print("attributes", attributes)
+  print(len(attributes))
+  import numpy as np
+  course_attribute_value = np.zeros((len(attributes),))
+
+  # print(course.id)
+  chapters = Chapter.objects.filter(course=course_id)
+  # print("chapters", chapters)
+  for chapter in chapters:
+    tutorials = Tutorial.objects.filter(chapter=chapter.id)
+    practices = Practice.objects.filter(chapter=chapter.id)
+    for tutorial in tutorials:
+      for i, attr in enumerate(attributes):
+        x = TutorialAttribute.objects.filter(tutorial_id=tutorial.id, attribute_id=attr.id).values('value')
+        # print("attr", x)
+        if len(x) > 0:
+          course_attribute_value[i] += x[0]['value']
+    
+    for practice in practices:
+      for i, attr in enumerate(attributes):
+        x = PracticeAttribute.objects.filter(practice_id=practice.id, attribute_id=attr.id).values('value')
+        # print("attr", x)
+        if len(x) > 0:
+          course_attribute_value[i] += x[0]['value']
+
+  print("course_attribute_value", course_attribute_value)
+  return course_attribute_value
+
+
+
+
 def get_track_attribute_values(track_id):
   attributes = Attribute.objects.all()
   # print("attributes", attributes)
