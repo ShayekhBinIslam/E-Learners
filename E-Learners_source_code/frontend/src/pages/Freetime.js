@@ -30,8 +30,10 @@ export default function Freetime() {
     let formField = new FormData()
     formField.append('start_date', startDate)
     formField.append('end_date', endDate)
-    formField.append('start_time', startTime)
-    formField.append('end_time', endTime)
+    // formField.append('start_time', startTime)
+    // formField.append('end_time', endTime)
+    formField.append('start_time', "00:00")
+    formField.append('end_time', "00:00")
     
     formField.append('user_id', localStorage.getItem('user_id'))
     // formField.append('a', 'a');

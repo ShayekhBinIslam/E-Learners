@@ -148,6 +148,8 @@ class FreeSlot(models.Model):
   end_date = models.DateTimeField()
 
 
+
+
 class CareerTrack(models.Model):
   '''
   '''
@@ -287,6 +289,18 @@ class UserTutorials(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
   progress = models.CharField(max_length=200)
+
+
+class UserTutorialsFreeslot(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
+  date = models.DateTimeField(default=datetime.datetime.now())
+
+
+class UserPracticeFreeslot(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
+  date = models.DateTimeField(default=datetime.datetime.now())
 
 
 class UserCourse(models.Model):

@@ -831,81 +831,112 @@ def get_freeslot(request):
   print('User id is {}'.format(user_id))
   slots = FreeSlot.objects.filter(user__id = user_id)
   # return Response({})
-  slot = slots[0] # assumes slot
+  slots = iter(slots)
+  # slot = slots[0] # assumes slot
+  slot = next(slots)
   slot_range = daterange(slot.start_date, slot.end_date)
   slot_obj = next(slot_range)
   print(slot_range)
   # return Response({})
 
-
-
-
   # Get the enrolled tracks of the user
   enrolled_tracks = UserCareerTrack.objects.filter(user=user_id)
   enrolled_tracks_ids = [track.track_id for track in enrolled_tracks]
   print(("enrolled_tracks", enrolled_tracks_ids))
+  UserTutorialsFreeslot.objects.all().delete()
+  UserPracticeFreeslot.objects.all().delete()
   if len(enrolled_tracks_ids) > 0:
     current_limit = 0
-    max_limit = 60*60
+    # max_limit = 60*60
+    max_limit = 20*60
     sched_done = False
-    current_track = enrolled_tracks_ids[0]
-    # courses = Course.objects.filter(track=enrolled_tracks_ids)
-    print("current_track", current_track)
-    courses = Course.objects.filter(career_track=current_track)
-    print("courses", courses)
-    for course in courses:
-      print(course.id)
-      chapters = Chapter.objects.filter(course=course.id)
-      print("chapters", chapters)
-      for chapter in chapters:
-        tutorials = Tutorial.objects.filter(chapter=chapter.id)
-        practices = Practice.objects.filter(chapter=chapter.id)
-        print("tutorials", tutorials)
-        print("practices", practices)
-        ordered_tasks = []
-        for tutorial in tutorials:
-          print("tutorial order", tutorial.order)
-          video = Video.objects.filter(id=tutorial.video_id)
-          print("video", video)
-          video_link = MEDIA_ROOT/str(video[0].link)
-          from moviepy.editor import VideoFileClip
-          clip = VideoFileClip(str(video_link))
-          duration_seconds       = clip.duration
-          # print(type(duration))
-          print("video_link", video_link)
-          print("duration", duration_seconds)
-          ordered_tasks.append((tutorial.order, duration_seconds, tutorial))
-        print("ordered_tasks", ordered_tasks)
-        for practice in practices:
-          print("practice order", practice.order)
-          duration_seconds = practice.duration*60
-          print("duration", duration_seconds)
-          ordered_tasks.append((practice.order, duration_seconds, practice))
-        
-        # sort ordered task by order
-        ordered_tasks.sort(key=lambda x: x[0])
-        print("sorted_order", ordered_tasks)
-        for task in ordered_tasks:
-          if current_limit + task[1] <= max_limit:
-            current_limit += task[1]
-            print("schedule", task[2], "at", slot_obj)
-          else:
-            try:
-              slot_obj = next(slot_range)
-              current_limit = task[1]
+    # current_track = enrolled_tracks_ids[0]
+    for current_track in enrolled_tracks_ids:
+      # courses = Course.objects.filter(track=enrolled_tracks_ids)
+      print("current_track", current_track)
+      courses = Course.objects.filter(career_track=current_track)
+      print("courses", courses)
+      for course in courses:
+        print(course.id)
+        chapters = Chapter.objects.filter(course=course.id)
+        print("chapters", chapters)
+        for chapter in chapters:
+          tutorials = Tutorial.objects.filter(chapter=chapter.id)
+          practices = Practice.objects.filter(chapter=chapter.id)
+          print("tutorials", tutorials)
+          print("practices", practices)
+          ordered_tasks = []
+          for tutorial in tutorials:
+            print("tutorial order", tutorial.order)
+            video = Video.objects.filter(id=tutorial.video_id)[0]
+            print("video", video)
+            # video_link = MEDIA_ROOT/str(video[0].link)
+            # from moviepy.editor import VideoFileClip
+            # clip = VideoFileClip(str(video_link))
+            # duration_seconds       = clip.duration
+            # print(type(duration))
+            # print("video_link", video_link)
+            duration_seconds = video.duration
+            print("duration", duration_seconds)
+            ordered_tasks.append((tutorial.order, duration_seconds, tutorial))
+          print("ordered_tasks", ordered_tasks)
+          for practice in practices:
+            print("practice order", practice.order)
+            duration_seconds = practice.duration*60
+            print("duration", duration_seconds)
+            ordered_tasks.append((practice.order, duration_seconds, practice))
+          
+          # sort ordered task by order
+          ordered_tasks.sort(key=lambda x: x[0])
+          print("sorted_order", ordered_tasks)
+          for task in ordered_tasks:
+            if current_limit + task[1] <= max_limit:
+              current_limit += task[1]
               print("schedule", task[2], "at", slot_obj)
-            except Exception as e:
-              sched_done = True
-              # raise e
-              break
+              if isinstance(task[2], Tutorial):
+                schedule = UserTutorialsFreeslot(user_id=user_id, tutorial=task[2], date=slot_obj)
+                schedule.save()
+              else:
+                schedule = UserPracticeFreeslot(user_id=user_id, practice=task[2], date=slot_obj)
+                schedule.save()
+            else:
+              try:
+                slot_obj = next(slot_range)
+                current_limit = task[1]
+                print("schedule", task[2], "at", slot_obj)
+                if isinstance(task[2], Tutorial):
+                  schedule = UserTutorialsFreeslot(user_id=user_id, tutorial=task[2], date=slot_obj)
+                  schedule.save()
+                else:
+                  schedule = UserPracticeFreeslot(user_id=user_id, practice=task[2], date=slot_obj)
+                  schedule.save()
+              except Exception as e:
+                try:
+                  slot = next(slots)
+                  slot_range = daterange(slot.start_date, slot.end_date)
+                  slot_obj = next(slot_range)
+                  current_limit = task[1]
+                  if isinstance(task[2], Tutorial):
+                    schedule = UserTutorialsFreeslot(user_id=user_id, tutorial=task[2], date=slot_obj)
+                    schedule.save()
+                  else:
+                    schedule = UserPracticeFreeslot(user_id=user_id, practice=task[2], date=slot_obj)
+                    schedule.save()
+                except Exception as e:
+                  # raise e
+                  sched_done = True
+                  break
 
+                # raise e
+
+          if sched_done: break
+          # break
+          print("ordered_tasks", ordered_tasks)
         if sched_done: break
-        print("ordered_tasks", ordered_tasks)
-      if sched_done: break
-      # break
-      # practices = Practice.objects.filter(chapter__id=course.id)
-      # for tutorial in tutorials:
-        # print(tutorial.id)
+        # break
+        # practices = Practice.objects.filter(chapter__id=course.id)
+        # for tutorial in tutorials:
+          # print(tutorial.id)
   
   
 
