@@ -53,7 +53,12 @@ urlpatterns = [
     path('getUserTrackRunning/', views.get_usertrack_running, name="getUserTrackRunning"),
     path('getRecomPracticeList/', views.get_recom_practice_list, name="getRecomPracticeList"),
     path('getRecomTutorialList/', views.get_recom_tutorial_list, name="getRecomTutorialList"),
+    path('getUserDetails/', views.get_user_details, name="getUserDetails"),
 
+
+    path('add_freeslot/', views.add_freeslot, name="add_freeslot"),
+    path('get_freeslot/', views.get_freeslot, name="get_freeslot"),
+    path('get_attribute_recommendation/', views.get_attribute_recommendation, name="get_attribute_recommendation"),
     
 
 

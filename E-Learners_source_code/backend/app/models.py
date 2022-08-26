@@ -125,6 +125,17 @@ class Video(models.Model):
   # link = models.CharField(max_length=200)
   link = models.FileField(upload_to="video/%y")
   # more metadata such as duration
+  duration = models.IntegerField(default=0)
+
+  def save(self, *args, **kwargs):
+    super(Video, self).save(*args, **kwargs)
+    from backend.settings import MEDIA_ROOT
+    video_link = MEDIA_ROOT/str(self.link)
+    from moviepy.editor import VideoFileClip
+    clip = VideoFileClip(str(video_link))
+    duration_seconds       = int(clip.duration)
+    self.duration = duration_seconds
+    super(Video, self).save(*args, **kwargs)
 
 
 class FreeSlot(models.Model):
@@ -135,6 +146,8 @@ class FreeSlot(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   start_date = models.DateTimeField()
   end_date = models.DateTimeField()
+
+
 
 
 class CareerTrack(models.Model):
@@ -270,10 +283,24 @@ class UserQuestions(models.Model):
   status = models.CharField(max_length=200)
 
 
+
+
 class UserTutorials(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
   progress = models.CharField(max_length=200)
+
+
+class UserTutorialsFreeslot(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
+  date = models.DateTimeField(default=datetime.datetime.now())
+
+
+class UserPracticeFreeslot(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
+  date = models.DateTimeField(default=datetime.datetime.now())
 
 
 class UserCourse(models.Model):
@@ -303,8 +330,13 @@ class UserAttribute(models.Model):
   attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
   value = models.IntegerField(default=0)
 
-class ChapterAttribute(models.Model):
-  chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+class TutorialAttribute(models.Model):
+  tutorial = models.ForeignKey(Tutorial, on_delete=models.CASCADE)
+  attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+  value = models.IntegerField(default=0)
+
+class PracticeAttribute(models.Model):
+  practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
   attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
   value = models.IntegerField(default=0)
 

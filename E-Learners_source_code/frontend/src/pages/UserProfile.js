@@ -20,6 +20,9 @@ const UserProfile = () =>{
     
     const [showRegisterForm, setShowRegisterForm] = useState(false);
     const [token, setToken] = useState(false);
+    const [user_content, setUserContent] = useState({
+        "user_contents": [{"id":0,"name":"d","mail":"sdfsdf"}]
+      });
   
     const [formValues, setFormValues] = useState({
         name: '',
@@ -27,13 +30,31 @@ const UserProfile = () =>{
         phone: '',
         password: ''
       });
-    // useEffect(() => {
+    useEffect(() => {
+        let data,userid;
+        userid = localStorage.getItem('user_id')
+        console.log(userid)
+        
+        axios.get(`http://localhost:8000/getUserDetails/?userid=${userid}`)
+        .then(res=>{
+            data = res.data;
+            console.log(data)
+            
+            setUserContent(
+            data
+            );
+        console.log(user_content)
+
+            
+            
+        })
+        .catch(err=>{})
     // if (localStorage.getItem("user_name") === null) {
     //     setToken(false);
     // } else {
     //     setToken(true);
     // }
-    // }, []);
+    }, []);
     const handleInputChange = (e) => {
         const name = e.target.name;
         setFormValues({ ...formValues, [name]: e.target.value });
@@ -92,9 +113,10 @@ const UserProfile = () =>{
 
                     </div>
                     <div className="col-md-6 mt-5">
-                        <div className="profile-head">
-                            <h5>Saiful Islam</h5>
-                            <h6>Web Developer</h6>
+                        {user_content.user_contents.map((out) => (
+                            <div className="profile-head">
+                            <h5>{out.name}</h5>
+                            <h6>{out.expert}</h6>
                             <p className="profile-rating mt-3 mb-5">RANKINGS
                                 <span>
                                     1/10
@@ -125,6 +147,8 @@ const UserProfile = () =>{
 
                             </ul>
                         </div>
+                        ))}
+                        
 
                     </div>
                     <div className="col-md-2 mt-5">
@@ -221,40 +245,43 @@ const UserProfile = () =>{
                     </div>
                     <div className="col-md-8">
                         <div className="tab-content profile-tab" id="mytabcontent">
+                            {user_content.user_contents.map((out) => (
                             <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <label>"User ID"</label>
+                                        <label>User ID</label>
 
                                     </div>
                                     <div className="col-md-6">
-                                        <p>"2342342353454624"</p>
+                                        <p>{out.id}</p>
                                     </div>
 
                                 </div>
                                 
                                 <div className="row mt-3">
                                     <div className="col-md-6">
-                                        <label>"User Name"</label>
+                                        <label>User Name</label>
 
                                     </div>
                                     <div className="col-md-6">
-                                        <p>"Saiful Islam"</p>
+                                        <p>{out.name}</p>
                                     </div>
 
                                 </div>
                                 <div className="row mt-3">
                                     <div className="col-md-6">
-                                        <label>"Email address"</label>
+                                        <label>Email address</label>
 
                                     </div>
                                     <div className="col-md-6">
-                                        <p>"saif@gmail.com"</p>
+                                        <p>{out.mail}</p>
                                     </div>
 
                                 </div>
 
                             </div>
+                            ))}
                             {/* <div className="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <div className="row">
                                     <div className="col-md-6">

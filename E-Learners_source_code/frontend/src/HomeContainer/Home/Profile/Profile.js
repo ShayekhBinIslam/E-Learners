@@ -1,9 +1,13 @@
-import React,{useState} from 'react'
+import React,{useState,useRef} from 'react'
 import Typical from 'react-typical'
 import "../../../index.css"
 import "./Profile.css"
 import axios from 'axios';
 import { TRACKS } from '../../../shared/tracks'
+import 'antd/dist/antd.css';
+import { notification } from 'antd';
+
+import emailjs from '@emailjs/browser';
 import {
     Button,
     Dialog,
@@ -17,6 +21,8 @@ import { Link } from "react-router-dom";
   
 
 export default function () {
+    const form = useRef();
+    const key = 'updatable';
     const [formValues, setFormValues] = useState({
         name: '',
         email: '',
@@ -68,6 +74,28 @@ export default function () {
               console.log(response);
               setregSuccess(false);
             });
+        //sending email
+        emailjs.sendForm('service_l2yzioj', 'template_9xhd26s', form.current, 'mBlaVkVpg91XLATti')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+        e.target.reset();
+        //show notification
+        notification.open({
+            key,
+            message: 'Successfully Registered',
+            description: 'WELCOME TO THE Elearners Family.',
+          });
+        
+          setTimeout(() => {
+            notification.open({
+              key,
+              message: 'Successfully Registered',
+              description: 'WELCOME TO THE Elearners Family.',
+            });
+          }, 2000);
 
       };
       const onSubmit2 = (e) => {
@@ -112,6 +140,29 @@ export default function () {
               console.log(error);
             //   localStorage.setItem('user_id',userID.toString());
             });
+            //sending email
+        emailjs.sendForm('service_l2yzioj', 'template_9xhd26s', form.current, 'mBlaVkVpg91XLATti')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+        e.target.reset();
+        //show notification
+        notification.open({
+            key,
+            message: 'Successfully Logged in',
+            description: 'WELCOME TO THE Elearners Family.',
+          });
+        
+          setTimeout(() => {
+            notification.open({
+              key,
+              message: 'Successfully Logged in',
+              description: 'WELCOME TO THE Elearners Family.',
+            });
+          }, 2000);
+
             // window.location.reload(true);
         
       };
@@ -173,7 +224,7 @@ export default function () {
                     >
                         <DialogTitle>Login</DialogTitle>
                         <DialogContent>
-                            <form onSubmit={onSubmit2}>
+                            <form onSubmit={onSubmit2} ref={form}>
                                 <Grid container spacing={4}>
                                     {/* <Grid item xs={12}>
                                         <TextField
@@ -261,7 +312,7 @@ export default function () {
                     >
                         <DialogTitle>Register</DialogTitle>
                         <DialogContent>
-                            <form onSubmit={onSubmit} id="form__submit">
+                            <form onSubmit={onSubmit} ref={form} id="form__submit">
                                 <Grid container spacing={4}>
                                     <Grid item xs={12}>
                                         <TextField

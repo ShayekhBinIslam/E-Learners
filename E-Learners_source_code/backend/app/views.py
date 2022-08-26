@@ -1,6 +1,5 @@
 # from django.shortcuts import render
-import tempfile
-from urllib import response
+from http.client import HTTPResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -20,6 +19,7 @@ from loguru import logger
 
 from .models import *
 from .serializer import *
+from backend.settings import MEDIA_ROOT
 
 
 # Create your views here.
@@ -189,6 +189,23 @@ def get_tracks_list(request):
 
   return Response(output)
 
+@api_view(["GET"])
+def get_user_details(request):
+  serializer_class = CareerTrackSerializer
+  user_id = request.GET.get('userid', '') 
+  output = [
+      {"id": output.id, "name": output.name, "mail": output.email, "Expert": "Web Developer"}
+      for output in User.objects.filter(id = user_id)
+  ]
+  dictO = {
+    
+    "user_contents": output,
+  }
+  print(dictO)
+
+  # print(request.GET.get('track', ''))
+
+  return Response(dictO)
 @api_view(["GET"])
 def get_usertrack_completed(request):
   serializer_class = UserTrackSerializer
@@ -815,6 +832,298 @@ def get_Quiz(request):
 #     student = Student.objects.get(id=pk)
 #     serilizer = StudentSerializer(student, many=False)
 #     return Response(serilizer.data)
+
+from datetime import date, timedelta
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days)):
+        yield start_date + timedelta(n)
+
+# start_date = date(2013, 1, 1)
+# end_date = date(2015, 6, 2)
+
+def get_course_attribute_values(course_id):
+  attributes = Attribute.objects.all()
+  # print("attributes", attributes)
+  print(len(attributes))
+  import numpy as np
+  course_attribute_value = np.zeros((len(attributes),))
+
+  # print(course.id)
+  chapters = Chapter.objects.filter(course=course_id)
+  # print("chapters", chapters)
+  for chapter in chapters:
+    tutorials = Tutorial.objects.filter(chapter=chapter.id)
+    practices = Practice.objects.filter(chapter=chapter.id)
+    for tutorial in tutorials:
+      for i, attr in enumerate(attributes):
+        x = TutorialAttribute.objects.filter(tutorial_id=tutorial.id, attribute_id=attr.id).values('value')
+        # print("attr", x)
+        if len(x) > 0:
+          course_attribute_value[i] += x[0]['value']
+    
+    for practice in practices:
+      for i, attr in enumerate(attributes):
+        x = PracticeAttribute.objects.filter(practice_id=practice.id, attribute_id=attr.id).values('value')
+        # print("attr", x)
+        if len(x) > 0:
+          course_attribute_value[i] += x[0]['value']
+
+  print("course_attribute_value", course_attribute_value)
+  return course_attribute_value
+
+
+
+
+def get_track_attribute_values(track_id):
+  attributes = Attribute.objects.all()
+  # print("attributes", attributes)
+  print(len(attributes))
+  import numpy as np
+
+  # courses = Course.objects.filter(track=enrolled_tracks_ids)
+  # print("current_track", track_id)
+  courses = Course.objects.filter(career_track=track_id)
+  # print("courses", courses) 
+  track_attribute_value = np.zeros((len(attributes),))
+  for course in courses:
+    # print(course.id)
+    chapters = Chapter.objects.filter(course=course.id)
+    # print("chapters", chapters)
+    for chapter in chapters:
+      tutorials = Tutorial.objects.filter(chapter=chapter.id)
+      practices = Practice.objects.filter(chapter=chapter.id)
+      for tutorial in tutorials:
+        for i, attr in enumerate(attributes):
+          x = TutorialAttribute.objects.filter(tutorial_id=tutorial.id, attribute_id=attr.id).values('value')
+          # print("attr", x)
+          if len(x) > 0:
+            track_attribute_value[i] += x[0]['value']
+      
+      for practice in practices:
+        for i, attr in enumerate(attributes):
+          x = PracticeAttribute.objects.filter(practice_id=practice.id, attribute_id=attr.id).values('value')
+          # print("attr", x)
+          if len(x) > 0:
+            track_attribute_value[i] += x[0]['value']
+
+  print("track_attribute_value", track_attribute_value)
+  return track_attribute_value
+
+
+@api_view(['GET'])
+def get_attribute_recommendation(request):
+  user_id = request.GET.get('user_id', '')
+  print('User id is {}'.format(user_id))
+  enrolled_tracks = UserCareerTrack.objects.filter(user=user_id)
+  enrolled_tracks_ids = [track.track_id for track in enrolled_tracks]
+  print("enrolled_tracks", enrolled_tracks_ids)
+  all_tracks = [x["id"] for x in CareerTrack.objects.all().values('id')]
+  print("all_tracks", all_tracks)
+  not_enrolled_tracks = list(set(all_tracks) - set(enrolled_tracks_ids))
+  print("not_enrolled_tracks", not_enrolled_tracks)
+
+  if len(not_enrolled_tracks) == 0:
+    return Response({"message": "No tracks to recommend"})
+
+  # return Response({})
+
+  enrolled_track_attribute_values = []
+  for current_track in enrolled_tracks_ids:
+    value = get_track_attribute_values(current_track)
+    enrolled_track_attribute_values.append(value)
+  
+  import numpy as np
+  avg_track_value = np.mean(enrolled_track_attribute_values, axis=0)  
+  print("enrolled_track_attribute_values", enrolled_track_attribute_values)
+  print("avg_track_value", avg_track_value)
+
+  not_enrolled_track_attribute_values = []
+  dot_products = []
+  for current_track in not_enrolled_tracks:
+    value = get_track_attribute_values(current_track)
+    not_enrolled_track_attribute_values.append(value)
+    dot_products.append(np.dot(avg_track_value, value))
+  
+  print("not_enrolled_track_attribute_values", not_enrolled_track_attribute_values)
+  print("dot_products", dot_products)
+  max_dot = np.argmax(dot_products)
+  dot_products[max_dot] = 1000
+  min_dot = np.argmin(dot_products)
+  print("max_dot", max_dot)
+  print("min_dot", min_dot)
+  similar_track = not_enrolled_tracks[max_dot]
+  dissimilar_track = not_enrolled_tracks[min_dot]
+  print("similar_track", similar_track)
+  print("dissimilar_track", dissimilar_track)
+
+  
+  return Response({})
+
+@api_view(['GET'])
+def get_freeslot(request):
+  user_id = request.GET.get('user_id', '')
+  print('User id is {}'.format(user_id))
+  slots = FreeSlot.objects.filter(user__id = user_id)
+  # return Response({})
+  slots = iter(slots)
+  # slot = slots[0] # assumes slot
+  slot = next(slots)
+  slot_range = daterange(slot.start_date, slot.end_date)
+  slot_obj = next(slot_range)
+  print(slot_range)
+  # return Response({})
+
+  # Get the enrolled tracks of the user
+  enrolled_tracks = UserCareerTrack.objects.filter(user=user_id)
+  enrolled_tracks_ids = [track.track_id for track in enrolled_tracks]
+  print(("enrolled_tracks", enrolled_tracks_ids))
+  UserTutorialsFreeslot.objects.all().delete()
+  UserPracticeFreeslot.objects.all().delete()
+  if len(enrolled_tracks_ids) > 0:
+    current_limit = 0
+    # max_limit = 60*60
+    max_limit = 20*60
+    sched_done = False
+    # current_track = enrolled_tracks_ids[0]
+    for current_track in enrolled_tracks_ids:
+      # courses = Course.objects.filter(track=enrolled_tracks_ids)
+      print("current_track", current_track)
+      courses = Course.objects.filter(career_track=current_track)
+      print("courses", courses)
+      for course in courses:
+        print(course.id)
+        chapters = Chapter.objects.filter(course=course.id)
+        print("chapters", chapters)
+        for chapter in chapters:
+          tutorials = Tutorial.objects.filter(chapter=chapter.id)
+          practices = Practice.objects.filter(chapter=chapter.id)
+          print("tutorials", tutorials)
+          print("practices", practices)
+          ordered_tasks = []
+          for tutorial in tutorials:
+            print("tutorial order", tutorial.order)
+            video = Video.objects.filter(id=tutorial.video_id)[0]
+            print("video", video)
+            # video_link = MEDIA_ROOT/str(video[0].link)
+            # from moviepy.editor import VideoFileClip
+            # clip = VideoFileClip(str(video_link))
+            # duration_seconds       = clip.duration
+            # print(type(duration))
+            # print("video_link", video_link)
+            duration_seconds = video.duration
+            print("duration", duration_seconds)
+            ordered_tasks.append((tutorial.order, duration_seconds, tutorial))
+          print("ordered_tasks", ordered_tasks)
+          for practice in practices:
+            print("practice order", practice.order)
+            duration_seconds = practice.duration*60
+            print("duration", duration_seconds)
+            ordered_tasks.append((practice.order, duration_seconds, practice))
+          
+          # sort ordered task by order
+          ordered_tasks.sort(key=lambda x: x[0])
+          print("sorted_order", ordered_tasks)
+          for task in ordered_tasks:
+            if current_limit + task[1] <= max_limit:
+              current_limit += task[1]
+              print("schedule", task[2], "at", slot_obj)
+              if isinstance(task[2], Tutorial):
+                schedule = UserTutorialsFreeslot(user_id=user_id, tutorial=task[2], date=slot_obj)
+                schedule.save()
+              else:
+                schedule = UserPracticeFreeslot(user_id=user_id, practice=task[2], date=slot_obj)
+                schedule.save()
+            else:
+              try:
+                slot_obj = next(slot_range)
+                current_limit = task[1]
+                print("schedule", task[2], "at", slot_obj)
+                if isinstance(task[2], Tutorial):
+                  schedule = UserTutorialsFreeslot(user_id=user_id, tutorial=task[2], date=slot_obj)
+                  schedule.save()
+                else:
+                  schedule = UserPracticeFreeslot(user_id=user_id, practice=task[2], date=slot_obj)
+                  schedule.save()
+              except Exception as e:
+                try:
+                  slot = next(slots)
+                  slot_range = daterange(slot.start_date, slot.end_date)
+                  slot_obj = next(slot_range)
+                  current_limit = task[1]
+                  if isinstance(task[2], Tutorial):
+                    schedule = UserTutorialsFreeslot(user_id=user_id, tutorial=task[2], date=slot_obj)
+                    schedule.save()
+                  else:
+                    schedule = UserPracticeFreeslot(user_id=user_id, practice=task[2], date=slot_obj)
+                    schedule.save()
+                except Exception as e:
+                  # raise e
+                  sched_done = True
+                  break
+
+                # raise e
+
+          if sched_done: break
+          # break
+          print("ordered_tasks", ordered_tasks)
+        if sched_done: break
+        # break
+        # practices = Practice.objects.filter(chapter__id=course.id)
+        # for tutorial in tutorials:
+          # print(tutorial.id)
+  
+  
+
+  output = [
+    # output  
+    {
+      'id': output.id, 
+      'start_date': output.start_date.strftime("%Y-%m-%d %H:%M"), 
+      'end_date': output.end_date.strftime("%Y-%m-%d %H:%M")
+    }
+    for output in FreeSlot.objects.filter(user__id = user_id)
+  ]
+  print(output)
+
+  return Response(output)
+
+
+@api_view(["POST"])
+def add_freeslot(request):
+  start_date = request.data.get('start_date', '')
+  start_time = request.data.get('start_time', '')
+  end_date = request.data.get('end_date', '')
+  end_time = request.data.get('end_time', '')
+  user_id = request.data.get('user_id', '')
+
+  start_date = datetime.datetime.strptime(start_date + " " + start_time, "%Y-%m-%d %H:%M")
+  end_date = datetime.datetime.strptime(end_date + " " + end_time, "%Y-%m-%d %H:%M")
+  print(start_date, end_date)
+  # request.data['start_date'] = start_date
+  # request.data['end_date'] = end_date
+  # print(request.data)
+  data = {
+    'user': user_id,
+    'start_date': start_date,
+    'end_date': end_date,
+  }
+
+  print(data)
+  serializer = FreeSlotSerializer(data=data)
+  
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+  print('start date is {}'.format(start_date))
+  print('start time is {}'.format(start_time))
+  print('end date is {}'.format(end_date))
+  print('end time is {}'.format(end_time))
+  print('user id is {}'.format(user_id))
+
+  return Response()
+
 
 
 @api_view(["POST"])
