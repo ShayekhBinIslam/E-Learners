@@ -438,7 +438,10 @@ export default function Course() {
         active_practice: 1,
       };
 
-      function gotoChapter(chapter_id) {
+      function gotoChapter(chapter_id, chapter_title) {
+        localStorage.setItem("course_mode", 2);	
+        localStorage.setItem("chapter_title", chapter_title);
+
         setActiveMode(2);
         
 
@@ -512,7 +515,7 @@ export default function Course() {
                         <div className="table-col">
                           <button
                             className="btn-table"
-                            onClick={() => gotoChapter(out.id)}
+                            onClick={() => gotoChapter(out.id, out.title)}
                           >
                             Enter
                           </button>
@@ -559,6 +562,7 @@ export default function Course() {
     
 
     function goBackToCourseContent() {
+      localStorage.setItem("course_mode", 1);
       setActiveMode(1);
     }
 
@@ -574,7 +578,7 @@ export default function Course() {
             >
               {"<-"}
             </button>
-            {ChpaterName}
+            {localStorage.getItem("chapter_title")}
           </div>
 
           <div className="courseRecom-card-container">
@@ -709,6 +713,12 @@ export default function Course() {
         
       }
 
+      function gotoVideoPage(order){	
+        localStorage.setItem("videoOrder", 1);	
+        navigate(`/Videos`);	
+       // console.log("video id", id);	
+      }
+
 
       if (isEnrolled) {
         return (
@@ -726,15 +736,17 @@ export default function Course() {
                     <div className="courseRecomCard">
                       <img
                         className="card_image"
-                        src={require("../assets/Home/profilephoto.jpg")}
+                        // src={require("../assets/Home/profilephoto.jpg")}
+                        src={"http://localhost:8000"+out.poster}
                       ></img>
                       <div className="CourseRecom-topText">{out.length}</div>
                       <div className="courseRecom-btn">
-                        <a href="#" className="playbtn">
-                          <img
-                            src={require("../assets/card/playbtn.jpg")}
-                          ></img>
-                        </a>
+                      <button className="playbtn"	
+                        onClick={() => gotoVideoPage(out.order)}>	
+                          <img	
+                            src={require("../assets/card/playbtn.jpg")}	
+                          ></img>	
+                        </button>
                       </div>
                       <div className="progressRow-row">
                         <Progress done={out.progress} />

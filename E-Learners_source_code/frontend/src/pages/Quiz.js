@@ -228,6 +228,18 @@ export default function Quiz() {
         });
     };
 
+    function updateScore(){
+      let score = 0;
+      for(let i = 0; i < questionsStatus.length; i++){
+        if(questionsStatus[i] === quizContent.questions[i].qAnswers[0]){
+          score = score+1;
+        }
+      }
+
+      console.log("show result scoreeee:  ",score);
+      localStorage.setItem("quizscore", score);
+    }
+
     function updateQuestionPage() {
       if (currQues === quizContent.questions.length - 1) {
         setCurrQues(0);
@@ -238,6 +250,7 @@ export default function Quiz() {
         setTotalQuestions(length);
         localStorage.setItem("mode", 2);
         localStorage.setItem("quizscore", quizscore+1);
+        // updateScore();
         setActiveMode(2);
 
       } else {

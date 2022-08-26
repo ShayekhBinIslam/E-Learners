@@ -142,6 +142,12 @@ class UserTutorialsSerializer(serializers.ModelSerializer):
     model = UserTutorials
     fields = ["user", "tutorial", "progress"]
 
+
+class FreeSlotSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = FreeSlot
+    fields = ["user", "start_date", "end_date",] 
+
 class VideoSerializer(serializers.ModelSerializer):
   class Meta:
     model = Video

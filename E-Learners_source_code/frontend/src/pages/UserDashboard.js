@@ -6,7 +6,8 @@ import { TRACKS } from "../shared/tracks";
 import "../styles/Course.css";
 import "../styles/UserDashboard.css"
 import { useEffect, useState } from "react";
-import axios from 'axios'
+import axios from 'axios';
+import { notification } from 'antd';
 
 // function RenderCompletedItem({ course }) {
 //   //console.log(course.image);
@@ -32,6 +33,7 @@ import axios from 'axios'
 
 
 export default function UserDashboard(props) {
+  const key = 'updatable';
   const { trackid } = useParams();
   const [runningTrack, setRunningTrack] = useState([]);
   const [completedTrack, setCompletedTrack] = useState([]);
@@ -53,7 +55,8 @@ export default function UserDashboard(props) {
       sessionStorage.removeItem('reloadCount');
     }
     let data,userid;
-    userid = localStorage.getItem('user_id')
+    userid = localStorage.getItem('user_id');
+    
     console.log(userid)
     
     axios.get(`http://localhost:8000/getUserTrackRunning/?userid=${userid}`)
@@ -79,6 +82,22 @@ export default function UserDashboard(props) {
           data
         );
     console.log(completed_track_content)
+    //show notification
+    let username;
+    username = localStorage.getItem('user_name');
+    notification.open({
+      key,
+      message: `Hello ${username}`,
+      description: 'WELCOME TO THE Elearners Family.',
+    });
+  
+    setTimeout(() => {
+      notification.open({
+        key,
+        message: `Hello ${username}`,
+        description: 'WELCOME TO THE Elearners Family.',
+      });
+    }, 2000);
 
         
         
