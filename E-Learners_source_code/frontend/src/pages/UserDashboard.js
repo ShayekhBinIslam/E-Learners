@@ -132,14 +132,14 @@ export default function UserDashboard(props) {
     // console.log(runningTrack)
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Running Tracks</div>
+        <div className="courseRecom-header">Completed Tracks</div>
 
         <div className="courseRecom-card-container">
           {running_track_content.running_tracks.map((out) => (
             <div className="courseRecomCard">
               <div className="CourseRecom-topText">{out.title}</div>
-              <div className="CourseRecom-title">{out.des}</div>
-              <div className="CourseRecom-bottomText">School Level</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.des}</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track
@@ -201,14 +201,14 @@ export default function UserDashboard(props) {
   function CompletedCard() {
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Completed Tracks</div>
+        <div className="courseRecom-header">Running Tracks</div>
 
         <div className="courseRecom-card-container">
           {completed_track_content.completed_tracks.map((out) => (
             <div className="courseRecomCard">
-              <div className="CourseRecom-topText">{out.title}</div>
-              <div className="CourseRecom-title">{out.des}</div>
-              <div className="CourseRecom-bottomText">School Level</div>
+              <div className="CourseRecom-topText">Active Learning</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.des}</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track
