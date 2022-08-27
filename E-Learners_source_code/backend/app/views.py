@@ -177,6 +177,34 @@ def save_video_progress(request):
   
   return Response("Success")
 
+@api_view(["POST"])
+def save_notification(request):
+  noti_id = request.data.get('id')
+  userid = request.data.get('userid')
+
+  
+  
+  print("NotiID: ", noti_id)
+  print("userID: ", userid)
+
+
+  output = [
+    {'id': output.id,'userid' : output.userid}
+    # output
+    for output in UserNotifications.objects.filter(id = noti_id, userid = userid)
+  ]
+
+  print(output)
+
+  if len(output)>0:
+    UserNotifications.objects.filter(id=output[0]["id"],userid = output[0]["userid"]).update(isread=True)
+  else:
+    print("Serializing")
+    serializer = UserNotificationsSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+  
+  return Response("Success")
 
 @api_view(["GET"])
 def get_tracks_list(request):
@@ -189,6 +217,46 @@ def get_tracks_list(request):
   # print(request.GET.get('track', ''))
 
   return Response(output)
+@api_view(["GET"])
+def get_notification_list(request):
+  serializer_class = UserNotificationsSerializer
+  output = [
+      {"id": output.id, "title": output.title, "description": output.description,"userid" : output.userid, "date": output.date.strftime("%Y-%m-%d %H:%M:%S"),"isread":output.isread,"link":output.link}
+      for output in UserNotifications.objects.filter(isread = False)
+  ]
+
+  # print(request.GET.get('track', ''))
+
+  return Response(output)
+@api_view(["POST"])
+def addNotification(request):
+  title = request.data.get('title', '')
+  description = request.data.get('description', '')
+  date = request.data.get('date', '')
+  link = request.data.get('link', '')
+  userid = request.data.get('userid', '')
+  # serilizer = UserNotificationsSerializer(data=request.data)
+  data = {
+    'title': title,
+    'description': description,
+    'userid': userid,
+    'date' : date,
+    'isread' : False,
+    'link' : link,
+  }
+
+  
+  serializer =  UserNotificationsSerializer(data=data)
+  
+  if serializer.is_valid():
+    serializer.save()
+    print(data)
+    print("save hoyeche")
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+  print(data)
+  print("save hoyni")
+  
+  return Response(serializer.data)
 
 @api_view(["GET"])
 def get_user_details(request):
@@ -533,10 +601,16 @@ def get_course_list(request):
   output2 = []
   
   for i in output:
+    isRunning = False
+    x = UserCourse.objects.filter(user__id = request.GET.get('user_id', ''),course__id = i["id"])
+    if len(x) > 0:
+      isRunning = True
     output2.extend(
-        list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+        list({"id": output3.id, "name":output3.title, "des": output3.description, 
+        "progress":"0", "isRunning": isRunning}
         for output3 in Course.objects.filter(id = i["id"]))
     )
+  print(output2)
 
 
  # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
@@ -718,7 +792,7 @@ def get_tutorial_list(request):
           correct = correct+1
       
     practiceStatus.insert(c, 
-        round(correct*100/(len(questions)+0.02))
+      round(correct*100/(len(questions)+0.02))
     )
     c = c + 1
 
@@ -912,6 +986,97 @@ def get_track_attribute_values(track_id):
   print("track_attribute_value", track_attribute_value)
   return track_attribute_value
 
+@api_view(['POST'])
+def enroll_course(request):
+  print(request.data)
+
+  serializer = UserCourseSerializer2(data=request.data)
+  print("here")
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)  
+
+  return Response({"message": "success"})
+
+
+@api_view(['GET'])
+def get_course_recommendation(request):
+  user_id = request.GET.get('user_id', '')
+  print("user_id", user_id)
+  track_id = request.GET.get('track_id', '')
+  print("track_id", track_id)
+  # course_id = request.GET.get('course_id', '')
+  # print("course_id", course_id)
+  # Get all courses in the track
+  all_course_ids = [x.id for x in Course.objects.filter(career_track=track_id)]
+  print("all_course_ids", all_course_ids)
+  # Get all courses that the user has enrolled in
+  enrolled_courses = [x.course.id for x in UserCourse.objects.filter(user_id=user_id)]
+  print("enrolled_courses", enrolled_courses)
+  # Get all courses that the user has not enrolled in
+  not_enrolled_courses = list(set(all_course_ids) - set(enrolled_courses))
+
+  if len(not_enrolled_courses) == 0:
+    return Response([])
+
+  print("not_enrolled_courses", not_enrolled_courses)
+  # Enrolled courses attribute values
+  enrolled_course_attribute_values = []
+  for course in enrolled_courses:
+    enrolled_course_attribute_values.append(get_course_attribute_values(course))
+  import numpy as np
+  avg_enrolled_course_attribute_value = np.mean(enrolled_course_attribute_values, axis=0)
+  print("avg_enrolled_course_attribute_value", avg_enrolled_course_attribute_value)
+
+  # Not enrolled courses attribute values
+  not_enrolled_course_attribute_values = []
+  dot_products = []
+  for course in not_enrolled_courses:
+    value = get_course_attribute_values(course)
+    not_enrolled_course_attribute_values.append(value)
+    dot_products.append(np.dot(value, avg_enrolled_course_attribute_value))
+  
+  print("not_enrolled_track_attribute_values", not_enrolled_course_attribute_values)
+  print("dot_products", dot_products)
+  NUM_RECOM = 2
+  max_dot = np.argmax(dot_products)
+  # max_dot = np.argpartition(dot_products, -NUM_RECOM)[-NUM_RECOM:]
+  dot_products[max_dot] = 1000
+  min_dot = np.argmin(dot_products)
+  print("max_dot", max_dot)
+  print("min_dot", min_dot)
+  similar_course = [not_enrolled_courses[max_dot]]
+  dissimilar_course = [not_enrolled_courses[min_dot]]
+  dissimilar_course = list(set(dissimilar_course) - set(similar_course))
+  print("similar_course", similar_course)
+  print("dissimilar_course", dissimilar_course)
+
+
+  similar_course_data = []
+  for course in similar_course:
+    similar_course_data.extend(
+          list({"id": output3.id, "name":output3.title, "des": output3.description, 
+          "progress":"0", "isRunning":"true", 
+          "header": "Similiar Course", "button": "Start",
+          "track_id": track_id}
+          for output3 in Course.objects.filter(id=course))
+      )
+  print("similar_course_data", similar_course_data)
+  dissimilar_course_data = []
+  for course in dissimilar_course:
+    dissimilar_course_data.extend(
+          list({"id": output4.id, "name":output4.title, "des": output4.description, 
+          "progress":"0", "isRunning":"true", 
+          "header": "Explore Course", "button": "Start",
+          "track_id": track_id}
+          for output4 in Course.objects.filter(id=course))
+      )
+  print("dissimilar_course_data", dissimilar_course_data)
+
+  # return Response({"similar_course": similar_course_data, "dissimilar_course": dissimilar_course_data})
+  # return Response({})
+  return Response(similar_course_data + dissimilar_course_data)
+
 
 @api_view(['GET'])
 def get_attribute_recommendation(request):
@@ -926,7 +1091,7 @@ def get_attribute_recommendation(request):
   print("not_enrolled_tracks", not_enrolled_tracks)
 
   if len(not_enrolled_tracks) == 0:
-    return Response({"message": "No tracks to recommend"})
+    return Response([{}])
 
   # return Response({})
 
@@ -954,13 +1119,47 @@ def get_attribute_recommendation(request):
   min_dot = np.argmin(dot_products)
   print("max_dot", max_dot)
   print("min_dot", min_dot)
-  similar_track = not_enrolled_tracks[max_dot]
-  dissimilar_track = not_enrolled_tracks[min_dot]
+  similar_track = [not_enrolled_tracks[max_dot]]
+  dissimilar_track = [not_enrolled_tracks[min_dot]]
+  dissimilar_track = list(set(dissimilar_track) - set(similar_track))
   print("similar_track", similar_track)
   print("dissimilar_track", dissimilar_track)
 
+  similar_track_data = []
+  for track in similar_track:
+    x = CareerTrack.objects.filter(id=track).values('id', 'title', 'description', 'intro_video__link')
+    print("x", x)
+    if len(x) > 0:
+      similar_track_data.append(
+            {"id": x[0]["id"],"title":x[0]["title"],"des":x[0]["description"], 
+            "link": x[0]["intro_video__link"]
+            }
+      )
   
-  return Response({})
+  dissimilar_track_data = []
+  for track in dissimilar_track:
+    dissimilar_track_data.extend(
+          list({"id": output5.id,"title":output5.title,"des":output5.description,
+          # "link": output4.video__link
+          }
+          for output5 in CareerTrack.objects.filter(id=track))
+        )
+  
+  print("similar_track_data", similar_track_data)
+  print("dissimilar_track_data", dissimilar_track_data)
+
+  
+  # return Response({
+  #   "similar_track": similar_track_data,
+  #   "dissimilar_track": dissimilar_track_data 
+  # })
+
+  if len(similar_track_data) == 0:
+    return Response([{}])
+  
+  print(similar_track_data[0])
+  
+  return Response(similar_track_data[0])
 
 @api_view(['GET'])
 def get_freeslot(request):

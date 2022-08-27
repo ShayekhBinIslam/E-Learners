@@ -59,6 +59,11 @@ const UserProfile = () =>{
         const name = e.target.name;
         setFormValues({ ...formValues, [name]: e.target.value });
     };
+    const navToEditProfile = () => {
+        <Navigate to="/editProfile/" replace={true} />
+        
+    };
+    
     const onSubmit = (e) => {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
@@ -152,11 +157,15 @@ const UserProfile = () =>{
 
                     </div>
                     <div className="col-md-2 mt-5">
+
                         <div >
-                            <button role="button" className="btn-right-mi" onClick={() => setShowRegisterForm(true)}>Edit Profile</button>
+                            <a  href={"/editProfile/"} className="btn-right-mi">
+                                Edit Profile
+                            </a>
+                            {/* <button role="button" className="btn-right-mi" onClick={navToEditProfile}>Edit Profile</button> */}
                         </div>
                         {console.log(showRegisterForm)}
-                        <Dialog
+                        {/* <Dialog
                             open={showRegisterForm}
                             
                             fullWidth
@@ -201,7 +210,7 @@ const UserProfile = () =>{
                                                 disableElevation
                                             >
                                                 Login
-                                            </Button> */}
+                                            </Button> 
                                             <button
                                                         
                                                 style={{ marginLeft: '15px' }}
@@ -211,17 +220,14 @@ const UserProfile = () =>{
                                                 disableElevation
                                                 className='btn-table'
                                             >submit
-                                            
-                                            {/* <a disableElevation href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
+
                                             </button>
-                                            {/* {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
-                                            {loginSuccess ? localStorage.setItem('user_name',userName) : '' }
-                                            {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' } */}
+
                                         </Grid>
                                     </Grid>
                                 </form>
                             </DialogContent>
-                        </Dialog>
+                        </Dialog> */}
 
                     </div>
 

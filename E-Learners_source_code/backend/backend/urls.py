@@ -44,6 +44,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('getTrackList/', views.get_tracks_list, name="TrackList"),
+    path('getNotificationList/', views.get_notification_list, name="NotificationList"),
     path('getCourseList/', views.get_course_list, name="CourseList"),
     path('getChapterList/', views.get_chapter_list, name="getChapterList"),
     path('getChapterListForQuiz/', views.get_chapter_list_for_quiz, name="getChapterListForQuiz"),
@@ -59,10 +60,14 @@ urlpatterns = [
     path('add_freeslot/', views.add_freeslot, name="add_freeslot"),
     path('get_freeslot/', views.get_freeslot, name="get_freeslot"),
     path('get_attribute_recommendation/', views.get_attribute_recommendation, name="get_attribute_recommendation"),
+    path('get_course_recommendation/', views.get_course_recommendation, name="get_course_recommendation"),
+    path('enroll_course/', views.enroll_course, name="enroll_course"),
     
 
-
     path('saveUserCourse/', views.save_user_course, name="saveUserCourse"),
+    path('addNotification/', views.addNotification, name="addNotification"),
+
+    
     
     path('getTutorialList/', views.get_tutorial_list, name="getTutorialList"),
     path('getDailyChallengeList/', views.get_daily_challenge_list, name="getDailyChallengeList"),
@@ -73,6 +78,9 @@ urlpatterns = [
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
     path("get_video/", views.get_videos, name="get_video"),
     path("save_video_progress/", views.save_video_progress, name="save_video_progress"),
+    path("save_notification/", views.save_notification, name="save_notification"),
+
+    
 
     #     path('showSingleStudent/<int:pk>/', views.showSingleStudent, name='show-single'),
     #     path('addStudent', views.addStudent, name='add-student'),
