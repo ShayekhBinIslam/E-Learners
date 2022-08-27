@@ -10,6 +10,7 @@ import axios from 'axios'
 import ReactPlayer from "react-player"
 // import { Navigate } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import { notification } from 'antd';
 
 // function RenderCompletedItem({ course }) {
 //   //console.log(course.image);
@@ -35,6 +36,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function UserDashboard(props) {
+  const key = 'updatable';
   const { trackid } = useParams();
   const [runningTrack, setRunningTrack] = useState([]);
   const [completedTrack, setCompletedTrack] = useState([]);
@@ -57,7 +59,8 @@ export default function UserDashboard(props) {
       sessionStorage.removeItem('reloadCount');
     }
     let data,userid;
-    userid = localStorage.getItem('user_id')
+    userid = localStorage.getItem('user_id');
+    
     console.log(userid)
     
     axios.get(`http://localhost:8000/getUserTrackRunning/?userid=${userid}`)
@@ -91,6 +94,22 @@ export default function UserDashboard(props) {
         setRecomData(data)
         console.log(data)
       })
+    //show notification
+    let username;
+    username = localStorage.getItem('user_name');
+    notification.open({
+      key,
+      message: `Hello ${username}`,
+      description: 'WELCOME TO THE Elearners Family.',
+    });
+  
+    setTimeout(() => {
+      notification.open({
+        key,
+        message: `Hello ${username}`,
+        description: 'WELCOME TO THE Elearners Family.',
+      });
+    }, 2000);
 
         
         
@@ -144,14 +163,14 @@ export default function UserDashboard(props) {
     // console.log(runningTrack)
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Running Tracks</div>
+        <div className="courseRecom-header">Completed Tracks</div>
 
         <div className="courseRecom-card-container">
           {running_track_content.running_tracks.map((out) => (
             <div className="courseRecomCard">
               <div className="CourseRecom-topText">{out.title}</div>
-              <div className="CourseRecom-title">{out.des}</div>
-              <div className="CourseRecom-bottomText">School Level</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.des}</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track
@@ -241,14 +260,14 @@ export default function UserDashboard(props) {
   function CompletedCard() {
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Completed Tracks</div>
+        <div className="courseRecom-header">Running Tracks</div>
 
         <div className="courseRecom-card-container">
           {completed_track_content.completed_tracks.map((out) => (
             <div className="courseRecomCard">
-              <div className="CourseRecom-topText">{out.title}</div>
-              <div className="CourseRecom-title">{out.des}</div>
-              <div className="CourseRecom-bottomText">School Level</div>
+              <div className="CourseRecom-topText">Active Learning</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.des}</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track

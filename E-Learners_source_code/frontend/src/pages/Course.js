@@ -739,7 +739,9 @@ export default function Course() {
                         // src={require("../assets/Home/profilephoto.jpg")}
                         src={"http://localhost:8000"+out.poster}
                       ></img>
+                      <div className="length-text">
                       <div className="CourseRecom-topText">{out.length}</div>
+                      </div>
                       <div className="courseRecom-btn">
                       <button className="playbtn"	
                         onClick={() => gotoVideoPage(out.order)}>	

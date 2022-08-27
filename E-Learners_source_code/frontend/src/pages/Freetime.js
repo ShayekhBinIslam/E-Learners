@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
+import "../styles/freetime.css";
 
 export default function Freetime() {
   const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
@@ -61,7 +62,9 @@ export default function Freetime() {
 
   return (
     <div>
-      
+      <div className="free_slots_list">
+        <h3>Free Slots</h3>
+        </div>
       {freeslot.map((out => 
       <div className="container">
         <div> {out.start_date} </div>
@@ -69,10 +72,10 @@ export default function Freetime() {
         </div>
       ))}
       
-      <h1> Enter Freetime: </h1>
+      <h3> Add Freetime: </h3>
       <div className="form-group">
         {/* Inpute date */}
-        <label for="start_date">Start</label>
+        <label className="start_date" for="start_date">Start</label>
         <input type="date" 
           name="start_date" 
           value={startDate}
@@ -86,7 +89,7 @@ export default function Freetime() {
           // onLoad={(e) => setStartDate(e.target.value)}
           onChange={(e) => setStartTime(e.target.value)}/>
 
-        <label for="end_date">End</label>
+        <label className="start_date" for="end_date">End</label>
         <input type="date" 
           name="end_date"
           value={endDate}

@@ -156,6 +156,11 @@ class FreeSlotSerializer(serializers.ModelSerializer):
     model = FreeSlot
     fields = ["user", "start_date", "end_date",] 
 
+class DailyChallengeSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = DailyChallenge
+    fields = ["user", "practice", "date"]
+
 class VideoSerializer(serializers.ModelSerializer):
   class Meta:
     model = Video
