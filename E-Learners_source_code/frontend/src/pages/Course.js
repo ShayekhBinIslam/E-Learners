@@ -25,20 +25,20 @@ let globalactiveMode = 1;
 
 let activeChapterid = 1;
 
-const courses = [
-  {
-    id: 0,
-    name: "FrontEnd Basics",
-    des: "This is Web FrontEnd Basics Course",
-  },
-  {
-    id: 1,
-    name: "Frontend Advance",
-    des: "This is Frontend Advance Course",
-  },
-  { id: 2, name: "React", des: "This is React Course" },
-  { id: 3, name: "Angular", des: "This is Angular Course" },
-];
+// const courses = [
+//   {
+//     id: 0,
+//     name: "FrontEnd Basics",
+//     des: "This is Web FrontEnd Basics Course",
+//   },
+//   {
+//     id: 1,
+//     name: "Frontend Advance",
+//     des: "This is Frontend Advance Course",
+//   },
+//   { id: 2, name: "React", des: "This is React Course" },
+//   { id: 3, name: "Angular", des: "This is Angular Course" },
+// ];
 
 const firstTrack = "Frontend Basics";
 const fistDes = "This is Frontend Basics Course";
