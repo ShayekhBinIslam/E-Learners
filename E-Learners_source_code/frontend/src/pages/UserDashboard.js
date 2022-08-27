@@ -8,6 +8,8 @@ import "../styles/UserDashboard.css"
 import { useEffect, useState } from "react";
 import axios from 'axios'
 import ReactPlayer from "react-player"
+// import { Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // function RenderCompletedItem({ course }) {
 //   //console.log(course.image);
@@ -270,6 +272,13 @@ export default function UserDashboard(props) {
       //   </div>
     );
   }
+
+  const navigate = useNavigate();
+
+  const navToUserProfile = () => {
+    // localStorage.setItem('user_name','');
+    navigate("/UserProfile/");
+  }
   return (
     <div className="dashboard-container">
       <div className="courseSidebar">
@@ -287,7 +296,7 @@ export default function UserDashboard(props) {
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Progress
           </div>
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={() => navToUserProfile()}>
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Profile
           </div>
