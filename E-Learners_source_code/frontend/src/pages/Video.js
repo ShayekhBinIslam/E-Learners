@@ -5,7 +5,24 @@ import { OutlinedInput } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import "../styles/video.css"
 
-export default function Course() {
+
+// //// for pdf popup
+// import { Viewer } from '@react-pdf-viewer/core';
+
+// // Plugins
+// import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+
+// // Import styles
+
+// import '@react-pdf-viewer/core/lib/styles/index.css';
+// import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+
+
+// import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page, pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+export default function Video() {
   const playerRef = React.useRef();
   const [played, setPlayed] = useState(0);
   const [video, setVideo] = useState("");
@@ -15,6 +32,29 @@ export default function Course() {
   const [description, setDescription] = useState(" ");
   const [chapter_title, setChapterTitle] = useState(" ");
   console.log(played)
+
+  // Create new plugin instance
+  // const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
+  const [numPages, setNumPages] = useState(null);
+	const [pageNumber, setPageNumber] = useState(1);
+
+	const onDocumentLoadSuccess = ({ numPages }) => {
+		setNumPages(numPages);
+	};
+
+	const goToPrevPage = () =>
+		setPageNumber(pageNumber - 1 <= 1 ? 1 : pageNumber - 1);
+
+	const goToNextPage = () =>
+		setPageNumber(
+			pageNumber + 1 >= numPages ? numPages : pageNumber + 1,
+		);
+
+
+
+
+
 
   useEffect ( () => {
     const chapterid = 1;
@@ -110,7 +150,26 @@ export default function Course() {
       
     
       <div className="videoPlayer">
+        {(video.endsWith("pdf")===true)? 
 
+        <div>
+			<nav>
+				<button onClick={goToPrevPage}>Prev</button>
+				<button onClick={goToNextPage}>Next</button>
+				<p>
+					Page {pageNumber} of {numPages}
+				</p>
+			</nav>
+
+			<Document
+				file={"http://localhost:8000/media/" + video}
+				onLoadSuccess={onDocumentLoadSuccess}
+			>
+				<Page pageNumber={pageNumber} />
+			</Document>
+		</div>
+        
+        :
         <ReactPlayer 
           // onProgress={}
           ref={playerRef}
@@ -127,6 +186,7 @@ export default function Course() {
           onProgress={onProgress}
           onReady={() => onReady(1)}
         />
+  }
 
 <div className="videobtn">
         <button className="prevVideobtn" onClick={prevVideo}> Previous </button>
