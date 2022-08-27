@@ -918,6 +918,19 @@ def get_track_attribute_values(track_id):
   print("track_attribute_value", track_attribute_value)
   return track_attribute_value
 
+
+@api_view(['POST'])
+def enroll_track(request):
+  print(request.data)
+  serializer = UserTrackSerializer2(data=request.data)
+  print("here")
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)  
+
+  return Response({"message": "success"})
+
+
 @api_view(['POST'])
 def enroll_course(request):
   print(request.data)

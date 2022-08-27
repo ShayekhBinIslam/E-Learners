@@ -145,6 +145,12 @@ class UserTrackSerializer(serializers.ModelSerializer):
     model = UserCareerTrack
     fields = ["user", "track", "join_date", "isEnrolled"]
 
+
+class UserTrackSerializer2(serializers.ModelSerializer):
+  class Meta:
+    model = UserCareerTrack
+    fields = ["user", "track"]
+
 class UserTutorialsSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserTutorials
