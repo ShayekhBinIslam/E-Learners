@@ -515,10 +515,16 @@ def get_course_list(request):
   output2 = []
   
   for i in output:
+    isRunning = False
+    x = UserCourse.objects.filter(user__id = request.GET.get('user_id', ''),course__id = i["id"])
+    if len(x) > 0:
+      isRunning = True
     output2.extend(
-        list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+        list({"id": output3.id, "name":output3.title, "des": output3.description, 
+        "progress":"0", "isRunning": isRunning}
         for output3 in Course.objects.filter(id = i["id"]))
     )
+  print(output2)
 
 
  # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
@@ -700,7 +706,7 @@ def get_tutorial_list(request):
           correct = correct+1
       
     practiceStatus.insert(c, 
-        round(correct*100/(len(questions)+0.02))
+      round(correct*100/(len(questions)+0.02))
     )
     c = c + 1
 
@@ -895,6 +901,85 @@ def get_track_attribute_values(track_id):
 
 
 @api_view(['GET'])
+def get_course_recommendation(request):
+  user_id = request.GET.get('user_id', '')
+  print("user_id", user_id)
+  track_id = request.GET.get('track_id', '')
+  print("track_id", track_id)
+  # course_id = request.GET.get('course_id', '')
+  # print("course_id", course_id)
+  # Get all courses in the track
+  all_course_ids = [x.id for x in Course.objects.filter(career_track=track_id)]
+  print("all_course_ids", all_course_ids)
+  # Get all courses that the user has enrolled in
+  enrolled_courses = [x.id for x in UserCourse.objects.filter(user_id=user_id)]
+  print("enrolled_courses", enrolled_courses)
+  # Get all courses that the user has not enrolled in
+  not_enrolled_courses = list(set(all_course_ids) - set(enrolled_courses))
+
+  if len(not_enrolled_courses) == 0:
+    return Response({"message": "No courses to recommend"})
+
+  print("not_enrolled_courses", not_enrolled_courses)
+  # Enrolled courses attribute values
+  enrolled_course_attribute_values = []
+  for course in enrolled_courses:
+    enrolled_course_attribute_values.append(get_course_attribute_values(course))
+  import numpy as np
+  avg_enrolled_course_attribute_value = np.mean(enrolled_course_attribute_values, axis=0)
+  print("avg_enrolled_course_attribute_value", avg_enrolled_course_attribute_value)
+
+  # Not enrolled courses attribute values
+  not_enrolled_course_attribute_values = []
+  dot_products = []
+  for course in not_enrolled_courses:
+    value = get_course_attribute_values(course)
+    not_enrolled_course_attribute_values.append(value)
+    dot_products.append(np.dot(value, avg_enrolled_course_attribute_value))
+  
+  print("not_enrolled_track_attribute_values", not_enrolled_course_attribute_values)
+  print("dot_products", dot_products)
+  NUM_RECOM = 2
+  max_dot = np.argmax(dot_products)
+  # max_dot = np.argpartition(dot_products, -NUM_RECOM)[-NUM_RECOM:]
+  dot_products[max_dot] = 1000
+  min_dot = np.argmin(dot_products)
+  print("max_dot", max_dot)
+  print("min_dot", min_dot)
+  similar_course = [not_enrolled_courses[max_dot]]
+  dissimilar_course = [not_enrolled_courses[min_dot]]
+  dissimilar_course = list(set(dissimilar_course) - set(similar_course))
+  print("similar_course", similar_course)
+  print("dissimilar_course", dissimilar_course)
+
+
+  similar_course_data = []
+  for course in similar_course:
+    similar_course_data.extend(
+          list({"id": output3.id, "name":output3.title, "des": output3.description, 
+          "progress":"0", "isRunning":"true", 
+          "header": "Recommendation", "button": "Start",
+          "track_id": track_id}
+          for output3 in Course.objects.filter(id=course))
+      )
+  print("similar_course_data", similar_course_data)
+  dissimilar_course_data = []
+  for course in dissimilar_course:
+    dissimilar_course_data.extend(
+          list({"id": output4.id, "name":output4.title, "des": output4.description, 
+          "progress":"0", "isRunning":"true", 
+          "header": "Recommendation", "button": "Start",
+          "track_id": track_id}
+          for output4 in Course.objects.filter(id=course))
+      )
+  print("dissimilar_course_data", dissimilar_course_data)
+
+  # return Response({"similar_course": similar_course_data, "dissimilar_course": dissimilar_course_data})
+  # return Response({})
+  return Response(similar_course_data + dissimilar_course_data)
+
+
+@api_view(['GET'])
 def get_attribute_recommendation(request):
   user_id = request.GET.get('user_id', '')
   print('User id is {}'.format(user_id))
@@ -935,13 +1020,34 @@ def get_attribute_recommendation(request):
   min_dot = np.argmin(dot_products)
   print("max_dot", max_dot)
   print("min_dot", min_dot)
-  similar_track = not_enrolled_tracks[max_dot]
-  dissimilar_track = not_enrolled_tracks[min_dot]
+  similar_track = [not_enrolled_tracks[max_dot]]
+  dissimilar_track = [not_enrolled_tracks[min_dot]]
+  dissimilar_track = list(set(dissimilar_track) - set(similar_track))
   print("similar_track", similar_track)
   print("dissimilar_track", dissimilar_track)
 
+  similar_track_data = []
+  for track in similar_track:
+    similar_track_data.extend(
+          list({"id": output4.id,"title":output4.title,"des":output4.description}
+          for output4 in CareerTrack.objects.filter(id=track))
+        )
   
-  return Response({})
+  dissimilar_track_data = []
+  for track in dissimilar_track:
+    dissimilar_track_data.extend(
+          list({"id": output5.id,"title":output5.title,"des":output5.description}
+          for output5 in CareerTrack.objects.filter(id=track))
+        )
+  
+  print("similar_track_data", similar_track_data)
+  print("dissimilar_track_data", dissimilar_track_data)
+
+  
+  return Response({
+    "similar_track": similar_track_data,
+    "dissimilar_track": dissimilar_track_data 
+  })
 
 @api_view(['GET'])
 def get_freeslot(request):

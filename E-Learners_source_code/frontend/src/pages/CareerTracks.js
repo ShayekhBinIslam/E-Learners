@@ -35,6 +35,14 @@ export default function CareerTracks() {
   const [video, setVideo] = useState();
   
   console.log(played)
+  const [recomlist, setRecomlist] = useState([{
+    id: 1,
+    header: "Active Learning",
+    title: "Card with HTML5",
+    type: "Power Play",
+    progress: "70",
+    button: "Continue",
+  }]);
 
 
   useEffect(() => {
@@ -42,7 +50,7 @@ export default function CareerTracks() {
     trackid = localStorage.getItem('active_track_id')
     userid = localStorage.getItem('user_id')
     console.log(trackid)
-    axios.get(`http://localhost:8000/getCourseList/?trackid=${trackid}`)
+    axios.get(`http://localhost:8000/getCourseList/?trackid=${trackid}&user_id=${localStorage.getItem('user_id')}`)
       .then(res=>{
         data = res.data;
         setTrackContent(
@@ -65,6 +73,14 @@ export default function CareerTracks() {
         // );
       })
       .catch(err=>{})
+    
+    // Get recommended courses
+    axios.get(`http://localhost:8000/get_course_recommendation/?user_id=${localStorage.getItem('user_id')}&track_id=${localStorage.getItem('active_track_id')}&course_id=${localStorage.getItem('courseid')}`)
+      .then(res=>{
+        data = res.data;
+        setRecomlist(data);
+        console.log(data)
+      })
       
       // setCourse(trackscontent.courses)
       // setTrackName(trackscontent.name)
@@ -83,7 +99,7 @@ export default function CareerTracks() {
     //   })
     //   .catch(err=>{})
 
-  }, [JSON.stringify(trackscontent)]);
+  }, [JSON.stringify(trackscontent), JSON.stringify(recomlist)]);
 
   // const course = [
   //   {
@@ -135,7 +151,7 @@ export default function CareerTracks() {
       title: "Card with HTML5",
       type: "Power Play",
       progress: "70",
-      button: "continue",
+      button: "Continue",
     },
     {
       id: 2,
@@ -143,7 +159,7 @@ export default function CareerTracks() {
       title: "Form with HTML5",
       type: "Power Play",
       progress: "0",
-      button: "start",
+      button: "Start",
     },
   ];
 
@@ -195,18 +211,19 @@ export default function CareerTracks() {
         <div className="courseRecom-header">Recommneded for you</div>
 
         <div className="courseRecom-card-container">
-          {recomList.map((out) => (
+          {recomlist.map((out) => (
+            
             <div className="courseRecomCard">
               <div className="CourseRecom-topText">{out.header}</div>
-              <div className="CourseRecom-title">{out.title}</div>
-              <div className="CourseRecom-bottomText">{out.type}</div>
+              <div className="CourseRecom-title">{out.name}</div>
+              {/* <div className="CourseRecom-bottomText">{out.type}</div> */}
               <div className="courseRecom-btn">
-                <a href="#" className="btn-right-mi">
+                <a href={"/CareerTracks/".concat(out.track_id).concat("/Course/").concat(out.id)} className="btn-right-mi">
                   {out.button}
                 </a>
               </div>
               <div className="progressRow-row">
-                <ProgressR done={out.progress} />
+                {/* <ProgressR done={out.progress} /> */}
               </div>
             </div>
           ))}
@@ -255,6 +272,11 @@ export default function CareerTracks() {
     );
   };
 
+  function enroll(course_id)
+  {
+    
+  }
+
   function CourseListEnrolled() {
     const set_courseid = (courseid) => {
       localStorage.setItem('courseid', courseid)
@@ -296,9 +318,15 @@ export default function CareerTracks() {
                         </div>
                     </div>
                     <div className="table-col">
-                      <a onClick={() => set_courseid(out.id)} href={"/CareerTracks/".concat(trackid.toString()).concat("/Course/").concat(out.id)} className="btn-table">
-                        Enter
-                      </a>
+                      
+                        {out.isRunning ? 
+                        <a onClick={() => set_courseid(out.id)} href={"/CareerTracks/".concat(trackid.toString()).concat("/Course/").concat(out.id)} className="btn-table">
+                        Enter </a>
+                        : 
+                        <a onClick={() => {set_courseid(out.id); enroll_course(out.id)}} href={"/CareerTracks/".concat(trackid.toString()).concat("/Course/").concat(out.id)} className="btn-table">
+                        Start </a>}
+                        {/* Enter */}
+                      
                     </div>
                   </div>
                 </div>
@@ -309,7 +337,7 @@ export default function CareerTracks() {
       );
     }
   }
-  const enroll = () => {
+  const enroll_course = () => {
     
   }
 

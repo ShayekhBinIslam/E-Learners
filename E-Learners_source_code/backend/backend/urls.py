@@ -56,6 +56,7 @@ urlpatterns = [
     path('add_freeslot/', views.add_freeslot, name="add_freeslot"),
     path('get_freeslot/', views.get_freeslot, name="get_freeslot"),
     path('get_attribute_recommendation/', views.get_attribute_recommendation, name="get_attribute_recommendation"),
+    path('get_course_recommendation/', views.get_course_recommendation, name="get_course_recommendation"),
     
 
 
