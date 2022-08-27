@@ -899,6 +899,18 @@ def get_track_attribute_values(track_id):
   print("track_attribute_value", track_attribute_value)
   return track_attribute_value
 
+@api_view(['POST'])
+def enroll_course(request):
+  print(request.data)
+
+  serializer = UserCourseSerializer2(data=request.data)
+  print("here")
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)  
+
+  return Response({"message": "success"})
+
 
 @api_view(['GET'])
 def get_course_recommendation(request):
@@ -912,13 +924,13 @@ def get_course_recommendation(request):
   all_course_ids = [x.id for x in Course.objects.filter(career_track=track_id)]
   print("all_course_ids", all_course_ids)
   # Get all courses that the user has enrolled in
-  enrolled_courses = [x.id for x in UserCourse.objects.filter(user_id=user_id)]
+  enrolled_courses = [x.course.id for x in UserCourse.objects.filter(user_id=user_id)]
   print("enrolled_courses", enrolled_courses)
   # Get all courses that the user has not enrolled in
   not_enrolled_courses = list(set(all_course_ids) - set(enrolled_courses))
 
   if len(not_enrolled_courses) == 0:
-    return Response({"message": "No courses to recommend"})
+    return Response([])
 
   print("not_enrolled_courses", not_enrolled_courses)
   # Enrolled courses attribute values
@@ -958,7 +970,7 @@ def get_course_recommendation(request):
     similar_course_data.extend(
           list({"id": output3.id, "name":output3.title, "des": output3.description, 
           "progress":"0", "isRunning":"true", 
-          "header": "Recommendation", "button": "Start",
+          "header": "Similiar Course", "button": "Start",
           "track_id": track_id}
           for output3 in Course.objects.filter(id=course))
       )
@@ -968,7 +980,7 @@ def get_course_recommendation(request):
     dissimilar_course_data.extend(
           list({"id": output4.id, "name":output4.title, "des": output4.description, 
           "progress":"0", "isRunning":"true", 
-          "header": "Recommendation", "button": "Start",
+          "header": "Explore Course", "button": "Start",
           "track_id": track_id}
           for output4 in Course.objects.filter(id=course))
       )
@@ -992,7 +1004,7 @@ def get_attribute_recommendation(request):
   print("not_enrolled_tracks", not_enrolled_tracks)
 
   if len(not_enrolled_tracks) == 0:
-    return Response({"message": "No tracks to recommend"})
+    return Response([{}])
 
   # return Response({})
 
@@ -1028,15 +1040,21 @@ def get_attribute_recommendation(request):
 
   similar_track_data = []
   for track in similar_track:
-    similar_track_data.extend(
-          list({"id": output4.id,"title":output4.title,"des":output4.description}
-          for output4 in CareerTrack.objects.filter(id=track))
-        )
+    x = CareerTrack.objects.filter(id=track).values('id', 'title', 'description', 'intro_video__link')
+    print("x", x)
+    if len(x) > 0:
+      similar_track_data.append(
+            {"id": x[0]["id"],"title":x[0]["title"],"des":x[0]["description"], 
+            "link": x[0]["intro_video__link"]
+            }
+      )
   
   dissimilar_track_data = []
   for track in dissimilar_track:
     dissimilar_track_data.extend(
-          list({"id": output5.id,"title":output5.title,"des":output5.description}
+          list({"id": output5.id,"title":output5.title,"des":output5.description,
+          # "link": output4.video__link
+          }
           for output5 in CareerTrack.objects.filter(id=track))
         )
   
@@ -1044,10 +1062,17 @@ def get_attribute_recommendation(request):
   print("dissimilar_track_data", dissimilar_track_data)
 
   
-  return Response({
-    "similar_track": similar_track_data,
-    "dissimilar_track": dissimilar_track_data 
-  })
+  # return Response({
+  #   "similar_track": similar_track_data,
+  #   "dissimilar_track": dissimilar_track_data 
+  # })
+
+  if len(similar_track_data) == 0:
+    return Response([{}])
+  
+  print(similar_track_data[0])
+  
+  return Response(similar_track_data[0])
 
 @api_view(['GET'])
 def get_freeslot(request):

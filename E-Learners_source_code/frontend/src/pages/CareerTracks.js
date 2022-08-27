@@ -218,7 +218,8 @@ export default function CareerTracks() {
               <div className="CourseRecom-title">{out.name}</div>
               {/* <div className="CourseRecom-bottomText">{out.type}</div> */}
               <div className="courseRecom-btn">
-                <a href={"/CareerTracks/".concat(out.track_id).concat("/Course/").concat(out.id)} className="btn-right-mi">
+                <a  onClick={() => {localStorage.setItem('courseid', out.id); enroll_course(out.id)}}
+                href={"/CareerTracks/".concat(out.track_id).concat("/Course/").concat(out.id)} className="btn-right-mi">
                   {out.button}
                 </a>
               </div>
@@ -337,8 +338,19 @@ export default function CareerTracks() {
       );
     }
   }
-  const enroll_course = () => {
-    
+  const enroll_course = (course_id) => {
+    let data;
+    axios.post('http://localhost:8000/enroll_course/', 
+        {'user': localStorage.getItem('user_id'), 
+        'course': course_id, 'status': 'R'})
+      .then(res=>{
+        data = res.data;
+        // this.setState({
+        //   details: data
+        // });
+      })
+      .catch(err=>{})
+       
   }
 
 
