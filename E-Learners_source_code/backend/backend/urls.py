@@ -60,8 +60,9 @@ urlpatterns = [
     path('add_freeslot/', views.add_freeslot, name="add_freeslot"),
     path('get_freeslot/', views.get_freeslot, name="get_freeslot"),
     path('get_attribute_recommendation/', views.get_attribute_recommendation, name="get_attribute_recommendation"),
+    path('get_course_recommendation/', views.get_course_recommendation, name="get_course_recommendation"),
+    path('enroll_course/', views.enroll_course, name="enroll_course"),
     
-
 
     path('saveUserCourse/', views.save_user_course, name="saveUserCourse"),
     path('addNotification/', views.addNotification, name="addNotification"),
@@ -69,7 +70,9 @@ urlpatterns = [
     
     
     path('getTutorialList/', views.get_tutorial_list, name="getTutorialList"),
+    path('getDailyChallengeList/', views.get_daily_challenge_list, name="getDailyChallengeList"),
     path('getQuiz/', views.get_Quiz, name="getQuiz"),
+    path('getPracticeScore/', views.get_practice_score, name="getPracticeScore"),
     path('saveQuestionStatus/', views.save_question_status, name="saveQuestionStatus"),
     path('getQuizStatus/', views.get_quiz_status, name="getQuizStatus"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),

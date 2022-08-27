@@ -6,7 +6,10 @@ import { TRACKS } from "../shared/tracks";
 import "../styles/Course.css";
 import "../styles/UserDashboard.css"
 import { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from 'axios'
+import ReactPlayer from "react-player"
+// import { Navigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { notification } from 'antd';
 
 // function RenderCompletedItem({ course }) {
@@ -37,6 +40,7 @@ export default function UserDashboard(props) {
   const { trackid } = useParams();
   const [runningTrack, setRunningTrack] = useState([]);
   const [completedTrack, setCompletedTrack] = useState([]);
+  const [recomData, setRecomData] = useState({});
   const [running_track_content, setRunningTrackContent] = useState({
     "running_tracks": [{"id":0,"title":"dfss","des":"sdfsdf"}]
   });
@@ -82,6 +86,14 @@ export default function UserDashboard(props) {
           data
         );
     console.log(completed_track_content)
+      
+    // let data
+    axios.get(`http://localhost:8000/get_attribute_recommendation/?user_id=${localStorage.getItem('user_id')}`)
+      .then(res=>{
+        data = res.data;
+        setRecomData(data)
+        console.log(data)
+      })
     //show notification
     let username;
     username = localStorage.getItem('user_name');
@@ -151,14 +163,14 @@ export default function UserDashboard(props) {
     // console.log(runningTrack)
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Running Tracks</div>
+        <div className="courseRecom-header">Completed Tracks</div>
 
         <div className="courseRecom-card-container">
           {running_track_content.running_tracks.map((out) => (
             <div className="courseRecomCard">
               <div className="CourseRecom-topText">{out.title}</div>
-              <div className="CourseRecom-title">{out.des}</div>
-              <div className="CourseRecom-bottomText">School Level</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.des}</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track
@@ -175,22 +187,29 @@ export default function UserDashboard(props) {
   }
 
   function SuggestionCard() {
-    return (
+    return ( 
+      <div>
+        {/* {recomData?  */}
       <div className="Suggestion-container">
+        
         <div className="Suggestion-Left">
           <div className="suggestion-header">
             We thought you might be interested to explore
           </div>
-          <div className="Suggestion-title">Animation in Web-Developement</div>
+          <div className="Suggestion-title">
+            {/* Animation in Web-Developement */}
+            {recomData.title}
+          </div>
           <div className="Suggestion-desc">
             {" "}
-            E-learners makes learning engaging & effective by leveraging deep
+            {/* E-learners makes learning engaging & effective by leveraging deep
             pedagogy & <br></br>
             cutting edge technology. With offerings ranging from adaptive
             self-learning <br></br>
             courses on apps & web to personalised 1-on-1 classes with expert
             teachers <br></br>
-            for ages 4-18+, we have programs for every learner.
+            for ages 4-18+, we have programs for every learner. */}
+            {recomData.des}
           </div>
           <div className="Suggestion-footer">
             Suggestion based on your achieved attributes
@@ -207,27 +226,48 @@ export default function UserDashboard(props) {
               <div className="CourseRecom-topText"></div>
               <div className="courseRecom-btn">
                 <a href="#" className="playbtn">
-                  <img src={require("../assets/card/playbtn.jpg")}></img>
+                  {/* <img src={require("../assets/card/playbtn.jpg")}></img>  */}
+                  {recomData.link? 
+                  <ReactPlayer 
+                    // onProgress={}
+                    width="400px"
+                    controls
+                    // url='https://www.youtube.com/watch?v=9nkR2LLPiYo'
+                    // url='../../../backend/media/video/22/video_file.mp4'
+                    // url="http://localhost:8000/media/video/22/video_file.mp4"
+                    
+                    url={"http://localhost:8000/media/" + recomData.link}
+                    // url={video}
+                    
+                    onProgress={(progress) => {
+                      // setPlayed(progress.playedSeconds);
+                      // console.log(progress);
+                    }}
+                  /> : ""}
                 </a>
               </div>
             </div>
           </div>
         </div>
+
+        
       </div>
+      </div>
+      
     );
   }
 
   function CompletedCard() {
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Completed Tracks</div>
+        <div className="courseRecom-header">Running Tracks</div>
 
         <div className="courseRecom-card-container">
           {completed_track_content.completed_tracks.map((out) => (
             <div className="courseRecomCard">
-              <div className="CourseRecom-topText">{out.title}</div>
-              <div className="CourseRecom-title">{out.des}</div>
-              <div className="CourseRecom-bottomText">School Level</div>
+              <div className="CourseRecom-topText">Active Learning</div>
+              <div className="CourseRecom-title">{out.title}</div>
+              <div className="CourseRecom-bottomText">{out.des}</div>
               <div className="courseRecom-btn">
                 <a href="#" className="btn-right-mi">
                   Visit Track
@@ -251,6 +291,13 @@ export default function UserDashboard(props) {
       //   </div>
     );
   }
+
+  const navigate = useNavigate();
+
+  const navToUserProfile = () => {
+    // localStorage.setItem('user_name','');
+    navigate("/UserProfile/");
+  }
   return (
     <div className="dashboard-container">
       <div className="courseSidebar">
@@ -268,14 +315,14 @@ export default function UserDashboard(props) {
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Progress
           </div>
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={() => navToUserProfile()}>
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Profile
           </div>
-          <div className="cousreSidebarMenuItem">
+          {/* <div className="cousreSidebarMenuItem">
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Attributes
-          </div>
+          </div> */}
         </div>
       </div>
 

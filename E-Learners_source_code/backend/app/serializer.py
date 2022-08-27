@@ -136,6 +136,14 @@ class UserCourseSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserCourse
     fields = ["user", "course", "active_tutorial", "active_practice","status"]
+
+
+class UserCourseSerializer2(serializers.ModelSerializer):
+  class Meta:
+    model = UserCourse
+    fields = ["user", "course", "status"]
+
+
 class UserTrackSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserCareerTrack
@@ -151,6 +159,11 @@ class FreeSlotSerializer(serializers.ModelSerializer):
   class Meta:
     model = FreeSlot
     fields = ["user", "start_date", "end_date",] 
+
+class DailyChallengeSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = DailyChallenge
+    fields = ["user", "practice", "date"]
 
 class VideoSerializer(serializers.ModelSerializer):
   class Meta:

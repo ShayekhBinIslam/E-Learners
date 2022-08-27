@@ -16,6 +16,7 @@ import Video from "./pages/Video";
 import Quiz from "./pages/Quiz";
 import Freetime from "./pages/Freetime";
 import Recom from "./pages/Recom";
+import CourseRecom from "./pages/CourseRecom";
 
 import Practice from "./pages/Practice";
 
@@ -26,6 +27,7 @@ import {
 } from "react-router-dom";
 import UserProfile from "./pages/UserProfile";
 import editProfile from "./pages/editProfile";
+import DailyChallenge from "./pages/DailyChallenge";
 
 // import {useEffct} from 'react';
 
@@ -48,10 +50,12 @@ function App() {
           <Route path="/CareerTracks/:trackid/Course/:courseid" element={<Course/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid/practice" element={<Practice/>}/>
           <Route path="/CareerTracks/:trackid/Course/:courseid/practice/:practiceid/mode/:mode" element={<Quiz/>}/>
+          <Route path="/CareerTracks/:trackid/Course/:courseid/DailyChallenge" element={<DailyChallenge/>}/>
 
           <Route path="/videos" element={<Video/>}/>
           <Route path="/freetime" element={<Freetime/>}/>
           <Route path="/recom" element={<Recom/>}/>
+          <Route path="/courseRecom" element={<CourseRecom/>}/>
           <Route path="/UserProfile/" element={<UserProfile/>}/>
           <Route path="/editProfile/" element={<editProfile/>}/>
         </Routes>

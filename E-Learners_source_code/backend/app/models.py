@@ -375,3 +375,9 @@ class QuizAnswer(models.Model):
   question = models.ForeignKey(QuizQuestion, on_delete=models.CASCADE)
   correct_option = models.ForeignKey(QuizOption, on_delete=models.CASCADE)
 
+
+class DailyChallenge(models.Model):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  practice = models.ForeignKey(Practice, on_delete=models.CASCADE)
+  date = models.DateField()
+  

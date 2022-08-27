@@ -1,5 +1,6 @@
 # from django.shortcuts import render
 from http.client import HTTPResponse
+from operator import le
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -600,10 +601,16 @@ def get_course_list(request):
   output2 = []
   
   for i in output:
+    isRunning = False
+    x = UserCourse.objects.filter(user__id = request.GET.get('user_id', ''),course__id = i["id"])
+    if len(x) > 0:
+      isRunning = True
     output2.extend(
-        list({"id": output3.id, "name":output3.title, "des": output3.description, "progress":"0", "isRunning":"true"}
+        list({"id": output3.id, "name":output3.title, "des": output3.description, 
+        "progress":"0", "isRunning": isRunning}
         for output3 in Course.objects.filter(id = i["id"]))
     )
+  print(output2)
 
 
  # "name": output.course_title, "des": "output.description", "progress":"0", "isRunning": "true"
@@ -719,7 +726,7 @@ def get_tutorial_list(request):
   import random
   output = [
     # output
-    {'id': output.id, 'title': output.title, 'poster': output.poster.url, 'order': output.order, 'progress': "30", 'length': "9 mins"}
+    {'id': output.id, 'title': output.title, 'poster': output.poster.url, 'order': output.order, 'progress': "30", 'length': str(output.video.duration)+" mins"}
     for output in Tutorial.objects.filter(chapter__id = chapterid)
   ]
   
@@ -785,7 +792,7 @@ def get_tutorial_list(request):
           correct = correct+1
       
     practiceStatus.insert(c, 
-        round(correct*100/(len(questions)+0.02))
+      round(correct*100/(len(questions)+0.02))
     )
     c = c + 1
 
@@ -822,7 +829,7 @@ def get_Quiz(request):
 
   questions = [
     # output
-    {'id': output.id, 'title': output.title}
+    {'id': output.id, 'title': output.title, 'poster': output.picture.url}
     for output in Question.objects.filter(practice__id = quizid)
   ]
 
@@ -880,6 +887,7 @@ def get_Quiz(request):
     Questions.append({
       "id": questions[i]["id"],
       "question": questions[i]["title"],
+      "poster": questions[i]["poster"],
       "qOptions": QOptionsSent[i],
       "qAnswers": QAnswerSent[i],
     })
@@ -978,6 +986,97 @@ def get_track_attribute_values(track_id):
   print("track_attribute_value", track_attribute_value)
   return track_attribute_value
 
+@api_view(['POST'])
+def enroll_course(request):
+  print(request.data)
+
+  serializer = UserCourseSerializer2(data=request.data)
+  print("here")
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)  
+
+  return Response({"message": "success"})
+
+
+@api_view(['GET'])
+def get_course_recommendation(request):
+  user_id = request.GET.get('user_id', '')
+  print("user_id", user_id)
+  track_id = request.GET.get('track_id', '')
+  print("track_id", track_id)
+  # course_id = request.GET.get('course_id', '')
+  # print("course_id", course_id)
+  # Get all courses in the track
+  all_course_ids = [x.id for x in Course.objects.filter(career_track=track_id)]
+  print("all_course_ids", all_course_ids)
+  # Get all courses that the user has enrolled in
+  enrolled_courses = [x.course.id for x in UserCourse.objects.filter(user_id=user_id)]
+  print("enrolled_courses", enrolled_courses)
+  # Get all courses that the user has not enrolled in
+  not_enrolled_courses = list(set(all_course_ids) - set(enrolled_courses))
+
+  if len(not_enrolled_courses) == 0:
+    return Response([])
+
+  print("not_enrolled_courses", not_enrolled_courses)
+  # Enrolled courses attribute values
+  enrolled_course_attribute_values = []
+  for course in enrolled_courses:
+    enrolled_course_attribute_values.append(get_course_attribute_values(course))
+  import numpy as np
+  avg_enrolled_course_attribute_value = np.mean(enrolled_course_attribute_values, axis=0)
+  print("avg_enrolled_course_attribute_value", avg_enrolled_course_attribute_value)
+
+  # Not enrolled courses attribute values
+  not_enrolled_course_attribute_values = []
+  dot_products = []
+  for course in not_enrolled_courses:
+    value = get_course_attribute_values(course)
+    not_enrolled_course_attribute_values.append(value)
+    dot_products.append(np.dot(value, avg_enrolled_course_attribute_value))
+  
+  print("not_enrolled_track_attribute_values", not_enrolled_course_attribute_values)
+  print("dot_products", dot_products)
+  NUM_RECOM = 2
+  max_dot = np.argmax(dot_products)
+  # max_dot = np.argpartition(dot_products, -NUM_RECOM)[-NUM_RECOM:]
+  dot_products[max_dot] = 1000
+  min_dot = np.argmin(dot_products)
+  print("max_dot", max_dot)
+  print("min_dot", min_dot)
+  similar_course = [not_enrolled_courses[max_dot]]
+  dissimilar_course = [not_enrolled_courses[min_dot]]
+  dissimilar_course = list(set(dissimilar_course) - set(similar_course))
+  print("similar_course", similar_course)
+  print("dissimilar_course", dissimilar_course)
+
+
+  similar_course_data = []
+  for course in similar_course:
+    similar_course_data.extend(
+          list({"id": output3.id, "name":output3.title, "des": output3.description, 
+          "progress":"0", "isRunning":"true", 
+          "header": "Similiar Course", "button": "Start",
+          "track_id": track_id}
+          for output3 in Course.objects.filter(id=course))
+      )
+  print("similar_course_data", similar_course_data)
+  dissimilar_course_data = []
+  for course in dissimilar_course:
+    dissimilar_course_data.extend(
+          list({"id": output4.id, "name":output4.title, "des": output4.description, 
+          "progress":"0", "isRunning":"true", 
+          "header": "Explore Course", "button": "Start",
+          "track_id": track_id}
+          for output4 in Course.objects.filter(id=course))
+      )
+  print("dissimilar_course_data", dissimilar_course_data)
+
+  # return Response({"similar_course": similar_course_data, "dissimilar_course": dissimilar_course_data})
+  # return Response({})
+  return Response(similar_course_data + dissimilar_course_data)
+
 
 @api_view(['GET'])
 def get_attribute_recommendation(request):
@@ -992,7 +1091,7 @@ def get_attribute_recommendation(request):
   print("not_enrolled_tracks", not_enrolled_tracks)
 
   if len(not_enrolled_tracks) == 0:
-    return Response({"message": "No tracks to recommend"})
+    return Response([{}])
 
   # return Response({})
 
@@ -1020,13 +1119,47 @@ def get_attribute_recommendation(request):
   min_dot = np.argmin(dot_products)
   print("max_dot", max_dot)
   print("min_dot", min_dot)
-  similar_track = not_enrolled_tracks[max_dot]
-  dissimilar_track = not_enrolled_tracks[min_dot]
+  similar_track = [not_enrolled_tracks[max_dot]]
+  dissimilar_track = [not_enrolled_tracks[min_dot]]
+  dissimilar_track = list(set(dissimilar_track) - set(similar_track))
   print("similar_track", similar_track)
   print("dissimilar_track", dissimilar_track)
 
+  similar_track_data = []
+  for track in similar_track:
+    x = CareerTrack.objects.filter(id=track).values('id', 'title', 'description', 'intro_video__link')
+    print("x", x)
+    if len(x) > 0:
+      similar_track_data.append(
+            {"id": x[0]["id"],"title":x[0]["title"],"des":x[0]["description"], 
+            "link": x[0]["intro_video__link"]
+            }
+      )
   
-  return Response({})
+  dissimilar_track_data = []
+  for track in dissimilar_track:
+    dissimilar_track_data.extend(
+          list({"id": output5.id,"title":output5.title,"des":output5.description,
+          # "link": output4.video__link
+          }
+          for output5 in CareerTrack.objects.filter(id=track))
+        )
+  
+  print("similar_track_data", similar_track_data)
+  print("dissimilar_track_data", dissimilar_track_data)
+
+  
+  # return Response({
+  #   "similar_track": similar_track_data,
+  #   "dissimilar_track": dissimilar_track_data 
+  # })
+
+  if len(similar_track_data) == 0:
+    return Response([{}])
+  
+  print(similar_track_data[0])
+  
+  return Response(similar_track_data[0])
 
 @api_view(['GET'])
 def get_freeslot(request):
@@ -1397,3 +1530,221 @@ def get_quiz_status(request):
   }
 
   return Response(quizResultContent)
+
+
+
+
+
+@api_view(['GET'])
+def get_practice_score(request):
+  practiceid = request.GET.get('practiceid', '')
+  userid = request.GET.get('userid', '')
+
+  score = calc_practice_score_corrects(practiceid, userid)
+  
+  return Response(score)
+
+
+# get practice score
+def calc_practice_score(practice_id, userid):
+
+    questions = [
+      {'id': output.id}
+      for output in Question.objects.filter(practice__id = practice_id)
+    ]
+
+    print("paisi questions")
+    # print(questions)
+
+    QStatus = []
+    cc = 0
+    for j in questions:
+      QStatus.insert(cc, 
+          list({"status":output3.status}
+          for output3 in UserQuestions.objects.filter(question = j["id"], user = userid))
+      )
+      cc = cc + 1
+    
+    print("paisi QStatus")
+    print(QStatus)
+
+    QAnswer = []
+  
+    for j in questions:
+      QAnswer.extend(
+          list({"id": output3.id, "optionid":output3.correct_option_id}
+          for output3 in Answer.objects.filter(question__id = j["id"]))
+      )
+    
+    QAnswername = []
+    for j in QAnswer:
+      QAnswername.extend(
+          list({"title":output3.title}
+          for output3 in Option.objects.filter(id = j["optionid"]))
+      )
+
+    print("paisi QAnswername")
+    print(QAnswername)
+    
+    correct = 0
+    print(QStatus)
+    print(QAnswername)
+    for j in range(len(QStatus)):
+      if len(QStatus[j]) > 0:
+        if (QStatus[j][0]["status"] == QAnswername[j]["title"]):
+          correct = correct+1
+      
+    
+    score = round(correct*100/(len(questions)+0.0001))
+    
+    print(score)
+
+    return score
+
+
+
+
+# get practice score 3/4 formate
+def calc_practice_score_corrects(practice_id, userid):
+
+    questions = [
+      {'id': output.id}
+      for output in Question.objects.filter(practice__id = practice_id)
+    ]
+
+    print("paisi questions")
+    # print(questions)
+
+    QStatus = []
+    cc = 0
+    for j in questions:
+      QStatus.insert(cc, 
+          list({"status":output3.status}
+          for output3 in UserQuestions.objects.filter(question = j["id"], user = userid))
+      )
+      cc = cc + 1
+    
+    print("paisi QStatus")
+    print(QStatus)
+
+    QAnswer = []
+  
+    for j in questions:
+      QAnswer.extend(
+          list({"id": output3.id, "optionid":output3.correct_option_id}
+          for output3 in Answer.objects.filter(question__id = j["id"]))
+      )
+    
+    QAnswername = []
+    for j in QAnswer:
+      QAnswername.extend(
+          list({"title":output3.title}
+          for output3 in Option.objects.filter(id = j["optionid"]))
+      )
+
+    print("paisi QAnswername")
+    print(QAnswername)
+    
+    correct = 0
+    print(QStatus)
+    print(QAnswername)
+    for j in range(len(QStatus)):
+      if len(QStatus[j]) > 0:
+        if (QStatus[j][0]["status"] == QAnswername[j]["title"]):
+          correct = correct+1
+      
+    
+    score = str(correct)+"/"+str(len(questions))
+    
+    print(score)
+
+    return score
+
+
+
+
+
+
+
+
+#daily challenge
+@api_view(['GET'])
+def get_daily_challenge_list(request):
+  courseid = request.GET.get('courseid', '')
+  userid = request.GET.get('userid', '')
+
+  from datetime import date
+  today = date.today()
+
+  daily_challenge_already_list = [
+    output.practice.id
+    for output in DailyChallenge.objects.filter(user = userid, date = today)
+  ]
+
+  if len(daily_challenge_already_list) == 0:
+    free_slot = [
+      {
+        'start_date': output.start_date, 'end_date': output.end_date
+      }
+      for output in FreeSlot.objects.filter(user = userid)
+    ]
+
+    isFree = False
+    for i in range(len(free_slot)):
+      s_d = free_slot[i]["start_date"].strftime("%Y-%m-%d")
+      e_d = free_slot[i]["end_date"].strftime("%Y-%m-%d")
+      y, m, d = [int(x) for x in s_d.split('-')]  
+      ye, me, de = [int(x) for x in e_d.split('-')]
+      start_date = date(y, m, d)
+      end_date = date(ye, me, de)
+
+      if start_date <= today <= end_date:
+        isFree = True
+        break
+
+    practice_count = 2
+    if isFree:
+      practice_count = 5
+    else:
+      practice_count = 2
+    
+
+    chapters = [
+      output.id
+      for output in Chapter.objects.filter(course__id = courseid)
+    ]
+
+    practiceList = []
+    daily_challenge_list = []
+    for i in range(len(chapters)):
+      practice = [
+        {'id': output.id, 'title': output.title, 'description': output.description, 'score': calc_practice_score(output.id, userid), 'level': output.level}
+        for output in Practice.objects.filter(chapter__id = chapters[i], type = "practice")
+      ]
+      practiceList += practice
+
+    count = 0
+    for i in range(len(practiceList)):
+      if practiceList[i]["score"] < 50:
+        daily_challenge_list.append(practiceList[i])
+        count = count + 1
+        if count >= practice_count:
+          break
+
+    for i in range(len(daily_challenge_list)):
+      DailyChallenge.objects.create(user = User.objects.get(id = userid), practice = Practice.objects.get(id = daily_challenge_list[i]["id"]), date = today)
+    
+    return Response(daily_challenge_list)
+
+  else:
+
+    daily_challenge_list = []
+    for i in range(len(daily_challenge_already_list)):
+      practice = [
+        {'id': output.id, 'title': output.title, 'description': output.description, 'score': calc_practice_score(output.id, userid), 'level': output.level}
+        for output in Practice.objects.filter(id=daily_challenge_already_list[i])
+      ]
+      daily_challenge_list += practice
+    return Response(daily_challenge_list)
+
+
