@@ -319,6 +319,10 @@ export default function UserDashboard(props) {
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Profile
           </div>
+          <div className="cousreSidebarMenuItem" onClick={() => navToUserProfile()}>
+            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            Free Time
+          </div>
           {/* <div className="cousreSidebarMenuItem">
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Attributes
