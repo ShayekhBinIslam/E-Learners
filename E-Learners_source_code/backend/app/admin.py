@@ -20,6 +20,7 @@ from .models import (
   Option,
   UserAttribute,
   UserCourse,
+  UserNotifications,
   UserPractice,
   UserQuestions,
   UserCareerTrack,
@@ -95,5 +96,5 @@ admin.site.register(PracticeAttribute)
 
 
 
-
+admin.site.register(UserNotifications)
 admin.site.register(UserCourse)

@@ -25,6 +25,7 @@ import {
   Route
 } from "react-router-dom";
 import UserProfile from "./pages/UserProfile";
+import editProfile from "./pages/editProfile";
 
 // import {useEffct} from 'react';
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="/freetime" element={<Freetime/>}/>
           <Route path="/recom" element={<Recom/>}/>
           <Route path="/UserProfile/" element={<UserProfile/>}/>
+          <Route path="/editProfile/" element={<editProfile/>}/>
         </Routes>
       </div>
       

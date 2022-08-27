@@ -6,6 +6,8 @@ import axios from 'axios';
 import { TRACKS } from '../../../shared/tracks'
 import 'antd/dist/antd.css';
 import { notification } from 'antd';
+import moment from "moment";
+
 
 import emailjs from '@emailjs/browser';
 import {
@@ -39,6 +41,7 @@ export default function () {
 
     //   const [regSuccess,setRegSuccess] = useState(false);
       const [userID,setUserID] = useState('');
+      const [userMail,setUserMail] = useState('');
       const [userName,setUserName] = useState('');
       const [userData, setUserData] = useState({});
       const runningID = runningTrack.id;
@@ -46,6 +49,8 @@ export default function () {
       const onSubmit = (e) => {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
+        let temp_mail;
+        temp_mail = data.get('email');
         const actualData = {
             name: data.get('name'),
             email: data.get('email'),
@@ -64,6 +69,7 @@ export default function () {
               setregSuccess(true);
               setUserID(response.data.id);
               setUserName(response.data.name);
+              setUserMail(temp_mail);
               
               //handle success
             //   console.log(response);
@@ -75,7 +81,7 @@ export default function () {
               setregSuccess(false);
             });
         //sending email
-        emailjs.sendForm('service_l2yzioj', 'template_9xhd26s', form.current, 'mBlaVkVpg91XLATti')
+        emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
             .then((result) => {
                 console.log(result.text);
             }, (error) => {
@@ -102,6 +108,8 @@ export default function () {
         
         e.preventDefault();
         const data = new FormData(e.currentTarget);
+        let temp_mail;
+        temp_mail = data.get("email");
         const actualData = {
             
             email: data.get('email'),
@@ -126,6 +134,7 @@ export default function () {
               setUserData(response.data); //setting user data
               setUserID(response.data.id);
               setUserName(response.data.name);
+              setUserMail(temp_mail);
             //   localStorage.setItem('user_id',userID.toString());
               console.log(userID);
               console.log(userName);
@@ -141,13 +150,46 @@ export default function () {
             //   localStorage.setItem('user_id',userID.toString());
             });
             //sending email
-        emailjs.sendForm('service_l2yzioj', 'template_9xhd26s', form.current, 'mBlaVkVpg91XLATti')
+        emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
             .then((result) => {
                 console.log(result.text);
             }, (error) => {
                 console.log(error.text);
             });
         e.target.reset();
+        ///---------------------posting db notifications-----------------///
+        // const notyData = new FormData(e.currentTarget);
+        
+        const actualNotyData = {
+            
+            title : "Login",
+            description : "You have logged in successfully to Elearners",
+            userid : localStorage.getItem('user_id'),
+            date : moment().format("YYYY-MM-DD HH:MM:SS"),
+            link : "/",
+            
+        }
+        // console.log(formValues);
+        axios({
+            method: "post",
+            url: "http://localhost:8000/addNotification/",
+            data: actualNotyData,
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+            .then(response => {
+            
+                
+              console.log("notification sent");
+              
+            })
+            .catch((error) => {
+              //handle error
+              console.log("is it printing something");
+              setloginAuth(false);
+            //   setloginSuccess(false);
+              console.log(error);
+            //   localStorage.setItem('user_id',userID.toString());
+            });
         //show notification
         notification.open({
             key,
@@ -292,6 +334,7 @@ export default function () {
                                         </button>
                                         {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
                                         {loginSuccess ? localStorage.setItem('user_name',userName) : '' }
+                                        {loginSuccess ? localStorage.setItem('user_mail',userMail) : '' }
                                         {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
                                         
                                         
@@ -387,6 +430,7 @@ export default function () {
                                         {/* {regSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' } */}
                                         {regSuccess ? localStorage.setItem('user_id',userID) : '' }
                                         {regSuccess ? localStorage.setItem('user_name',userName) : '' }
+                                        {regSuccess ? localStorage.setItem('user_mail',userMail) : '' }
                                     </Grid>
                                 </Grid>
                             </form>
