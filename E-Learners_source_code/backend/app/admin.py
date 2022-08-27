@@ -6,6 +6,7 @@ from .models import (
   Answer,
   CareerTrack,
   Chapter,
+  DailyChallenge,
   Option,
   Practice,
   Question,
@@ -18,7 +19,6 @@ from .models import (
   Practice,
   Question,
   Option,
-  UserAttribute,
   UserCourse,
   UserPractice,
   UserQuestions,
@@ -91,6 +91,8 @@ admin.site.register(Answer)
 admin.site.register(Attribute)
 admin.site.register(TutorialAttribute)
 admin.site.register(PracticeAttribute)
+
+admin.site.register(DailyChallenge)
 
 
 

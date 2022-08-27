@@ -65,6 +65,7 @@ urlpatterns = [
     path('saveUserCourse/', views.save_user_course, name="saveUserCourse"),
     
     path('getTutorialList/', views.get_tutorial_list, name="getTutorialList"),
+    path('getDailyChallengeList/', views.get_daily_challenge_list, name="getDailyChallengeList"),
     path('getQuiz/', views.get_Quiz, name="getQuiz"),
     path('saveQuestionStatus/', views.save_question_status, name="saveQuestionStatus"),
     path('getQuizStatus/', views.get_quiz_status, name="getQuizStatus"),

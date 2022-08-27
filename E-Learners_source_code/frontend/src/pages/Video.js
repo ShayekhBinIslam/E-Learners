@@ -217,26 +217,28 @@ export default function Course() {
             <div className="tutorials-grid">
             
               {tutorials.map((out) => (
-                <div className="tutorrialsCard">
-                  <div className="courseRecomCard">
+                <div className="tutorrialsCard2">
+                  <div className="courseRecomCard2">
                     <img
                       className="card_image"
                       // src={require("../assets/Home/profilephoto.jpg")}
                       src={"http://localhost:8000"+out.poster}
                     ></img>
+                    
                     <div className="CourseRecom-topText">{out.length}</div>
-                    <div className="courseRecom-btn">
-                      <button className="playbtn"
-                      onClick={() => gotoVideoPage(out.order)}>
+                    
+                    <div className="courseRecom-btn"> 
+                      <div className="playbtn2"
+                       onClick={() => gotoVideoPage(out.order)}>
                         <img
                           src={require("../assets/card/playbtn.jpg")}
                         ></img>
-                      </button>
+                      </div>
                     </div>
                     {/* <div className="progressRow-row">
                       <Progress done={out.progress} />
-                    </div> */}
-                  </div>
+                    </div>*/}
+              </div>
                   <div className="tutorialsName">{out.title}</div>
                 </div>
               ))}

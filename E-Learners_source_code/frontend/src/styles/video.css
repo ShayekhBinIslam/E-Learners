@@ -127,6 +127,6 @@
 
 .VideoPlaylist-Side{
     width: 30%;
-    background-color: rgba(114, 112, 250, 0.151);
-
+    background-color: rgba(0, 0, 0, 0.045);
+    height: 900px;
 }
