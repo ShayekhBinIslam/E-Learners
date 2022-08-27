@@ -755,7 +755,7 @@ def get_Quiz(request):
 
   questions = [
     # output
-    {'id': output.id, 'title': output.title}
+    {'id': output.id, 'title': output.title, 'poster': output.picture.url}
     for output in Question.objects.filter(practice__id = quizid)
   ]
 
@@ -813,6 +813,7 @@ def get_Quiz(request):
     Questions.append({
       "id": questions[i]["id"],
       "question": questions[i]["title"],
+      "poster": questions[i]["poster"],
       "qOptions": QOptionsSent[i],
       "qAnswers": QAnswerSent[i],
     })
@@ -1335,9 +1336,18 @@ def get_quiz_status(request):
 
 
 
+@api_view(['GET'])
+def get_practice_score(request):
+  practiceid = request.GET.get('practiceid', '')
+  userid = request.GET.get('userid', '')
+
+  score = calc_practice_score_corrects(practiceid, userid)
+  
+  return Response(score)
+
 
 # get practice score
-def get_practice_score(practice_id, userid):
+def calc_practice_score(practice_id, userid):
 
     questions = [
       {'id': output.id}
@@ -1386,12 +1396,70 @@ def get_practice_score(practice_id, userid):
           correct = correct+1
       
     
-    score = round(correct*100/(len(questions)+0.02))
+    score = round(correct*100/(len(questions)+0.0001))
     
     print(score)
 
     return score
 
+
+
+
+# get practice score 3/4 formate
+def calc_practice_score_corrects(practice_id, userid):
+
+    questions = [
+      {'id': output.id}
+      for output in Question.objects.filter(practice__id = practice_id)
+    ]
+
+    print("paisi questions")
+    # print(questions)
+
+    QStatus = []
+    cc = 0
+    for j in questions:
+      QStatus.insert(cc, 
+          list({"status":output3.status}
+          for output3 in UserQuestions.objects.filter(question = j["id"], user = userid))
+      )
+      cc = cc + 1
+    
+    print("paisi QStatus")
+    print(QStatus)
+
+    QAnswer = []
+  
+    for j in questions:
+      QAnswer.extend(
+          list({"id": output3.id, "optionid":output3.correct_option_id}
+          for output3 in Answer.objects.filter(question__id = j["id"]))
+      )
+    
+    QAnswername = []
+    for j in QAnswer:
+      QAnswername.extend(
+          list({"title":output3.title}
+          for output3 in Option.objects.filter(id = j["optionid"]))
+      )
+
+    print("paisi QAnswername")
+    print(QAnswername)
+    
+    correct = 0
+    print(QStatus)
+    print(QAnswername)
+    for j in range(len(QStatus)):
+      if len(QStatus[j]) > 0:
+        if (QStatus[j][0]["status"] == QAnswername[j]["title"]):
+          correct = correct+1
+      
+    
+    score = str(correct)+"/"+str(len(questions))
+    
+    print(score)
+
+    return score
 
 
 
@@ -1451,7 +1519,7 @@ def get_daily_challenge_list(request):
     daily_challenge_list = []
     for i in range(len(chapters)):
       practice = [
-        {'id': output.id, 'title': output.title, 'description': output.description, 'score': get_practice_score(output.id, userid), 'level': output.level}
+        {'id': output.id, 'title': output.title, 'description': output.description, 'score': calc_practice_score(output.id, userid), 'level': output.level}
         for output in Practice.objects.filter(chapter__id = chapters[i], type = "practice")
       ]
       practiceList += practice
@@ -1474,7 +1542,7 @@ def get_daily_challenge_list(request):
     daily_challenge_list = []
     for i in range(len(daily_challenge_already_list)):
       practice = [
-        {'id': output.id, 'title': output.title, 'description': output.description, 'score': get_practice_score(output.id, userid), 'level': output.level}
+        {'id': output.id, 'title': output.title, 'description': output.description, 'score': calc_practice_score(output.id, userid), 'level': output.level}
         for output in Practice.objects.filter(id=daily_challenge_already_list[i])
       ]
       daily_challenge_list += practice

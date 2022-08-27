@@ -333,7 +333,11 @@ export default function Quiz() {
           </div>
           <div className="QuizItemQA">
             <div className="QuizItemQuestion">
-              <div className="QuizItemQuestionImg"> </div>
+              <div className="QuizItemQuestionImg">
+
+                { (questions[currQues].poster==="/media/none.jpg") ? null : <img src={"http://localhost:8000"+questions[currQues].poster}></img>}
+                
+              </div>
               <div className="QuizItemQuestionText">
                 {questions[currQues].question}
               </div>
@@ -388,6 +392,7 @@ export default function Quiz() {
   function QuizEndContent() {
 
     const [isBack, setIsBack] = React.useState(false);
+    const [score, setScore] = React.useState(-1);
 
     const handleRetake = () => {
       localStorage.setItem("mode", 1);
@@ -409,6 +414,18 @@ export default function Quiz() {
       setActiveMode(3);
     };
 
+    useEffect(() => {
+      let data;
+
+      axios
+        .get(`http://localhost:8000/getPracticeScore/?practiceid=${practiceid}&userid=${localStorage.getItem("user_id")}`)
+        .then((res) => {
+          data = res.data;
+          setScore(data);
+        })
+        .catch((err) => {});
+    },[score]);
+
     if (activeMode === 2) {
       return (
         <div>
@@ -420,9 +437,10 @@ export default function Quiz() {
               </div>
               <div className="QuizEndHeaderScore">
                 {"Your score is "
-                  .concat(localStorage.getItem("quizscore"))
-                  .concat("/")
-                  .concat(totalQuestions)}
+                  .concat(score)
+                  // .concat("/")
+                  // .concat(totalQuestions)
+                  }
               </div>
             </div>
             <div className="QuizEndButton">

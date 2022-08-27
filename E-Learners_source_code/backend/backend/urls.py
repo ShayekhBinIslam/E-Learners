@@ -67,6 +67,7 @@ urlpatterns = [
     path('getTutorialList/', views.get_tutorial_list, name="getTutorialList"),
     path('getDailyChallengeList/', views.get_daily_challenge_list, name="getDailyChallengeList"),
     path('getQuiz/', views.get_Quiz, name="getQuiz"),
+    path('getPracticeScore/', views.get_practice_score, name="getPracticeScore"),
     path('saveQuestionStatus/', views.save_question_status, name="saveQuestionStatus"),
     path('getQuizStatus/', views.get_quiz_status, name="getQuizStatus"),
     #     path('showAllStudents', views.showAllStudents, name='show-all'),
