@@ -26,6 +26,7 @@ import {
   Route
 } from "react-router-dom";
 import UserProfile from "./pages/UserProfile";
+import editProfile from "./pages/editProfile";
 import DailyChallenge from "./pages/DailyChallenge";
 
 // import {useEffct} from 'react';
@@ -56,6 +57,7 @@ function App() {
           <Route path="/recom" element={<Recom/>}/>
           <Route path="/courseRecom" element={<CourseRecom/>}/>
           <Route path="/UserProfile/" element={<UserProfile/>}/>
+          <Route path="/editProfile/" element={<editProfile/>}/>
         </Routes>
       </div>
       

@@ -95,7 +95,51 @@
     /*transform: translateX(-45%);*/  
     transition: height var(--speed) ease;
   }
+  .dropdownNoty {
+    position: absolute;
+    top: 60px;
+    width: 30%;
+    left: 62%;
+    text-align: left;
+    /* margin-left: 2%; */
+  
 
+    font-family: "Poppins Regular";
+
+    box-shadow: 5px 5px 3px 2px #1111111f;
+    
+    /* background-color: #fff; */
+    background-image: linear-gradient(to left, #9500ffef, #AEBAF8);
+
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    overflow: hidden;
+    /*transform: translateX(-45%);*/  
+    transition: height var(--speed) ease;
+  }
+  
+  .notification-details{
+  margin-bottom: 10px;
+  width: 100%;
+  box-shadow:5px 5px 3px 2px #1111111f ;
+  text-decoration: none;
+  color: black;
+  margin-bottom: 40px;
+
+  /* background-color: rgba(0, 0, 0, 0.306); */
+
+  }
+  .notification-time{
+    /* margin-left: 200; */
+    font-size: 7px;
+    font-family:'Poppins Regular';
+    margin-bottom: 2px;
+
+  }
+ .notification-des{
+  font-size: 12px;
+  font-family:'Poppins Regular';
+ }
   .dropdown-course {
     position: absolute;
     top: 60px;
@@ -150,6 +194,16 @@
   .menu {
     width: 35%;
     padding-left: 20px;
+    padding-top: 5px;
+    background-color: #e3cdf359;
+    /* background-image: linear-gradient(to right, #9500ffef, #AEBAF8); */
+
+    font-size: 14px;
+    font-family: "Poppins SemiBold";
+  }
+  .menuNoty {
+    width: 98%;
+    padding-left: 5px;
     padding-top: 5px;
     background-color: #e3cdf359;
     /* background-image: linear-gradient(to right, #9500ffef, #AEBAF8); */
@@ -227,6 +281,34 @@
 }
 
 .btn-right-mi:hover {
+  box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+  transform: scale(1.07);
+}
+.btn-right-miNoty {
+  width: 100%;
+  margin-top: 2px;
+  
+  background-color: #c2fbd7;
+  /* border-radius: 5px; */
+  box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+  color: green;
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+  /* padding: 7px 20px; */
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  /* font-size: 16px; */
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  font-family: "Poppins SemiBold";
+
+}
+
+.btn-right-miNoty:hover {
   box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
   transform: scale(1.07);
 }

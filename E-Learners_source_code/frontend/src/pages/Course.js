@@ -15,6 +15,9 @@ import axios from "axios";
 import "../index.css";
 import "../styles/CareerTracks.css";
 
+
+
+
 //mode = 1 for CourseContent
 //mode = 2 for ChapterContent
 //mode = 3 for tutorialsContent
@@ -22,20 +25,20 @@ let globalactiveMode = 1;
 
 let activeChapterid = 1;
 
-const courses = [
-  {
-    id: 0,
-    name: "FrontEnd Basics",
-    des: "This is Web FrontEnd Basics Course",
-  },
-  {
-    id: 1,
-    name: "Frontend Advance",
-    des: "This is Frontend Advance Course",
-  },
-  { id: 2, name: "React", des: "This is React Course" },
-  { id: 3, name: "Angular", des: "This is Angular Course" },
-];
+// const courses = [
+//   {
+//     id: 0,
+//     name: "FrontEnd Basics",
+//     des: "This is Web FrontEnd Basics Course",
+//   },
+//   {
+//     id: 1,
+//     name: "Frontend Advance",
+//     des: "This is Frontend Advance Course",
+//   },
+//   { id: 2, name: "React", des: "This is React Course" },
+//   { id: 3, name: "Angular", des: "This is Angular Course" },
+// ];
 
 const firstTrack = "Frontend Basics";
 const fistDes = "This is Frontend Basics Course";
@@ -65,62 +68,7 @@ const chapterList = [
   },
 ];
 
-const tutorialsList = [
-  {
-    id: 1,
-    title: "Card with HTML5",
-    progress: "70",
-    length: "9 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-];
+
 
 const recomList = [
   {
@@ -141,24 +89,7 @@ const recomList = [
   },
 ];
 
-const recomChapterList = [
-  {
-    id: 1,
-    header: "Active Learning",
-    title: "Card with HTML5",
-    type: "Power Play",
-    progress: "70",
-    button: "continue",
-  },
-  {
-    id: 2,
-    header: "HTML",
-    title: "Practice",
-    type: "Test what you have learnt",
-    progress: "0",
-    button: "Practice Now",
-  },
-];
+
 
 export default function Course() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
@@ -357,6 +288,10 @@ export default function Course() {
     );
   }
 
+
+
+
+
   function CourseContent() {
     let isEnrolled = true;
 
@@ -444,29 +379,6 @@ export default function Course() {
 
         setActiveMode(2);
         
-
-          // fechTracks();
-          
-           
-          
-            
-            // setCourse(trackscontent.courses)
-            // setTrackName(trackscontent.name)
-            // setTrackDes(trackscontent.des)
-            // setVideo(trackscontent.video)
-          // let data;
-          
-      
-        
-        // axios({
-        //   method: "post",
-        //   url: "http://localhost:8000/saveUserCourse/",
-        //   data: userCourse,
-        // })
-        //   .then(function (response) {})
-        //   .catch(function (response) {
-        //     console.log(response);
-        //   });
 
         localStorage.setItem("chapter_id", chapter_id);
         console.log("Chapter id: " + chapter_id);
@@ -714,7 +626,7 @@ export default function Course() {
       }
 
       function gotoVideoPage(order){	
-        localStorage.setItem("videoOrder", 1);	
+        localStorage.setItem("videoOrder", order);	
         navigate(`/Videos`);	
        // console.log("video id", id);	
       }

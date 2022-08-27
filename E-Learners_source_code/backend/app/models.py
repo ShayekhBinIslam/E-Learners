@@ -1,4 +1,5 @@
 import datetime
+from statistics import mode
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
@@ -131,6 +132,9 @@ class Video(models.Model):
     super(Video, self).save(*args, **kwargs)
     from backend.settings import MEDIA_ROOT
     video_link = MEDIA_ROOT/str(self.link)
+
+    if str(video_link).endswith(".pdf"):
+      return
     from moviepy.editor import VideoFileClip
     clip = VideoFileClip(str(video_link))
     duration_seconds       = int(clip.duration)
@@ -156,7 +160,17 @@ class CareerTrack(models.Model):
   title = models.CharField(max_length=200)
   description = models.CharField(max_length=5000)
   intro_video = models.ForeignKey(Video, on_delete=models.SET_NULL, null=True,default="")
-
+#---------------------notifications---------------------
+class UserNotifications(models.Model):
+  '''
+  '''
+  title = models.CharField(max_length=200)
+  description = models.CharField(max_length=5000)
+  userid = models.CharField(max_length=200)
+  date = models.DateTimeField(default=datetime.datetime.now())
+  isread = models.BooleanField(default=False)
+  link = models.CharField(max_length=500)
+#--------------------notifications----------------------
 
 class Course(models.Model):
   # class YearInSchool(models.TextChoices):

@@ -20,6 +20,7 @@ from .models import (
   Question,
   Option,
   UserCourse,
+  UserNotifications,
   UserPractice,
   UserQuestions,
   UserCareerTrack,
@@ -97,5 +98,5 @@ admin.site.register(DailyChallenge)
 
 
 
-
+admin.site.register(UserNotifications)
 admin.site.register(UserCourse)

@@ -116,6 +116,10 @@ class CareerTrackSerializer(serializers.ModelSerializer):
   class Meta:
     model = CareerTrack
     fields = ["id", "name", "des"]
+class UserNotificationsSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserNotifications
+    fields = ["title", "description","userid","date","isread","link"]
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:

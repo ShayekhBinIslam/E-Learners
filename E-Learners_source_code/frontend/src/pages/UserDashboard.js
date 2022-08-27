@@ -218,19 +218,21 @@ export default function UserDashboard(props) {
 
         <div className="Suggestion-right">
           <div className="tutorrialsCard">
-            <div className="courseRecomCard">
-              <img
+            <div className="courseRecomCard33">
+              {/* <img
                 className="card_image"
                 src={require("../assets/Home/profilephoto.jpg")}
-              ></img>
+              ></img> */}
               <div className="CourseRecom-topText"></div>
-              <div className="courseRecom-btn">
-                <a href="#" className="playbtn">
+              <div className="react-player-ct">
+                <a href="#" className="playbtn22">
                   {/* <img src={require("../assets/card/playbtn.jpg")}></img>  */}
                   {recomData.link? 
                   <ReactPlayer 
                     // onProgress={}
-                    width="400px"
+                    width="380px"
+                    height="300px"
+                    className="react-player"
                     controls
                     // url='https://www.youtube.com/watch?v=9nkR2LLPiYo'
                     // url='../../../backend/media/video/22/video_file.mp4'
@@ -318,6 +320,10 @@ export default function UserDashboard(props) {
           <div className="cousreSidebarMenuItem" onClick={() => navToUserProfile()}>
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Profile
+          </div>
+          <div className="cousreSidebarMenuItem" onClick={() => navToUserProfile()}>
+            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            Free Time
           </div>
           {/* <div className="cousreSidebarMenuItem">
             <img src={require("../assets/Home/profilephoto.jpg")}></img>

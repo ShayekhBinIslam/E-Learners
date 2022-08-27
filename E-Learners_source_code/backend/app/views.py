@@ -177,6 +177,34 @@ def save_video_progress(request):
   
   return Response("Success")
 
+@api_view(["POST"])
+def save_notification(request):
+  noti_id = request.data.get('id')
+  userid = request.data.get('userid')
+
+  
+  
+  print("NotiID: ", noti_id)
+  print("userID: ", userid)
+
+
+  output = [
+    {'id': output.id,'userid' : output.userid}
+    # output
+    for output in UserNotifications.objects.filter(id = noti_id, userid = userid)
+  ]
+
+  print(output)
+
+  if len(output)>0:
+    UserNotifications.objects.filter(id=output[0]["id"],userid = output[0]["userid"]).update(isread=True)
+  else:
+    print("Serializing")
+    serializer = UserNotificationsSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+  
+  return Response("Success")
 
 @api_view(["GET"])
 def get_tracks_list(request):
@@ -189,6 +217,46 @@ def get_tracks_list(request):
   # print(request.GET.get('track', ''))
 
   return Response(output)
+@api_view(["GET"])
+def get_notification_list(request):
+  serializer_class = UserNotificationsSerializer
+  output = [
+      {"id": output.id, "title": output.title, "description": output.description,"userid" : output.userid, "date": output.date.strftime("%Y-%m-%d %H:%M:%S"),"isread":output.isread,"link":output.link}
+      for output in UserNotifications.objects.filter(isread = False)
+  ]
+
+  # print(request.GET.get('track', ''))
+
+  return Response(output)
+@api_view(["POST"])
+def addNotification(request):
+  title = request.data.get('title', '')
+  description = request.data.get('description', '')
+  date = request.data.get('date', '')
+  link = request.data.get('link', '')
+  userid = request.data.get('userid', '')
+  # serilizer = UserNotificationsSerializer(data=request.data)
+  data = {
+    'title': title,
+    'description': description,
+    'userid': userid,
+    'date' : date,
+    'isread' : False,
+    'link' : link,
+  }
+
+  
+  serializer =  UserNotificationsSerializer(data=data)
+  
+  if serializer.is_valid():
+    serializer.save()
+    print(data)
+    print("save hoyeche")
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+  print(data)
+  print("save hoyni")
+  
+  return Response(serializer.data)
 
 @api_view(["GET"])
 def get_user_details(request):
