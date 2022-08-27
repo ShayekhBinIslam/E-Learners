@@ -65,47 +65,57 @@ export default function Freetime() {
       <div className="free_slots_list">
         <h3>Free Slots</h3>
         </div>
+        <div className="free-time-container2">
+        <div className="start-added"> Start date </div>
+        <div className="end-added"> End Date </div>
+        </div>
       {freeslot.map((out => 
-      <div className="container">
-        <div> {out.start_date} </div>
-        <div> {out.end_date} </div>
+      <div className="free-time-container">
+        <div className="start-added"> {out.start_date} </div>
+        <div className="end-added"> {out.end_date} </div>
         </div>
       ))}
       
-      <h3> Add Freetime: </h3>
+      <h3 className="add-ft"> Add Freetime: </h3>
       <div className="form-group">
         {/* Inpute date */}
+        <div className="start-div-input">
         <label className="start_date" for="start_date">Start</label>
-        <input type="date" 
+        <input className="date-input" type="date" 
           name="start_date" 
           value={startDate}
           // onLoad={(e) => setStartDate(e.target.value)}
           onChange={(e) => setStartDate(e.target.value)}/>
         
         <label for="start_time"></label>
-        <input type="time" 
+        <input className="date-input" type="time" 
           name="start_time" 
           value={startTime}
           // onLoad={(e) => setStartDate(e.target.value)}
           onChange={(e) => setStartTime(e.target.value)}/>
 
+</div>
+        <div className="end-div-input">
         <label className="start_date" for="end_date">End</label>
-        <input type="date" 
+        <input className="date-input" type="date" 
           name="end_date"
           value={endDate}
           // onLoad={(e) => setStartDate(e.target.value)}
           onChange={(e) => setEndDate(e.target.value)}/>
         <label for="end_time"></label>
-        <input type="time" 
+        <input className="date-input" type="time" 
           name="end_time" 
           value={endTime}
           // onLoad={(e) => setStartDate(e.target.value)}
           onChange={(e) => setEndTime(e.target.value)}/>
+        </div>
 
-        <button type="submit" className="btn btn-primary" onClick={addFreeslot}>
-          Add Free Slot
-        </button>
+       
       </div>
+      <button className="date-input-btn" type="submit" onClick={addFreeslot}>
+          Add Free Slot
+      </button>
+      
     </div>
   );
 }
