@@ -8,6 +8,7 @@ import Card from '../components/Card';
 import RecommendationQuiz from '../components/RecommendationQuiz';
 import HomeFooter from '../HomeContainer/Footer/HomeFooter';
 import { useEffect } from 'react';
+// import { Redirect } from 'react-router';
 import { Navigate } from 'react-router-dom';
 
 function Home(){

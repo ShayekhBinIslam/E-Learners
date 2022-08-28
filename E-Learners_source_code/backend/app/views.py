@@ -990,6 +990,19 @@ def get_track_attribute_values(track_id):
   print("track_attribute_value", track_attribute_value)
   return track_attribute_value
 
+
+@api_view(['POST'])
+def enroll_track(request):
+  print(request.data)
+  serializer = UserTrackSerializer2(data=request.data)
+  print("here")
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)  
+
+  return Response({"message": "success"})
+
+
 @api_view(['POST'])
 def enroll_course(request):
   print(request.data)
@@ -1024,12 +1037,15 @@ def get_course_recommendation(request):
     return Response([])
 
   print("not_enrolled_courses", not_enrolled_courses)
+  import numpy as np
   # Enrolled courses attribute values
   enrolled_course_attribute_values = []
+  attributes = Attribute.objects.all()
   for course in enrolled_courses:
     enrolled_course_attribute_values.append(get_course_attribute_values(course))
-  import numpy as np
-  avg_enrolled_course_attribute_value = np.mean(enrolled_course_attribute_values, axis=0)
+  avg_enrolled_course_attribute_value = np.zeros((len(attributes),))
+  if len(enrolled_course_attribute_values) > 0:  
+    avg_enrolled_course_attribute_value = np.mean(enrolled_course_attribute_values, axis=0)
   print("avg_enrolled_course_attribute_value", avg_enrolled_course_attribute_value)
 
   # Not enrolled courses attribute values
@@ -1104,8 +1120,13 @@ def get_attribute_recommendation(request):
     value = get_track_attribute_values(current_track)
     enrolled_track_attribute_values.append(value)
   
+  attributes = Attribute.objects.all()
+  
   import numpy as np
-  avg_track_value = np.mean(enrolled_track_attribute_values, axis=0)  
+  if len(enrolled_track_attribute_values) == 0:
+    avg_track_value = np.zeros((len(attributes),))
+  else:
+    avg_track_value = np.mean(enrolled_track_attribute_values, axis=0)  
   print("enrolled_track_attribute_values", enrolled_track_attribute_values)
   print("avg_track_value", avg_track_value)
 
