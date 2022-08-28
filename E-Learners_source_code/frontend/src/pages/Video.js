@@ -224,10 +224,12 @@ export default function Video() {
     const [gotoQuizMode3, setGotoQuizMode3] = useState(false);
 
     useEffect(() => {
+
+      async function fetchData() {
       let data;
 
       console.log("chapter_id", chapter_id);
-      axios
+      await axios
         .get(
           `http://localhost:8000/getTutorialList/?chapterid=${chapter_id}&userid=${localStorage.getItem(
             "user_id"
@@ -241,13 +243,16 @@ export default function Video() {
         .catch((err) => {});
 
       console.log("tutorialsListEnroled", tutorials);
+      }
+      fetchData();
     }, [JSON.stringify(tutorials)]);
 
     var navigate = useNavigate();
 
     function gotoVideoPage(order) {
-      localStorage.setItem("videoOrder", 1);
-      navigate(`/Videos`);
+      localStorage.setItem("videoOrder", order);
+      // navigate(`/Videos`);
+      setVideoNum(order-1);
       // console.log("video id", id);
     }
 
@@ -259,7 +264,8 @@ export default function Video() {
           <div className="tutorials-grid">
             {tutorials.map((out) => (
               <div className="tutorrialsCard2">
-                <div className="courseRecomCard2">
+                <div className="courseRecomCard2"
+                onClick={() => gotoVideoPage(out.order)}>
                   <img
                     className="card_image"
                     // src={require("../assets/Home/profilephoto.jpg")}
@@ -271,7 +277,7 @@ export default function Video() {
                   <div className="courseRecom-btn">
                     <div
                       className="playbtn2"
-                      onClick={() => gotoVideoPage(out.order)}
+                      // onClick={() => gotoVideoPage(out.order)}
                     >
                       <img src={require("../assets/card/playbtn.jpg")}></img>
                     </div>
