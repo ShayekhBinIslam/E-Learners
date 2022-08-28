@@ -1033,12 +1033,14 @@ def get_course_recommendation(request):
     return Response([])
 
   print("not_enrolled_courses", not_enrolled_courses)
+  import numpy as np
   # Enrolled courses attribute values
   enrolled_course_attribute_values = []
   for course in enrolled_courses:
     enrolled_course_attribute_values.append(get_course_attribute_values(course))
-  import numpy as np
-  avg_enrolled_course_attribute_value = np.mean(enrolled_course_attribute_values, axis=0)
+  avg_enrolled_course_attribute_value = np.zeros((len(attributes),))
+  if len(enrolled_course_attribute_values) > 0:  
+    avg_enrolled_course_attribute_value = np.mean(enrolled_course_attribute_values, axis=0)
   print("avg_enrolled_course_attribute_value", avg_enrolled_course_attribute_value)
 
   # Not enrolled courses attribute values
@@ -1114,7 +1116,10 @@ def get_attribute_recommendation(request):
     enrolled_track_attribute_values.append(value)
   
   import numpy as np
-  avg_track_value = np.mean(enrolled_track_attribute_values, axis=0)  
+  if len(enrolled_track_attribute_values) == 0:
+    avg_track_value = np.zeros((len(attributes),))
+  else:
+    avg_track_value = np.mean(enrolled_track_attribute_values, axis=0)  
   print("enrolled_track_attribute_values", enrolled_track_attribute_values)
   print("avg_track_value", avg_track_value)
 

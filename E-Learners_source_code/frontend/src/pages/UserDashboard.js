@@ -171,10 +171,10 @@ export default function UserDashboard(props) {
               <div className="CourseRecom-topText">{out.title}</div>
               <div className="CourseRecom-title">{out.title}</div>
               <div className="CourseRecom-bottomText">{out.des}</div>
-              <div className="courseRecom-btn">
-                <a href="#" className="btn-right-mi">
+              <div className="courseRecom-btn" onClick={()=>gotoTrack(out.id)}>
+                <button className="btn-right-mi">
                   Visit Track
-                </a>
+                </button>
               </div>
               <div className="progressRow-row">
                 <Progress done={20} />
@@ -258,6 +258,11 @@ export default function UserDashboard(props) {
       
     );
   }
+  function gotoTrack(track_id)
+  {
+    localStorage.setItem('active_track_id', track_id)
+    navigate(`/CareerTracks/${track_id}/User/${localStorage.getItem('user_id')}`)
+  }
 
   function CompletedCard() {
     return (
@@ -270,10 +275,10 @@ export default function UserDashboard(props) {
               <div className="CourseRecom-topText">Active Learning</div>
               <div className="CourseRecom-title">{out.title}</div>
               <div className="CourseRecom-bottomText">{out.des}</div>
-              <div className="courseRecom-btn">
-                <a href="#" className="btn-right-mi">
+              <div className="courseRecom-btn" onClick={() => gotoTrack(out.id)}>
+                <button className="btn-right-mi">
                   Visit Track
-                </a>
+                </button>
               </div>
               <div className="progressRow-row">
                 <Progress done={0} />
@@ -300,6 +305,10 @@ export default function UserDashboard(props) {
     // localStorage.setItem('user_name','');
     navigate("/UserProfile/");
   }
+  const navToFreeTime = () => {
+    navigate("/Freetime/");
+  }
+
   return (
     <div className="dashboard-container">
       <div className="courseSidebar">
@@ -321,7 +330,7 @@ export default function UserDashboard(props) {
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Profile
           </div>
-          <div className="cousreSidebarMenuItem" onClick={() => navToUserProfile()}>
+          <div className="cousreSidebarMenuItem" onClick={() => navToFreeTime()}>
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Free Time
           </div>

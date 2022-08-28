@@ -34,10 +34,10 @@ export default function Freetime() {
     let formField = new FormData();
     formField.append("start_date", startDate);
     formField.append("end_date", endDate);
-    // formField.append('start_time', startTime)
-    // formField.append('end_time', endTime)
-    formField.append("start_time", "00:00");
-    formField.append("end_time", "00:00");
+    formField.append('start_time', startTime)
+    formField.append('end_time', endTime)
+    // formField.append("start_time", "00:00");
+    // formField.append("end_time", "00:00");
 
     formField.append("user_id", localStorage.getItem("user_id"));
     // formField.append('a', 'a');
@@ -59,15 +59,25 @@ export default function Freetime() {
     }).then((response) => {
       console.log(response.data);
       // history.push('/admins')
+      window.location.reload(); 
     });
   };
 
   const navigate = useNavigate();
 
+  const navToProgress = () =>
+  {
+    navigate("/UserDashboard/".concat(localStorage.getItem('user_id').toString()));
+  }
+
   const navToUserProfile = () => {
     // localStorage.setItem('user_name','');
     navigate("/UserProfile/");
   };
+
+  const navToFreeTime = () => {
+    navigate("/Freetime/");
+  }
 
   return (
     <div>
@@ -82,7 +92,7 @@ export default function Freetime() {
 
         <div className="courseSidebarSplit"></div>
         <div className="courseSidebarMenu">
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={navToProgress}>
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Progress
           </div>
@@ -93,7 +103,7 @@ export default function Freetime() {
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Profile
           </div>
-          <div className="cousreSidebarMenuItem-selected" onClick={() => navToUserProfile()}>
+          <div className="cousreSidebarMenuItem-selected" onClick={() => navToFreeTime()}>
             <img src={require("../assets/Home/profilephoto.jpg")}></img>
             Free Time
           </div>
