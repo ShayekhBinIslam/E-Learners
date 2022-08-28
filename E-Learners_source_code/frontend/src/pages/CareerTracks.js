@@ -220,9 +220,20 @@ export default function CareerTracks() {
     );
   };
 
-  function enroll(course_id)
-  {
-    
+  function enroll()
+  {  
+    let data;
+    axios.post('http://localhost:8000/enroll_track/',
+        {'user': localStorage.getItem('user_id'), 
+        'track': trackid})
+      .then(res=>{
+        data = res.data;
+        // this.setState({
+        //   details: data
+        // });
+      })
+      .catch(err=>{})
+
   }
 
   function CourseListEnrolled() {

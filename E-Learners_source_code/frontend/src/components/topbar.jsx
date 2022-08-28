@@ -96,7 +96,7 @@ export default function Topbar() {
     }
     let data;
     
-    axios.get('http://localhost:8000/getNotificationList/')
+    axios.get(`http://localhost:8000/getNotificationList/?userid=${localStorage.getItem('user_id')}`)
       .then(res=>{
         data = res.data;
         // setNotifications(
@@ -104,11 +104,13 @@ export default function Topbar() {
         // );
         console.log(data.length);
         setNotificationCount(data.length);
+        // localStorage.setItem('notificationCount',data.length);
+        // console.log(localStorage.getItem('notificationCount'));
       })
       .catch(err=>{})
       // console.log(notifications);
       // setMenuHeight(notifications.length*50+50);
-  }, []);
+  }, [JSON.stringify(notificationCount)]);
   const onSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -168,7 +170,7 @@ export default function Topbar() {
             description : "You have logged in successfully to Elearners",
             userid : localStorage.getItem('user_id'),
             date : moment().format("YYYY-MM-DD HH:MM:SS"),
-            link : "/",
+            link : "/UserDashboard/".concat(localStorage.getItem('user_id')),
             
         }
         // console.log(formValues);
@@ -216,6 +218,25 @@ export default function Topbar() {
   const navToHome = () => {
     localStorage.setItem('user_name','');
     localStorage.setItem('user_id','');
+
+
+  }
+  const getNotificationCount = () =>{
+    let data;
+    
+    axios.get(`http://localhost:8000/getNotificationList/?userid=${localStorage.getItem('user_id')}`)
+      .then(res=>{
+        data = res.data;
+        // setNotifications(
+        //   data
+        // );
+        console.log(data.length);
+        setNotificationCount(data.length);
+        // localStorage.setItem('notificationCount',data.length);
+        // console.log(localStorage.getItem('notificationCount'));
+      })
+      .catch(err=>{})
+
 
   }
   const navToUserProfile = () => {
@@ -321,13 +342,15 @@ export default function Topbar() {
           </Dialog>
           <div className="notificationDropdown-container">
             {localStorage.getItem('user_id') ? 
-            <div className="tracksDropdown-menu">
+            <div className="tracksDropdown-menu" onClick={getNotificationCount}>
+              {console.log("notiCount"+notificationCount)}
               <NavItemNoty icon={<Noty width={"30px"} color={"#122C34"} count={notificationCount} />} >
               
                 <DropdownMenuNoty></DropdownMenuNoty>
               </NavItemNoty>
             </div>
-            : ''}
+            :''}
+
           </div>
           <Link to="/UserProfile/" className="topbaricnos" style={{ textDecoration: 'none'}}>
             <Button className="topbaricnos" role='button' onClick={navToUserProfile}>
@@ -502,13 +525,15 @@ function DropdownMenuNoty() {
 
     let data;
     let trackid=1;
-    axios.get('http://localhost:8000/getNotificationList/')
+    axios.get(`http://localhost:8000/getNotificationList/?userid=${localStorage.getItem('user_id')}`)
+
       .then(res=>{
         data = res.data;
         setNotifications(
           data
         );
         console.log(data.length);
+        // localStorage.setItem('notificationCount',data.length);
         // setNotificationCount(data.length);
       })
       .catch(err=>{})
@@ -564,7 +589,8 @@ function DropdownMenuNoty() {
       </a>
     );
   }
-  const gotoLink= (notiID) =>{
+  const navigate = useNavigate();
+  const gotoLink= (notiID,link) =>{
     // var navigate = useNavigate();
     console.log("hello from gotolink");
     setIsClicked(true);
@@ -576,6 +602,11 @@ function DropdownMenuNoty() {
     axios.post('http://localhost:8000/save_notification/', { 'id': noti_id,'userid': userid})
       .then(res=>{
         data = res.data;
+        navigate(link);
+        // let temp_count = localStorage.getItem('notificationCount');
+        // localStorage.setItem('notificationCount',temp_count-1);
+
+
         // this.setState({
         //   details: data
         // });
@@ -600,13 +631,13 @@ function DropdownMenuNoty() {
               <div>
                 <DropdownItem goToMenu={out.id} name={out.title} des={out.description}>
                 {/* <a href="/" className="btn-right-miNoty"> */}
-                  <div className="notification-details"onClick={() => gotoLink(out.id)} >
+                  <div className="notification-details"onClick={() => gotoLink(out.id,out.link)} >
                     <div className="notification-title">{out.title}</div>
                     <div className="notification-time">{moment(out.date).fromNow()}</div>
                     <div className="notification-des">{out.description}</div>
                     {console.log(out.link)}
 
-                    {isclicked  ? <Navigate to={out.link} /> : '' }
+                    {/* {isclicked  ? <Navigate to={out.link} /> : '' } */}
 
                     {/* {isclicked ? <Navigate/>} */}
                     

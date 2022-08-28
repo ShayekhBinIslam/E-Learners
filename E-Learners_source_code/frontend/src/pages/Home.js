@@ -8,6 +8,8 @@ import Card from '../components/Card';
 import RecommendationQuiz from '../components/RecommendationQuiz';
 import HomeFooter from '../HomeContainer/Footer/HomeFooter';
 import { useEffect } from 'react';
+// import { Redirect } from 'react-router';
+import { Navigate } from 'react-router-dom';
 
 function Home(){
     const reloadCount= sessionStorage.getItem('reloadCount');
@@ -19,7 +21,14 @@ function Home(){
       sessionStorage.removeItem('reloadCount');
     }
   }, []);
-
+  // return <div className='home-container'>
+  //       <Profile/>
+  //       <Footer/>
+  //       <Card/>
+  //       <RecommendationQuiz/>
+  //       <HomeFooter/>
+  //   </div>;
+    if(!localStorage.getItem('user_id')){
     return <div className='home-container'>
         <Profile/>
         <Footer/>
@@ -27,6 +36,13 @@ function Home(){
         <RecommendationQuiz/>
         <HomeFooter/>
     </div>;
+    }
+    else {
+      return(
+      <Navigate to={"/UserDashboard/".concat(localStorage.getItem('user_id'))} replace={true} />)
+
+      // <Navigate to={"/UserDashboard/".concat(localStorage.getItem('user_id'))}/>
+     }
      
 }
 

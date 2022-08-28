@@ -1,4 +1,4 @@
-import React,{useState,useRef} from 'react'
+import React,{useState,useRef,useEffect} from 'react'
 import Typical from 'react-typical'
 import "../../../index.css"
 import "./Profile.css"
@@ -7,6 +7,9 @@ import { TRACKS } from '../../../shared/tracks'
 import 'antd/dist/antd.css';
 import { notification } from 'antd';
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 import emailjs from '@emailjs/browser';
@@ -40,11 +43,12 @@ export default function () {
       const [regSuccess,setregSuccess] = useState(false);
 
     //   const [regSuccess,setRegSuccess] = useState(false);
-      const [userID,setUserID] = useState('');
-      const [userMail,setUserMail] = useState('');
-      const [userName,setUserName] = useState('');
+    //   const [userID,setUserID] = useState('');
+    //   const [userMail,setUserMail] = useState('');
+    //   const [userName,setUserName] = useState('');
       const [userData, setUserData] = useState({});
       const runningID = runningTrack.id;
+      
       
       const onSubmit = (e) => {
         e.preventDefault();
@@ -67,9 +71,70 @@ export default function () {
           })
             .then(function (response) {
               setregSuccess(true);
-              setUserID(response.data.id);
-              setUserName(response.data.name);
-              setUserMail(temp_mail);
+              localStorage.setItem('user_id',response.data.id);
+              localStorage.setItem('user_name',response.data.name);
+              localStorage.setItem('user_mail',data.get("email"));
+              //sending email
+              emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
+              .then((result) => {
+                  console.log(result.text);
+              }, (error) => {
+                  console.log(error.text);
+              });
+          e.target.reset();
+          //show notification
+          notification.open({
+              key,
+              message: 'Successfully Registered',
+              description: 'WELCOME TO THE Elearners Family.',
+          });
+          
+          setTimeout(() => {
+              notification.open({
+              key,
+              message: 'Successfully Registered',
+              description: 'WELCOME TO THE Elearners Family.',
+              });
+          }, 2000);
+              const actualNotyData = {
+                
+                title : "Register",
+                description : "You have Registered in successfully to Elearners",
+                userid : localStorage.getItem('user_id'),
+                date : moment().format("YYYY-MM-DD HH:MM:SS"),
+            // navigate("/UserDashboard/".concat(localStorage.getItem('user_id')))
+
+                
+                link : "/UserDashboard/".concat(localStorage.getItem('user_id')),
+                
+            }
+            // console.log(formValues);
+            axios({
+                method: "post",
+                url: "http://localhost:8000/addNotification/",
+                data: actualNotyData,
+                headers: { "Content-Type": "multipart/form-data" },
+            })
+                .then(response => {
+                    // console.log("var"+userID);
+                    console.log("local"+localStorage.getItem('user_id'));
+                    setloginAuth(true);
+                    setloginSuccess(true);
+                    // console.log();
+                    console.log(response.status);
+                
+                    
+                    console.log("notification sent");
+                    navigate("/UserDashboard/".concat(localStorage.getItem('user_id')));
+
+                
+                })
+              
+            //   navigate("/UserDashboard/".concat(localStorage.getItem('user_id')));
+              
+            //   setUserID(response.data.id);
+            //   setUserName(response.data.name);
+            //   setUserMail(temp_mail);
               
               //handle success
             //   console.log(response);
@@ -80,31 +145,11 @@ export default function () {
               console.log(response);
               setregSuccess(false);
             });
-        //sending email
-        emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
-            .then((result) => {
-                console.log(result.text);
-            }, (error) => {
-                console.log(error.text);
-            });
-        e.target.reset();
-        //show notification
-        notification.open({
-            key,
-            message: 'Successfully Registered',
-            description: 'WELCOME TO THE Elearners Family.',
-          });
         
-          setTimeout(() => {
-            notification.open({
-              key,
-              message: 'Successfully Registered',
-              description: 'WELCOME TO THE Elearners Family.',
-            });
-          }, 2000);
 
       };
-      const onSubmit2 = (e) => {
+    const navigate = useNavigate();
+    const onSubmit2 = (e) => {
         
         e.preventDefault();
         const data = new FormData(e.currentTarget);
@@ -127,84 +172,106 @@ export default function () {
             
                 
               //handle success
-              setloginAuth(true);
-              setloginSuccess(true);
-              console.log(loginAuth);
-              console.log(response.status);
+              
+              console.log(response.data.id);
               setUserData(response.data); //setting user data
-              setUserID(response.data.id);
-              setUserName(response.data.name);
-              setUserMail(temp_mail);
+            //   setUserID(response.data.id);
+            //   console.log(userID);
+            //   setUserName(response.data.name);
+            //   setUserMail(temp_mail);
+              localStorage.setItem('user_id',response.data.id);
+              localStorage.setItem('user_name',response.data.name);
+              localStorage.setItem('user_mail',data.get("email"));
+            //   console.log("var"+userID);
+              console.log("local"+localStorage.getItem('user_id'));
             //   localStorage.setItem('user_id',userID.toString());
-              console.log(userID);
-              console.log(userName);
-              <Navigate to={"/UserDashboard/".concat(userID.toString())} replace={true} />
-              
-            })
-            .catch((error) => {
-              //handle error
-              console.log("is it printing something");
-              setloginAuth(false);
-            //   setloginSuccess(false);
-              console.log(error);
-            //   localStorage.setItem('user_id',userID.toString());
-            });
-            //sending email
-        emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
-            .then((result) => {
-                console.log(result.text);
-            }, (error) => {
-                console.log(error.text);
-            });
-        e.target.reset();
-        ///---------------------posting db notifications-----------------///
-        // const notyData = new FormData(e.currentTarget);
-        
-        const actualNotyData = {
-            
-            title : "Login",
-            description : "You have logged in successfully to Elearners",
-            userid : localStorage.getItem('user_id'),
-            date : moment().format("YYYY-MM-DD HH:MM:SS"),
-            link : "/",
-            
-        }
-        // console.log(formValues);
-        axios({
-            method: "post",
-            url: "http://localhost:8000/addNotification/",
-            data: actualNotyData,
-            headers: { "Content-Type": "multipart/form-data" },
-          })
-            .then(response => {
-            
-                
-              console.log("notification sent");
-              
-            })
-            .catch((error) => {
-              //handle error
-              console.log("is it printing something");
-              setloginAuth(false);
-            //   setloginSuccess(false);
-              console.log(error);
-            //   localStorage.setItem('user_id',userID.toString());
-            });
-        //show notification
-        notification.open({
-            key,
-            message: 'Successfully Logged in',
-            description: 'WELCOME TO THE Elearners Family.',
-          });
-        
-          setTimeout(() => {
+            //   console.log(userID);
+            //   console.log(userName);
+              //sending email
+                emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
+                .then((result) => {
+                    console.log(result.text);
+                }, (error) => {
+                    console.log(error.text);
+                });
+            e.target.reset();
+            //show notification
             notification.open({
-              key,
-              message: 'Successfully Logged in',
-              description: 'WELCOME TO THE Elearners Family.',
+                key,
+                message: 'Successfully Logged in',
+                description: 'WELCOME TO THE Elearners Family.',
             });
-          }, 2000);
+            
+            setTimeout(() => {
+                notification.open({
+                key,
+                message: 'Successfully Logged in',
+                description: 'WELCOME TO THE Elearners Family.',
+                });
+            }, 2000);
+            // setTimeout(2000);
+            ///---------------------posting db notifications-----------------///
+            // const notyData = new FormData(e.currentTarget);
+            console.log("userid :"+localStorage.getItem("user_id"));
+            const actualNotyData = {
+                
+                title : "Login",
+                description : "You have logged in successfully to Elearners",
+                userid : localStorage.getItem('user_id'),
+                date : moment().format("YYYY-MM-DD HH:MM:SS"),
+            // navigate("/UserDashboard/".concat(localStorage.getItem('user_id')))
 
+                
+                link : "/UserDashboard/".concat(localStorage.getItem('user_id')),
+                
+            }
+            // console.log(formValues);
+            axios({
+                method: "post",
+                url: "http://localhost:8000/addNotification/",
+                data: actualNotyData,
+                headers: { "Content-Type": "multipart/form-data" },
+            })
+                .then(response => {
+                    // console.log("var"+userID);
+                    console.log("local"+localStorage.getItem('user_id'));
+                    setloginAuth(true);
+                    setloginSuccess(true);
+                    console.log(loginAuth);
+                    console.log(response.status);
+                
+                    
+                    console.log("notification sent");
+                    navigate("/UserDashboard/".concat(localStorage.getItem('user_id')));
+                
+                })
+                .catch((error) => {
+                //handle error
+                console.log("is it printing something");
+                setloginAuth(false);
+                //   setloginSuccess(false);
+                console.log(error);
+                //   localStorage.setItem('user_id',userID.toString());
+                });
+            
+            // console.log("var"+userID);
+            console.log("local"+localStorage.getItem('user_id'));
+            
+            // navigate("/UserDashboard/".concat(localStorage.getItem('user_id')))
+           
+
+            //   <Navigate to={"/UserDashboard/".concat(userID.toString())} replace={true} />
+              
+            })
+            .catch((error) => {
+              //handle error
+              console.log("is it printing something");
+              setloginAuth(false);
+            //   setloginSuccess(false);
+              console.log(error);
+            //   localStorage.setItem('user_id',userID.toString());
+            });
+            
             // window.location.reload(true);
         
       };
@@ -332,10 +399,10 @@ export default function () {
                                         
                                         {/* <a disableElevation href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                         </button>
-                                        {loginSuccess ? localStorage.setItem('user_id',userID) : '' }
-                                        {loginSuccess ? localStorage.setItem('user_name',userName) : '' }
-                                        {loginSuccess ? localStorage.setItem('user_mail',userMail) : '' }
-                                        {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
+                                        {/* {loginSuccess ? localStorage.setItem('user_id',userID) : '' } */}
+                                        {/* {loginSuccess ? localStorage.setItem('user_name',userName) : '' } */}
+                                        {/* {loginSuccess ? localStorage.setItem('user_mail',userMail) : '' } */}
+                                        {/* {loginSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' } */}
                                         
                                         
 
@@ -425,12 +492,12 @@ export default function () {
                                             href={"/UserDashboard/".concat(runningID.toString())} onClick={submitForm}>Log in</a> */}
                                             Sign up
                                         </button>
-                                        {regSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' }
+                                        {/* {regSuccess ? <Navigate to={"/UserDashboard/".concat(localStorage.getItem('user_id'))} /> : '' } */}
 
                                         {/* {regSuccess ? <Navigate to={"/UserDashboard/".concat(userID.toString())} /> : '' } */}
-                                        {regSuccess ? localStorage.setItem('user_id',userID) : '' }
-                                        {regSuccess ? localStorage.setItem('user_name',userName) : '' }
-                                        {regSuccess ? localStorage.setItem('user_mail',userMail) : '' }
+                                        {/* {regSuccess ? localStorage.setItem('user_id',userID) : '' } */}
+                                        {/* {regSuccess ? localStorage.setItem('user_name',userName) : '' } */}
+                                        {/* {regSuccess ? localStorage.setItem('user_mail',userMail) : '' } */}
                                     </Grid>
                                 </Grid>
                             </form>
