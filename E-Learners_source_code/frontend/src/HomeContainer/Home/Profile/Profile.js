@@ -240,7 +240,6 @@ export default function () {
                     console.log(loginAuth);
                     console.log(response.status);
                 
-                    
                     console.log("notification sent");
                     navigate("/UserDashboard/".concat(localStorage.getItem('user_id')));
                 
@@ -381,9 +380,9 @@ export default function () {
                                     </Grid>
                                     
                                     <Grid item xs={12}>
-                                        <Button variant="contained" onClick={() => setShowLoginForm(false)} disableElevation>
+                                        <button className='btn-table' variant="contained" onClick={() => setShowLoginForm(false)} disableElevation>
                                             Close
-                                        </Button>
+                                        </button>
                                         
                                         {loginAuth ? '' : <span style={{ fontSize: 12, color: 'red', paddingLeft: 10 }}>Incorrect Password or Email</span> }    
                                         

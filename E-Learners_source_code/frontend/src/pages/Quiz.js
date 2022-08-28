@@ -432,6 +432,7 @@ export default function Quiz() {
           <div className="QuizEndContainerTop"></div>
           <div className="QuizEndContainer">
             <div className="QuizEndHeader">
+              <h3>Result</h3>
               <div className="QuizEndHeaderTitle">
                 {"You have completed the quiz"}
               </div>

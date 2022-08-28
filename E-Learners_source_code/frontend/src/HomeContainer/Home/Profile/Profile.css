@@ -8,6 +8,18 @@
     margin-top: 50px;
 }
 
+.login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #692c2c;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(128, 128, 128, 0.768);
+}
+
 .profile-parent{
     display: flex;
     align-items: center;
@@ -148,6 +160,7 @@
     .profile-options{
         display: flex;
         justify-content: space-between;
+
     }
 
     .profile-details{
