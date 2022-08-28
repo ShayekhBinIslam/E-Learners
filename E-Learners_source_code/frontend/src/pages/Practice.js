@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
+import { Navigate } from 'react-router-dom';
+
 import axios from "axios";
 
 //mode = 1 for CourseContent
@@ -48,6 +50,9 @@ export default function Practice() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
   const [trackscontent, setTrackscontent] = useState([]);
 
+  const [isgotoDL, setisGotoDL] = useState(false);
+  const [isgotoL, setisGotoL] = useState(false);
+
   useEffect(() => {
     let data, trackid, userid;
     trackid = 1;
@@ -62,6 +67,17 @@ export default function Practice() {
       })
       .catch((err) => {});
   }, [JSON.stringify(trackscontent.courses)]);
+
+
+  
+  function gotoDL(){
+    setisGotoDL(true);
+  }
+
+  function gotoL(){
+    setisGotoL(true);
+  }
+
 
   return (
     <div className="practice-container">
@@ -88,7 +104,7 @@ export default function Practice() {
         </div>
         <div className="courseSidebarSplit"></div>
         <div className="courseSidebarMenu">
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={gotoL}>
             <img src={require("../assets/icons/learn.webp")}></img>
             Learn
           </div>
@@ -96,12 +112,16 @@ export default function Practice() {
             <img src={require("../assets/icons/practice.webp")}></img>
             Practice
           </div>
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={gotoDL}>
             <img src={require("../assets/icons/challenge.png")}></img>
             Daily Challenge
           </div>
         </div>
       </div>
+      {/* { isgotoPractice ? <Navigate to={"./practice"} replace={true} />: null} */}
+      { isgotoDL ? <Navigate to={`/CareerTracks/${localStorage.getItem("active_track_id")}/Course/${localStorage.getItem("courseid")}/DailyChallenge`} replace={true} />: null}
+      { isgotoL ? <Navigate to={`/CareerTracks/${localStorage.getItem("active_track_id")}/Course/${localStorage.getItem("courseid")}`} replace={true} />: null}
+      
       <div className="courseContent">
         <PracticeContent />
       </div>

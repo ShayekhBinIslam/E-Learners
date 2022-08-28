@@ -84,6 +84,7 @@ export default function Course() {
 
   const [activeMode, setActiveMode] = useState(globalactiveMode);
   const [isgotoPractice, setisGotoPractive] = useState(false);
+  const [isgotoDL, setisGotoDL] = useState(false);
   const [recomPracticeList, setRecomPracticeList] = useState({
     "recompractice_list": [{"id":0,"title":"dfss","des":"sdfsdf","level":"begginner"}]
   });
@@ -221,6 +222,10 @@ export default function Course() {
     setisGotoPractive(true);
   }
 
+  function gotoDL(){
+    setisGotoDL(true);
+  }
+
   return (
     <div className="courseContainer">
       <div className="courseSidebar">
@@ -251,7 +256,7 @@ export default function Course() {
             <img src={require("../assets/icons/practice.webp")}></img>
             Practice
           </div>
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={gotoDL}>
             <img src={require("../assets/icons/challenge.png")}></img>
             Daily Challenge
           </div>
@@ -259,6 +264,7 @@ export default function Course() {
       </div>
       {/* bodyContent */}
       { isgotoPractice ? <Navigate to={"./practice"} replace={true} />: null}
+      { isgotoDL ? <Navigate to={"./DailyChallenge"} replace={true} />: null}
       <div className="courseContent">
         <CourseContent />
         <ChapterContent />

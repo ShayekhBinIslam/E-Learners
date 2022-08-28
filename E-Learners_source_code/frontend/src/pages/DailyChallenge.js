@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
+import { Navigate } from 'react-router-dom';
+
 import axios from "axios";
 
 //mode = 1 for CourseContent
@@ -28,6 +30,9 @@ export default function DailyChallenge() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
   const [trackscontent, setTrackscontent] = useState([]);
 
+  const [isgotoDL, setisGotoDL] = useState(false);
+  const [isgotoL, setisGotoL] = useState(false);
+
   useEffect(() => {
     let data, trackid, userid;
     trackid = 1;
@@ -42,6 +47,14 @@ export default function DailyChallenge() {
       })
       .catch((err) => {});
   }, [JSON.stringify(trackscontent.courses)]);
+
+  function gotoDL(){
+    setisGotoDL(true);
+  }
+
+  function gotoL(){
+    setisGotoL(true);
+  }
 
   return (
     <div className="practice-container">
@@ -68,11 +81,11 @@ export default function DailyChallenge() {
         </div>
         <div className="courseSidebarSplit"></div>
         <div className="courseSidebarMenu">
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={gotoL}>
             <img src={require("../assets/icons/learn.webp")}></img>
             Learn
           </div>
-          <div className="cousreSidebarMenuItem">
+          <div className="cousreSidebarMenuItem" onClick={gotoDL}>
             <img src={require("../assets/icons/practice.webp")}></img>
             Practice
           </div>
@@ -82,6 +95,9 @@ export default function DailyChallenge() {
           </div>
         </div>
       </div>
+      { isgotoDL ? <Navigate to={`/CareerTracks/${localStorage.getItem("active_track_id")}/Course/${localStorage.getItem("courseid")}/practice`} replace={true} />: null}
+      { isgotoL ? <Navigate to={`/CareerTracks/${localStorage.getItem("active_track_id")}/Course/${localStorage.getItem("courseid")}`} replace={true} />: null}
+      
       <div className="courseContent">
         <PracticeContent />
       </div>
@@ -383,7 +399,7 @@ export default function DailyChallenge() {
       console.log(path2);
 
       //navigate(path2);
-      navigate(`./practice/${id}/mode/1`);
+      navigate(`/CareerTracks/${localStorage.getItem("active_track_id")}/Course/${localStorage.getItem("courseid")}/practice/${id}/mode/1`);
       // <Navigate to={`./practice/${id}/mode/1`} replace={true} />
     }
 
@@ -391,7 +407,7 @@ export default function DailyChallenge() {
       localStorage.setItem("quizid", id);
 
       localStorage.setItem("mode", 3);
-      navigate(`./practice/${id}/mode/3`);
+      navigate(`/CareerTracks/${localStorage.getItem("active_track_id")}/Course/${localStorage.getItem("courseid")}/practice/${id}/mode/3`);
       // <Navigate to={`./practice/${id}/mode/3`} replace={true} />
     }
 
@@ -407,6 +423,7 @@ export default function DailyChallenge() {
           <div className="course-table-course">
             <div>
               <div>
+              <div className="nothing">h</div>
                 <div className="progressRow">
                   <div className="table-row-course">
                     <div className="table-col">
@@ -416,6 +433,7 @@ export default function DailyChallenge() {
                         </div>
                       </div>
                     </div>
+                    
                     <div className="table-col">
                       <div className="name">Today's Challenge</div>
                       <div className="des">Complete your today's tasks</div>
@@ -445,7 +463,7 @@ export default function DailyChallenge() {
               {practices.map((out, index) => (
                 <div>
                   <div>
-                    <div className="progressRow2">
+                    <div className="progressRow2-2">
                       <div className="table-row-course">
                         <div className="table-col">
                           {/* <div className="id">{out.id}</div> */}
@@ -497,6 +515,7 @@ export default function DailyChallenge() {
                   </div>
                 </div>
               ))}
+              
               {/* { isgotoPractice ? <Navigate to={"./practice"} replace={true} />: null} */}
             </div>
           </div>
