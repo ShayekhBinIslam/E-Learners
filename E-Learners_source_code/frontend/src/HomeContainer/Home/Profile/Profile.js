@@ -74,6 +74,28 @@ export default function () {
               localStorage.setItem('user_id',response.data.id);
               localStorage.setItem('user_name',response.data.name);
               localStorage.setItem('user_mail',data.get("email"));
+              //sending email
+              emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
+              .then((result) => {
+                  console.log(result.text);
+              }, (error) => {
+                  console.log(error.text);
+              });
+          e.target.reset();
+          //show notification
+          notification.open({
+              key,
+              message: 'Successfully Registered',
+              description: 'WELCOME TO THE Elearners Family.',
+          });
+          
+          setTimeout(() => {
+              notification.open({
+              key,
+              message: 'Successfully Registered',
+              description: 'WELCOME TO THE Elearners Family.',
+              });
+          }, 2000);
               const actualNotyData = {
                 
                 title : "Register",
@@ -98,7 +120,7 @@ export default function () {
                     console.log("local"+localStorage.getItem('user_id'));
                     setloginAuth(true);
                     setloginSuccess(true);
-                    console.log(loginAuth);
+                    // console.log();
                     console.log(response.status);
                 
                     
@@ -107,28 +129,7 @@ export default function () {
 
                 
                 })
-              //sending email
-                emailjs.sendForm('service_l2yzioj', 'template_wqqt95m', form.current, 'mBlaVkVpg91XLATti')
-                .then((result) => {
-                    console.log(result.text);
-                }, (error) => {
-                    console.log(error.text);
-                });
-            e.target.reset();
-            //show notification
-            notification.open({
-                key,
-                message: 'Successfully Registered',
-                description: 'WELCOME TO THE Elearners Family.',
-            });
-            
-            setTimeout(() => {
-                notification.open({
-                key,
-                message: 'Successfully Registered',
-                description: 'WELCOME TO THE Elearners Family.',
-                });
-            }, 2000);
+              
             //   navigate("/UserDashboard/".concat(localStorage.getItem('user_id')));
               
             //   setUserID(response.data.id);
@@ -194,6 +195,20 @@ export default function () {
                     console.log(error.text);
                 });
             e.target.reset();
+            //show notification
+            notification.open({
+                key,
+                message: 'Successfully Logged in',
+                description: 'WELCOME TO THE Elearners Family.',
+            });
+            
+            setTimeout(() => {
+                notification.open({
+                key,
+                message: 'Successfully Logged in',
+                description: 'WELCOME TO THE Elearners Family.',
+                });
+            }, 2000);
             // setTimeout(2000);
             ///---------------------posting db notifications-----------------///
             // const notyData = new FormData(e.currentTarget);
@@ -238,20 +253,7 @@ export default function () {
                 console.log(error);
                 //   localStorage.setItem('user_id',userID.toString());
                 });
-            //show notification
-            notification.open({
-                key,
-                message: 'Successfully Logged in',
-                description: 'WELCOME TO THE Elearners Family.',
-            });
             
-            setTimeout(() => {
-                notification.open({
-                key,
-                message: 'Successfully Logged in',
-                description: 'WELCOME TO THE Elearners Family.',
-                });
-            }, 2000);
             // console.log("var"+userID);
             console.log("local"+localStorage.getItem('user_id'));
             
