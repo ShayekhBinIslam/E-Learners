@@ -24,7 +24,7 @@ export default function Video() {
   const playerRef = React.useRef();
   const [played, setPlayed] = useState(0);
   const [video, setVideo] = useState("");
-  const [videoNum, setVideoNum] = useState(0);
+  const [videoNum, setVideoNum] = useState(parseInt(localStorage.getItem("videoOrder")));
   const [tutorial, setTutorial] = useState();
   const [title, setTitle] = useState(" ");
   const [description, setDescription] = useState(" ");
@@ -191,7 +191,7 @@ export default function Video() {
                 Previous{" "}
               </button>
               <p>
-                    Tutorials {videoNum+1}
+                    Tutorials {parseInt(videoNum)+1}
                   </p>
               <button className="nextVideobtn" onClick={nextVideo}>
                 {" "}

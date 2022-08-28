@@ -51,6 +51,8 @@ class UserLoginView(APIView):
     email = serializer.data.get('email')
     password = serializer.data.get('password')
     user = authenticate(email=email, password=password)
+    print("in login")
+    print(user.pk)
     if user is not None:
       token = get_tokens_for_user(user)
       return Response({'token':token,'name':user.name,'msg':'Login Success','id': user.pk}, status=status.HTTP_200_OK)
@@ -219,10 +221,11 @@ def get_tracks_list(request):
   return Response(output)
 @api_view(["GET"])
 def get_notification_list(request):
+  useridd = request.GET.get('userid', '')
   serializer_class = UserNotificationsSerializer
   output = [
       {"id": output.id, "title": output.title, "description": output.description,"userid" : output.userid, "date": output.date.strftime("%Y-%m-%d %H:%M:%S"),"isread":output.isread,"link":output.link}
-      for output in UserNotifications.objects.filter(isread = False)
+      for output in UserNotifications.objects.filter(isread = False,userid =useridd )
   ]
 
   # print(request.GET.get('track', ''))
@@ -235,6 +238,7 @@ def addNotification(request):
   date = request.data.get('date', '')
   link = request.data.get('link', '')
   userid = request.data.get('userid', '')
+  
   # serilizer = UserNotificationsSerializer(data=request.data)
   data = {
     'title': title,

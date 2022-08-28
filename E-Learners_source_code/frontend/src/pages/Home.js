@@ -21,21 +21,28 @@ function Home(){
       sessionStorage.removeItem('reloadCount');
     }
   }, []);
-  
-
-    if (localStorage.getItem('user_id'))
-    {
-      return (<Navigate to={"/UserDashboard/".concat(localStorage.getItem('user_id'))} />);
-    }
-    else 
-    return (
-    <div className='home-container'>
+  // return <div className='home-container'>
+  //       <Profile/>
+  //       <Footer/>
+  //       <Card/>
+  //       <RecommendationQuiz/>
+  //       <HomeFooter/>
+  //   </div>;
+    if(!localStorage.getItem('user_id')){
+    return <div className='home-container'>
         <Profile/>
         <Footer/>
         <Card/>
         <RecommendationQuiz/>
         <HomeFooter/>
-    </div>);
+    </div>;
+    }
+    else {
+      return(
+      <Navigate to={"/UserDashboard/".concat(localStorage.getItem('user_id'))} replace={true} />)
+
+      // <Navigate to={"/UserDashboard/".concat(localStorage.getItem('user_id'))}/>
+     }
      
 }
 
