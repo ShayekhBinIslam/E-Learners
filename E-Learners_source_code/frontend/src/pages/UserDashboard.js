@@ -163,14 +163,14 @@ export default function UserDashboard(props) {
     // console.log(runningTrack)
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Completed Tracks</div>
+        <div className="courseRecom-header">Running Tracks</div>
 
         <div className="courseRecom-card-container">
-          {running_track_content.running_tracks.map((out) => (
+          {running_track_content.running_tracks.slice(0, 1).map((out) => (
             <div className="courseRecomCard">
               <div className="CourseRecom-topText">{out.title}</div>
               <div className="CourseRecom-title">{out.title}</div>
-              <div className="CourseRecom-bottomText">{out.des}</div>
+              <div className="CourseRecom-bottomText">Continue your running track</div>
               <div className="courseRecom-btn" onClick={()=>gotoTrack(out.id)}>
                 <button className="btn-right-mi">
                   Visit Track
@@ -272,10 +272,10 @@ export default function UserDashboard(props) {
   function CompletedCard() {
     return (
       <div className="courseRecom-container">
-        <div className="courseRecom-header">Running Tracks</div>
+        <div className="courseRecom-header">Completed Tracks</div>
 
         <div className="courseRecom-card-container">
-          {completed_track_content.completed_tracks.map((out) => (
+          {completed_track_content.completed_tracks.slice(0, 1).map((out) => (
             <div className="courseRecomCard">
               <div className="CourseRecom-topText">Active Learning</div>
               <div className="CourseRecom-title">{out.title}</div>
