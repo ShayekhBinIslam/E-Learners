@@ -1040,6 +1040,7 @@ def get_course_recommendation(request):
   import numpy as np
   # Enrolled courses attribute values
   enrolled_course_attribute_values = []
+  attributes = Attribute.objects.all()
   for course in enrolled_courses:
     enrolled_course_attribute_values.append(get_course_attribute_values(course))
   avg_enrolled_course_attribute_value = np.zeros((len(attributes),))
@@ -1118,6 +1119,8 @@ def get_attribute_recommendation(request):
   for current_track in enrolled_tracks_ids:
     value = get_track_attribute_values(current_track)
     enrolled_track_attribute_values.append(value)
+  
+  attributes = Attribute.objects.all()
   
   import numpy as np
   if len(enrolled_track_attribute_values) == 0:
