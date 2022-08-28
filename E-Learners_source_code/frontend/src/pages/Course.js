@@ -15,6 +15,9 @@ import axios from "axios";
 import "../index.css";
 import "../styles/CareerTracks.css";
 
+
+
+
 //mode = 1 for CourseContent
 //mode = 2 for ChapterContent
 //mode = 3 for tutorialsContent
@@ -22,27 +25,13 @@ let globalactiveMode = 1;
 
 let activeChapterid = 1;
 
-const courses = [
-  {
-    id: 0,
-    name: "FrontEnd Basics",
-    des: "This is Web FrontEnd Basics Course",
-  },
-  {
-    id: 1,
-    name: "Frontend Advance",
-    des: "This is Frontend Advance Course",
-  },
-  { id: 2, name: "React", des: "This is React Course" },
-  { id: 3, name: "Angular", des: "This is Angular Course" },
-];
 
 const firstTrack = "Frontend Basics";
 const fistDes = "This is Frontend Basics Course";
 const trackid = 1;
 
 const trackname = "Web Development";
-const coursename = "FrontEnd Basics";
+// const coursename = "FrontEnd Basics";
 
 const chapterList = [
   {
@@ -65,62 +54,7 @@ const chapterList = [
   },
 ];
 
-const tutorialsList = [
-  {
-    id: 1,
-    title: "Card with HTML5",
-    progress: "70",
-    length: "9 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-  {
-    id: 2,
-    title: "Form with HTML5",
-    progress: "0",
-    length: "19 mins",
-  },
-];
+
 
 const recomList = [
   {
@@ -141,24 +75,7 @@ const recomList = [
   },
 ];
 
-const recomChapterList = [
-  {
-    id: 1,
-    header: "Active Learning",
-    title: "Card with HTML5",
-    type: "Power Play",
-    progress: "70",
-    button: "continue",
-  },
-  {
-    id: 2,
-    header: "HTML",
-    title: "Practice",
-    type: "Test what you have learnt",
-    progress: "0",
-    button: "Practice Now",
-  },
-];
+
 
 export default function Course() {
   const [activeMode, setActiveMode] = useState(globalactiveMode);
@@ -169,17 +86,59 @@ export default function Course() {
   const [recomTutorialList, setRecomTutorialList] = useState({
     "recomtutorial_list": [{"id":0,"title":"dfss","des":"sdfsdf","level":"begginner","progress":"0"}]
   });
-  
-  useEffect(() => {
 
-    // fechTracks();
-    let data,trackid,userid,courseid,chapterid;
+  const [coursename,  setCourseName] = useState(firstTrack);
+
+  const [courses, setCourses] = useState([{
+    id: 0,
+    name: "FrontEnd Basics",
+    des: "This is Web FrontEnd Basics Course",
+  },]);
+
+  const [trackscontent, setTrackscontent] = useState([]);
+
+
+
+  useEffect(() => {
+    
+    
+    async function fetchData1() {
+    let data;
+
+    var trackid = localStorage.getItem("active_track_id");
+    var userid = localStorage.getItem("user_id");
+    console.log(trackid);
+    await axios
+      .get(`http://localhost:8000/getCourseList/?trackid=${trackid}&user_id=${localStorage.getItem('user_id')}`)
+      .then((res) => {
+        data = res.data;
+        setTrackscontent(data);
+      })
+      .catch((err) => {});
+
+      setCourses(trackscontent.courses);
+      console.log("courses lala :", courses);
+      
+      if(trackscontent.courses !== 'undefined'){
+        for(var i=0; i<trackscontent.courses?.length || 0; i++){
+          if(trackscontent.courses[i].id === localStorage.getItem("courseid")){
+              setCourseName(trackscontent.courses[i].name);
+          }
+        }
+      }
+
+
+    }
+
+    async function fetchData2() {
+
+    let data, trackid, userid, courseid,chapterid;
     trackid = localStorage.getItem('active_track_id')
     userid = localStorage.getItem('user_id')
     courseid = localStorage.getItem('courseid')
     chapterid = localStorage.getItem('chapter_id')
     console.log(trackid)
-    axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}&chapterid=${chapterid}`)
+    await axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}&chapterid=${chapterid}`)
       .then(res=>{
         data = res.data;
         setRecomPracticeList(
@@ -199,17 +158,52 @@ export default function Course() {
         );
       })
       .catch(err=>{})
-     
     
-      
-      // setCourse(trackscontent.courses)
-      // setTrackName(trackscontent.name)
-      // setTrackDes(trackscontent.des)
-      // setVideo(trackscontent.video)
-    // let data;
-    
+      console.log("recomPracticeList lala lala",data)
+    }
 
-  }, []);
+    fetchData1();
+    fetchData2();
+
+    }, [JSON.stringify(trackscontent), JSON.stringify(recomPracticeList), JSON.stringify(recomTutorialList)]);
+
+
+
+
+  // useEffect(() => {
+
+  //   // fechTracks();
+  //   let data,trackid,userid,courseid,chapterid;
+  //   trackid = localStorage.getItem('active_track_id')
+  //   userid = localStorage.getItem('user_id')
+  //   courseid = localStorage.getItem('courseid')
+  //   chapterid = localStorage.getItem('chapter_id')
+  //   console.log(trackid)
+  //   axios.get(`http://localhost:8000/getRecomPracticeList/?userid=${userid}&courseid=${courseid}&chapterid=${chapterid}`)
+  //     .then(res=>{
+  //       data = res.data;
+  //       setRecomPracticeList(
+  //         data
+  //       );
+  //     })
+  //     .catch(err=>{})
+  //   // recom tutorial
+  //   userid = localStorage.getItem('user_id')
+  //   courseid = localStorage.getItem('courseid')
+  //   chapterid = localStorage.getItem('chapter_id')
+  //   axios.get(`http://localhost:8000/getRecomTutorialList/?userid=${userid}&courseid=${courseid}&chapterid=${chapterid}`)
+  //     .then(res=>{
+  //       data = res.data;
+  //       setRecomTutorialList(
+  //         data
+  //       );
+  //     })
+  //     .catch(err=>{})
+    
+  //     console.log("recomPracticeList",data)
+   
+
+  // }, []);
   
   
   
@@ -272,7 +266,7 @@ export default function Course() {
   function NavItem(props) {
     const [open, setOpen] = useState(false);
 
-    return (
+        return (
       <li className="nav-item">
         <a href="#" className="icon-button" onClick={() => setOpen(!open)}>
           {props.icon}
@@ -289,6 +283,7 @@ export default function Course() {
     const [activeDes, setActiveDes] = useState(fistDes);
     const [menuHeight, setMenuHeight] = useState(null);
     const dropdownRef = useRef(null);
+
 
     useEffect(() => {
       setMenuHeight(courses.length * 50 + 50);
@@ -357,13 +352,17 @@ export default function Course() {
     );
   }
 
+
+
+
+
   function CourseContent() {
     let isEnrolled = true;
 
     const { courseid } = useParams();
 
-    let CourseName = courses[courseid].name;
-    let CourseDes = courses[courseid].des;
+    // let CourseName = courses[courseid].name;
+    // let CourseDes = courses[courseid].des;
 
     let buttonName = "Start";
     if (isEnrolled) {
@@ -445,29 +444,6 @@ export default function Course() {
         setActiveMode(2);
         
 
-          // fechTracks();
-          
-           
-          
-            
-            // setCourse(trackscontent.courses)
-            // setTrackName(trackscontent.name)
-            // setTrackDes(trackscontent.des)
-            // setVideo(trackscontent.video)
-          // let data;
-          
-      
-        
-        // axios({
-        //   method: "post",
-        //   url: "http://localhost:8000/saveUserCourse/",
-        //   data: userCourse,
-        // })
-        //   .then(function (response) {})
-        //   .catch(function (response) {
-        //     console.log(response);
-        //   });
-
         localStorage.setItem("chapter_id", chapter_id);
         console.log("Chapter id: " + chapter_id);
       }
@@ -475,6 +451,7 @@ export default function Course() {
       const [chapters, setChapters] = useState([]);
       console.log(localStorage.getItem("user_id"));
       const { courseid } = useParams();
+      localStorage.setItem("courseid", courseid);
 
       useEffect(() => {
         
@@ -552,7 +529,7 @@ export default function Course() {
     let isEnrolled = true;
 
     let ChpaterName = chapterList[activeChapterid].name;
-    let ChapterDes = courses[activeChapterid].des;
+    let ChapterDes = chapterList[activeChapterid].des;
 
     let buttonName = "Start";
     if (isEnrolled) {
@@ -714,7 +691,7 @@ export default function Course() {
       }
 
       function gotoVideoPage(order){	
-        localStorage.setItem("videoOrder", 1);	
+        localStorage.setItem("videoOrder", order);	
         navigate(`/Videos`);	
        // console.log("video id", id);	
       }

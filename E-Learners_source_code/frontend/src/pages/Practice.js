@@ -17,21 +17,6 @@ let globalactiveMode = 1;
 
 let activeChapterid = 1;
 
-// const courses = [
-//   {
-//     id: 0,
-//     name: "FrontEnd Basics",
-//     des: "This is Web FrontEnd Basics Course",
-//   },
-//   {
-//     id: 1,
-//     name: "Frontend Advance",
-//     des: "This is Frontend Advance Course",
-//   },
-//   { id: 2, name: "React", des: "This is React Course" },
-//   { id: 3, name: "Angular", des: "This is Angular Course" },
-// ];
-
 const firstTrack = "Frontend Basics";
 const fistDes = "This is Frontend Basics Course";
 const trackid = 1;
@@ -39,26 +24,6 @@ const trackid = 1;
 const trackname = "Web Development";
 const coursename = "FrontEnd Basics";
 
-// const chapterList = [
-//   {
-//     id: 1,
-//     name: "HTML",
-//     des: "This is HTML Chapter",
-//     progress: "70",
-//   },
-//   {
-//     id: 2,
-//     name: "CSS",
-//     des: "This is CSS Chapter",
-//     progress: "30",
-//   },
-//   {
-//     id: 3,
-//     name: "JavaScript",
-//     des: "This is JavaScript Chapter",
-//     progress: "20",
-//   },
-// ];
 
 const recomList = [
   {
@@ -90,7 +55,7 @@ export default function Practice() {
     userid = localStorage.getItem("user_id");
     console.log(trackid);
     axios
-      .get(`http://localhost:8000/getCourseList/?trackid=${trackid}`)
+      .get(`http://localhost:8000/getCourseList/?trackid=${trackid}&user_id=${localStorage.getItem('user_id')}`)
       .then((res) => {
         data = res.data;
         setTrackscontent(data);

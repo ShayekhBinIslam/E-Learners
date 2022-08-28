@@ -132,6 +132,9 @@ class Video(models.Model):
     super(Video, self).save(*args, **kwargs)
     from backend.settings import MEDIA_ROOT
     video_link = MEDIA_ROOT/str(self.link)
+
+    if str(video_link).endswith(".pdf"):
+      return
     from moviepy.editor import VideoFileClip
     clip = VideoFileClip(str(video_link))
     duration_seconds       = int(clip.duration)

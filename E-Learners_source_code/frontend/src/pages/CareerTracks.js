@@ -82,62 +82,9 @@ export default function CareerTracks() {
         console.log(data)
       })
       
-      // setCourse(trackscontent.courses)
-      // setTrackName(trackscontent.name)
-      // setTrackDes(trackscontent.des)
-      // setVideo(trackscontent.video)
-    // let data;
-    // axios.get('http://localhost:8000/get_video/')
-    //   .then(res=>{
-    //     data = res.data;
-    //     // this.setState({
-    //     //   details: data
-    //     // });
-    //     console.log(data[0].link);
-    //     console.log(window.location.pathname)
-    //     setVideo(data[0].link)
-    //   })
-    //   .catch(err=>{})
 
   }, [JSON.stringify(trackscontent), JSON.stringify(recomlist)]);
 
-  // const course = [
-  //   {
-  //     id: 0,
-  //     name: "FrontEnd Basics",
-  //     des: "This is Web FrontEnd Basics Course",
-  //     progress: "25",
-  //     isRunning : true
-  //   },
-  //   {
-  //     id: 1,
-  //     name: "Frontend Advance",
-  //     des: "This is Frontend Advance Course",
-  //     progress: "75",
-  //     isRunning : false
-  //   },
-  //   { id: 2, name: "React", des: "This is React Course",progress: "35",isRunning : false },
-  //   { id: 3, name: "Angular", des: "This is Angular Course",progress: "0",isRunning : false },
-  // ];
-
-  // const tracks = [
-  //   {
-  //     id: 1,
-  //     name: "Web Development",
-  //     des: "This is Web Development Career Track",
-  //     isRunning : true
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Competetive Programming",
-  //     des: "This is Competetive Programming Career Track",
-  //     isRunning : false
-  //   },
-  //   { id: 3, name: "Math", des: "This is Math Career Track",isRunning : false },
-  //   { id: 4, name: "Design", des: "This is Desing Career Track" , isRunning : false},
-  // ];
-
-  // let isEnrolled = true;
 
   let buttonName = "Start";
   if (isEnrolled) {
@@ -435,7 +382,7 @@ export default function CareerTracks() {
 
             </div> */}
             <div className="tutorrialsCard">
-            <div className="courseRecomCard">
+            <div className="courseRecomCard3">
 
               {/* <img
                 className="card_image"
@@ -445,13 +392,16 @@ export default function CareerTracks() {
 
               {/* <div className="CourseRecom-topText"></div> */}
               {/* <div className="courseRecom-btn"> */}
-              <div>
-                <a href="#" className="playbtn">
+              <div className="react-player-ct">
+                <a href="#" className="playbtn22">
                   {/* <img src={require("../assets/card/playbtn.jpg")}></img> */}
                   {video? 
                   <ReactPlayer 
                     // onProgress={}
-                    width="400px"
+                    width="380px"
+                    height="300px"
+                    className="react-player"
+
                     controls
                     // url='https://www.youtube.com/watch?v=9nkR2LLPiYo'
                     // url='../../../backend/media/video/22/video_file.mp4'
