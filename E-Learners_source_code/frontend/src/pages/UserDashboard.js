@@ -211,6 +211,11 @@ export default function UserDashboard(props) {
             for ages 4-18+, we have programs for every learner. */}
             {recomData.des}
           </div>
+          <div className="courseRecom-btn">
+                <a href="#" className="btn-right-mi">
+                  Visit Track
+                </a>
+              </div>
           <div className="Suggestion-footer">
             Suggestion based on your achieved attributes
           </div>

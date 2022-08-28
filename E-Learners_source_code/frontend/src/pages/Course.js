@@ -28,9 +28,9 @@ let activeChapterid = 1;
 
 const firstTrack = "Frontend Basics";
 const fistDes = "This is Frontend Basics Course";
-const trackid = 1;
+// const trackid = 1;
 
-const trackname = "Web Development";
+// const trackname = "Web Development";
 // const coursename = "FrontEnd Basics";
 
 const chapterList = [
@@ -78,6 +78,10 @@ const recomList = [
 
 
 export default function Course() {
+
+  // const [trackid, setTrackid] = useState(localStorage.getItem("active_track_id"));
+  const [trackname, setTrackname] = useState("Web Development");
+
   const [activeMode, setActiveMode] = useState(globalactiveMode);
   const [isgotoPractice, setisGotoPractive] = useState(false);
   const [recomPracticeList, setRecomPracticeList] = useState({
@@ -117,15 +121,16 @@ export default function Course() {
       .catch((err) => {});
 
       setCourses(trackscontent.courses);
+      setTrackname(trackscontent.name);
       console.log("courses lala :", courses);
       
-      if(trackscontent.courses !== 'undefined'){
+      
         for(var i=0; i<trackscontent.courses?.length || 0; i++){
-          if(trackscontent.courses[i].id === localStorage.getItem("courseid")){
+          if(trackscontent.courses[i].id === parseInt(localStorage.getItem("courseid"))){
               setCourseName(trackscontent.courses[i].name);
           }
         }
-      }
+      
 
 
     }
@@ -341,7 +346,7 @@ export default function Course() {
           <a
             className="btn-right-mi"
             href={"/CareerTracks/"
-              .concat(trackid.toString())
+              .concat(localStorage.getItem("active_track_id").toString())
               .concat("/Course/")
               .concat(activeId.toString())}
           >
@@ -454,10 +459,10 @@ export default function Course() {
       localStorage.setItem("courseid", courseid);
 
       useEffect(() => {
-        
+        async function fetchData() {
         let data;
         console.log("course id", courseid);
-        axios
+        await axios
           .get(`http://localhost:8000/getChapterList/?courseid=${courseid}`)
           .then((res) => {
             data = res.data;
@@ -465,6 +470,9 @@ export default function Course() {
             console.log(data);
           })
           .catch((err) => {});
+        }
+
+        fetchData();
       }, []);
 
       if (isEnrolled) {
@@ -645,11 +653,13 @@ export default function Course() {
       const [gotoQuizMode3, setGotoQuizMode3] = useState(false);
 
       useEffect(() => {
+
+        async function fetchData() {
         
         let data;
 
         console.log("chapter_id", chapter_id);
-        axios
+        await axios
           .get(
             `http://localhost:8000/getTutorialList/?chapterid=${chapter_id}&userid=${localStorage.getItem(
               "user_id"
@@ -663,6 +673,9 @@ export default function Course() {
             console.log(data);
           })
           .catch((err) => {});
+        }
+
+        fetchData();
       }, [
         JSON.stringify(tutorials),
         JSON.stringify(practices),

@@ -111,7 +111,40 @@ const UserProfile = () =>{
     return (
         <>
         <div className="container emp-profile">
+        <div className="courseSidebar">
+        <div className="cousreSidebarTrack">
+          <img src={require("../assets/Home/profilephoto.jpg")}></img>
+          <div className="courseSidebarTrackText">
+            <div className="courseSidebarTrackText1">John</div>
+            <div className="courseSidebarTrackText2">Good Morning</div>
+          </div>
+        </div>
+
+        <div className="courseSidebarSplit"></div>
+        <div className="courseSidebarMenu">
+          <div className="cousreSidebarMenuItem">
+            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            Progress
+          </div>
+          <div
+            className="cousreSidebarMenuItem"
+            
+          >
+            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            Profile
+          </div>
+          <div className="cousreSidebarMenuItem-selected">
+            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            Free Time
+          </div>
+          {/* <div className="cousreSidebarMenuItem">
+            <img src={require("../assets/Home/profilephoto.jpg")}></img>
+            Attributes
+          </div> */}
+        </div>
+      </div>
             <div>
+
                 <div className="row">
                     <div className="col-md-4">
                         <img src={require("../assets/Home/profilephoto.jpg")} alt='no internet connection' width="400"/>

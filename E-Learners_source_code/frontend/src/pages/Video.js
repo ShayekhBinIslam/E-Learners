@@ -24,7 +24,7 @@ export default function Video() {
   const playerRef = React.useRef();
   const [played, setPlayed] = useState(0);
   const [video, setVideo] = useState("");
-  const [videoNum, setVideoNum] = useState(parseInt(localStorage.getItem("videoOrder")));
+  const [videoNum, setVideoNum] = useState(parseInt(localStorage.getItem("videoOrder"))-1);
   const [tutorial, setTutorial] = useState();
   const [title, setTitle] = useState(" ");
   const [description, setDescription] = useState(" ");
@@ -120,7 +120,7 @@ export default function Video() {
   }
 
   function prevVideo() {
-    if (videoNum > 1) {
+    if (videoNum >= 1) {
       setVideoNum(videoNum - 1);
     }
   }
