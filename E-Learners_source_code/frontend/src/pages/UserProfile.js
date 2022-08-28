@@ -110,8 +110,7 @@ const UserProfile = () =>{
     
     return (
         <>
-        <div className="container emp-profile">
-        <div className="courseSidebar">
+                <div className="courseSidebar">
         <div className="cousreSidebarTrack">
           <img src={require("../assets/Home/profilephoto.jpg")}></img>
           <div className="courseSidebarTrackText">
@@ -143,6 +142,10 @@ const UserProfile = () =>{
           </div> */}
         </div>
       </div>
+      
+        <div className="container emp-profile">
+        
+
             <div>
 
                 <div className="row">

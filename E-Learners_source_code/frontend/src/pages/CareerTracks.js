@@ -241,7 +241,7 @@ export default function CareerTracks() {
       localStorage.setItem('courseid', courseid)
     };
 
-    if (isEnrolled) {
+    // if (isEnrolled) {
       return (
         <div className="courselist-container">
             <div className="courseList-header">
@@ -294,7 +294,7 @@ export default function CareerTracks() {
           </div>
         </div>
       );
-    }
+    // }
   }
   const enroll_course = (course_id) => {
     let data;
@@ -442,9 +442,9 @@ export default function CareerTracks() {
       <div className="track-course-list">
         <CourseListEnrolled />
       </div>
-      <div className="track-course-list">
+      {/* <div className="track-course-list">
         <CourseListNotEnrolled/>
-      </div>
+      </div> */}
     </div>
   );
 }
