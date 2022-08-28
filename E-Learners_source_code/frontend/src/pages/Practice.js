@@ -55,7 +55,7 @@ export default function Practice() {
     userid = localStorage.getItem("user_id");
     console.log(trackid);
     axios
-      .get(`http://localhost:8000/getCourseList/?trackid=${trackid}`)
+      .get(`http://localhost:8000/getCourseList/?trackid=${trackid}&user_id=${localStorage.getItem('user_id')}`)
       .then((res) => {
         data = res.data;
         setTrackscontent(data);
