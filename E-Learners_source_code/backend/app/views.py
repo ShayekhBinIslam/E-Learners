@@ -221,10 +221,11 @@ def get_tracks_list(request):
   return Response(output)
 @api_view(["GET"])
 def get_notification_list(request):
+  useridd = request.GET.get('userid', '')
   serializer_class = UserNotificationsSerializer
   output = [
       {"id": output.id, "title": output.title, "description": output.description,"userid" : output.userid, "date": output.date.strftime("%Y-%m-%d %H:%M:%S"),"isread":output.isread,"link":output.link}
-      for output in UserNotifications.objects.filter(isread = False)
+      for output in UserNotifications.objects.filter(isread = False,userid =useridd )
   ]
 
   # print(request.GET.get('track', ''))
