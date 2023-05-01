@@ -12,7 +12,6 @@ Some of the features of eLearning include:
 - User authentication and authorization
 - Course management and enrollment
 - Content creation and management, including text, images, videos, and quizzes
-- Interactive and real-time communication tools, including messaging and video conferencing
 - Progress tracking and assessment tools
 - Multi-language support
 
